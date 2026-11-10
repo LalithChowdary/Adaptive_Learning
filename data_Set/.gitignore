@@ -1,0 +1,16 @@
+# OS metadata
+.DS_Store
+
+# Python byte code and cache
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Build and run logs
+*.log
+reports/*.log
+
+# Virtual environments
+.venv/
+venv/
