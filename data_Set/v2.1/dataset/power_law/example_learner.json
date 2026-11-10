@@ -1,0 +1,5594 @@
+{
+  "first_events": [
+    {
+      "available_at": 1794009600.0,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "event_id": "v21_power_law_00035/practice/e00000",
+      "event_type": "task",
+      "interaction_id": "v21_power_law_00035/practice/q0001",
+      "learner_id": "v21_power_law_00035",
+      "max_hints": 3,
+      "max_retries": 2,
+      "occurred_at": 1794009600.0,
+      "parent_interaction_id": null,
+      "phase": "practice",
+      "purpose": "ordinary",
+      "reference_seconds": 49.0,
+      "schema_version": "2.1.0",
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.medium.output_prediction.00"
+    },
+    {
+      "active_response_seconds": 29.39642003094511,
+      "answer_revealed": false,
+      "assistance": "independent",
+      "attempt_number": 1,
+      "available_at": 1794009629.39642,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "event_id": "v21_power_law_00035/practice/e00001",
+      "event_type": "response",
+      "hint_count": 0,
+      "interaction_id": "v21_power_law_00035/practice/q0001",
+      "learner_id": "v21_power_law_00035",
+      "occurred_at": 1794009629.39642,
+      "phase": "practice",
+      "schema_version": "2.1.0",
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.medium.output_prediction.00"
+    },
+    {
+      "available_at": 1794009629.49642,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "criteria": [
+        false
+      ],
+      "event_id": "v21_power_law_00035/practice/e00002",
+      "event_type": "grade",
+      "evidence": [
+        false
+      ],
+      "full_success": false,
+      "grader": "simulated_rubric_v2",
+      "grader_confidence": null,
+      "grading_status": "resolved",
+      "interaction_id": "v21_power_law_00035/practice/q0001",
+      "learner_id": "v21_power_law_00035",
+      "occurred_at": 1794009629.49642,
+      "phase": "practice",
+      "response_id": "v21_power_law_00035/practice/e00001",
+      "rubric_id": "conditional_evaluation.medium.output_prediction.00.rubric_v2",
+      "schema_version": "2.1.0",
+      "score": 0,
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.medium.output_prediction.00"
+    },
+    {
+      "available_at": 1794009637.49642,
+      "branch": "practice",
+      "content_ref": "conditional_evaluation.medium.output_prediction.00/hint/1",
+      "course_id": "python_basics_v2",
+      "event_id": "v21_power_law_00035/practice/e00003",
+      "event_type": "hint",
+      "hint_number": 1,
+      "hint_type": "conceptual",
+      "interaction_id": "v21_power_law_00035/practice/q0001",
+      "learner_id": "v21_power_law_00035",
+      "occurred_at": 1794009637.49642,
+      "phase": "practice",
+      "reason": "observed_difficulty",
+      "schema_version": "2.1.0",
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.medium.output_prediction.00"
+    },
+    {
+      "attempt_number": 2,
+      "available_at": 1794009637.49642,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "event_id": "v21_power_law_00035/practice/e00004",
+      "event_type": "retry",
+      "interaction_id": "v21_power_law_00035/practice/q0001",
+      "learner_id": "v21_power_law_00035",
+      "occurred_at": 1794009637.49642,
+      "phase": "practice",
+      "reason": "retry_after_difficulty",
+      "schema_version": "2.1.0",
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.medium.output_prediction.00"
+    },
+    {
+      "active_response_seconds": 30.86181973756793,
+      "answer_revealed": false,
+      "assistance": "assisted",
+      "attempt_number": 2,
+      "available_at": 1794009668.3582397,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "event_id": "v21_power_law_00035/practice/e00005",
+      "event_type": "response",
+      "hint_count": 1,
+      "interaction_id": "v21_power_law_00035/practice/q0001",
+      "learner_id": "v21_power_law_00035",
+      "occurred_at": 1794009668.3582397,
+      "phase": "practice",
+      "schema_version": "2.1.0",
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.medium.output_prediction.00"
+    },
+    {
+      "available_at": 1794009698.3582397,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "criteria": [
+        true
+      ],
+      "event_id": "v21_power_law_00035/practice/e00006",
+      "event_type": "grade",
+      "evidence": [
+        true
+      ],
+      "full_success": true,
+      "grader": "simulated_rubric_v2",
+      "grader_confidence": null,
+      "grading_status": "resolved",
+      "interaction_id": "v21_power_law_00035/practice/q0001",
+      "learner_id": "v21_power_law_00035",
+      "occurred_at": 1794009698.3582397,
+      "phase": "practice",
+      "response_id": "v21_power_law_00035/practice/e00005",
+      "rubric_id": "conditional_evaluation.medium.output_prediction.00.rubric_v2",
+      "schema_version": "2.1.0",
+      "score": 1.0,
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.medium.output_prediction.00"
+    },
+    {
+      "available_at": 1794009758.3582397,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "event_id": "v21_power_law_00035/practice/e00007",
+      "event_type": "task",
+      "interaction_id": "v21_power_law_00035/practice/q0002",
+      "learner_id": "v21_power_law_00035",
+      "max_hints": 3,
+      "max_retries": 2,
+      "occurred_at": 1794009758.3582397,
+      "parent_interaction_id": "v21_power_law_00035/practice/q0001",
+      "phase": "practice",
+      "purpose": "followup",
+      "reference_seconds": 40.0,
+      "schema_version": "2.1.0",
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.easy.fill_in_the_blank.00"
+    },
+    {
+      "active_response_seconds": 31.37493628165765,
+      "answer_revealed": false,
+      "assistance": "independent",
+      "attempt_number": 1,
+      "available_at": 1794009789.733176,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "event_id": "v21_power_law_00035/practice/e00008",
+      "event_type": "response",
+      "hint_count": 0,
+      "interaction_id": "v21_power_law_00035/practice/q0002",
+      "learner_id": "v21_power_law_00035",
+      "occurred_at": 1794009789.733176,
+      "phase": "practice",
+      "schema_version": "2.1.0",
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.easy.fill_in_the_blank.00"
+    },
+    {
+      "available_at": 1794009819.733176,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "criteria": null,
+      "event_id": "v21_power_law_00035/practice/e00009",
+      "event_type": "grade",
+      "evidence": null,
+      "full_success": null,
+      "grader": "simulated_rubric_v2",
+      "grader_confidence": null,
+      "grading_status": "unresolved",
+      "interaction_id": "v21_power_law_00035/practice/q0002",
+      "learner_id": "v21_power_law_00035",
+      "occurred_at": 1794009819.733176,
+      "phase": "practice",
+      "response_id": "v21_power_law_00035/practice/e00008",
+      "rubric_id": "conditional_evaluation.easy.fill_in_the_blank.00.rubric_v2",
+      "schema_version": "2.1.0",
+      "score": null,
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.easy.fill_in_the_blank.00"
+    },
+    {
+      "available_at": 1794009819.733176,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "event_id": "v21_power_law_00035/practice/e00010",
+      "event_type": "task",
+      "interaction_id": "v21_power_law_00035/practice/q0003",
+      "learner_id": "v21_power_law_00035",
+      "max_hints": 3,
+      "max_retries": 2,
+      "occurred_at": 1794009819.733176,
+      "parent_interaction_id": null,
+      "phase": "practice",
+      "purpose": "ordinary",
+      "reference_seconds": 102.0,
+      "schema_version": "2.1.0",
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.easy.code_completion.01"
+    },
+    {
+      "active_response_seconds": 68.85018947993797,
+      "answer_revealed": false,
+      "assistance": "independent",
+      "attempt_number": 1,
+      "available_at": 1794009888.5833654,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "event_id": "v21_power_law_00035/practice/e00011",
+      "event_type": "response",
+      "hint_count": 0,
+      "interaction_id": "v21_power_law_00035/practice/q0003",
+      "learner_id": "v21_power_law_00035",
+      "occurred_at": 1794009888.5833654,
+      "phase": "practice",
+      "schema_version": "2.1.0",
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.easy.code_completion.01"
+    },
+    {
+      "available_at": 1794009918.5833654,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "criteria": [
+        true,
+        true,
+        true
+      ],
+      "event_id": "v21_power_law_00035/practice/e00012",
+      "event_type": "grade",
+      "evidence": [
+        true,
+        true,
+        true
+      ],
+      "full_success": true,
+      "grader": "simulated_rubric_v2",
+      "grader_confidence": null,
+      "grading_status": "resolved",
+      "interaction_id": "v21_power_law_00035/practice/q0003",
+      "learner_id": "v21_power_law_00035",
+      "occurred_at": 1794009918.5833654,
+      "phase": "practice",
+      "response_id": "v21_power_law_00035/practice/e00011",
+      "rubric_id": "conditional_evaluation.easy.code_completion.01.rubric_v2",
+      "schema_version": "2.1.0",
+      "score": 1.0,
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.easy.code_completion.01"
+    },
+    {
+      "available_at": 1794009918.5833654,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "event_id": "v21_power_law_00035/practice/e00013",
+      "event_type": "task",
+      "interaction_id": "v21_power_law_00035/practice/q0004",
+      "learner_id": "v21_power_law_00035",
+      "max_hints": 3,
+      "max_retries": 2,
+      "occurred_at": 1794009918.5833654,
+      "parent_interaction_id": null,
+      "phase": "practice",
+      "purpose": "ordinary",
+      "reference_seconds": 45.0,
+      "schema_version": "2.1.0",
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.hard.single_choice.14"
+    },
+    {
+      "active_response_seconds": 32.1977050832484,
+      "answer_revealed": false,
+      "assistance": "independent",
+      "attempt_number": 1,
+      "available_at": 1794009950.7810705,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "event_id": "v21_power_law_00035/practice/e00014",
+      "event_type": "response",
+      "hint_count": 0,
+      "interaction_id": "v21_power_law_00035/practice/q0004",
+      "learner_id": "v21_power_law_00035",
+      "occurred_at": 1794009950.7810705,
+      "phase": "practice",
+      "schema_version": "2.1.0",
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.hard.single_choice.14"
+    },
+    {
+      "available_at": 1794009952.7810705,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "criteria": [
+        true
+      ],
+      "event_id": "v21_power_law_00035/practice/e00015",
+      "event_type": "grade",
+      "evidence": "o2",
+      "full_success": true,
+      "grader": "simulated_rubric_v2",
+      "grader_confidence": null,
+      "grading_status": "resolved",
+      "interaction_id": "v21_power_law_00035/practice/q0004",
+      "learner_id": "v21_power_law_00035",
+      "occurred_at": 1794009952.7810705,
+      "phase": "practice",
+      "response_id": "v21_power_law_00035/practice/e00014",
+      "rubric_id": "conditional_evaluation.hard.single_choice.14.rubric_v2",
+      "schema_version": "2.1.0",
+      "score": 1.0,
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.hard.single_choice.14"
+    },
+    {
+      "available_at": 1794009952.7810705,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "event_id": "v21_power_law_00035/practice/e00016",
+      "event_type": "task",
+      "interaction_id": "v21_power_law_00035/practice/q0005",
+      "learner_id": "v21_power_law_00035",
+      "max_hints": 3,
+      "max_retries": 2,
+      "occurred_at": 1794009952.7810705,
+      "parent_interaction_id": null,
+      "phase": "practice",
+      "purpose": "ordinary",
+      "reference_seconds": 97.02,
+      "schema_version": "2.1.0",
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.medium.multiple_select.06"
+    },
+    {
+      "active_response_seconds": 71.56035385742418,
+      "answer_revealed": false,
+      "assistance": "independent",
+      "attempt_number": 1,
+      "available_at": 1794010024.3414242,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "event_id": "v21_power_law_00035/practice/e00017",
+      "event_type": "response",
+      "hint_count": 0,
+      "interaction_id": "v21_power_law_00035/practice/q0005",
+      "learner_id": "v21_power_law_00035",
+      "occurred_at": 1794010024.3414242,
+      "phase": "practice",
+      "schema_version": "2.1.0",
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.medium.multiple_select.06"
+    },
+    {
+      "available_at": 1794010024.4414241,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "criteria": [
+        false,
+        true,
+        true,
+        true
+      ],
+      "event_id": "v21_power_law_00035/practice/e00018",
+      "event_type": "grade",
+      "evidence": [
+        "o2"
+      ],
+      "full_success": false,
+      "grader": "simulated_rubric_v2",
+      "grader_confidence": null,
+      "grading_status": "resolved",
+      "interaction_id": "v21_power_law_00035/practice/q0005",
+      "learner_id": "v21_power_law_00035",
+      "occurred_at": 1794010024.4414241,
+      "phase": "practice",
+      "response_id": "v21_power_law_00035/practice/e00017",
+      "rubric_id": "conditional_evaluation.medium.multiple_select.06.rubric_v2",
+      "schema_version": "2.1.0",
+      "score": 0.6666666667,
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.medium.multiple_select.06"
+    },
+    {
+      "available_at": 1794010024.4414241,
+      "branch": "practice",
+      "course_id": "python_basics_v2",
+      "event_id": "v21_power_law_00035/practice/e00019",
+      "event_type": "help_request",
+      "interaction_id": "v21_power_law_00035/practice/q0005",
+      "learner_id": "v21_power_law_00035",
+      "occurred_at": 1794010024.4414241,
+      "phase": "practice",
+      "reason": "learner_request",
+      "schema_version": "2.1.0",
+      "session_id": "s1",
+      "skill_id": "conditional_evaluation",
+      "task_id": "conditional_evaluation.medium.multiple_select.06"
+    }
+  ],
+  "first_skill_record": {
+    "events": [
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": null,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": null,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "medium",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 49.0,
+          "snippet_count": 1,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": 29.39642003094511,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 29.396420001983643,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.599926939407043,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "medium",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 49.0,
+          "snippet_count": 1,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 0.09999990463256836,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "medium",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 49.0,
+          "snippet_count": 1,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 8.0,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": "conceptual",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "medium",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 49.0,
+          "snippet_count": 1,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": 2,
+        "event_type": "retry",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "medium",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 49.0,
+          "snippet_count": 1,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": 30.86181973756793,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 30.861819744110107,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.6298330558687333,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "medium",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 49.0,
+          "snippet_count": 1,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "grade",
+        "full_success": true,
+        "gap_seconds": 30.0,
+        "grading_status": "resolved",
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 1.0,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "medium",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 49.0,
+          "snippet_count": 1,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 60.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 40.0,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": 31.37493628165765,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 31.37493634223938,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.7843734070414412,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 40.0,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": null,
+        "gap_seconds": 30.0,
+        "grading_status": "unresolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 40.0,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 102.0,
+          "snippet_count": 1,
+          "task_type": "code_completion"
+        }
+      },
+      {
+        "active_response_seconds": 68.85018947993797,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 68.85018944740295,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.6750018576464507,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 102.0,
+          "snippet_count": 1,
+          "task_type": "code_completion"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": true,
+        "gap_seconds": 30.0,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 1.0,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 102.0,
+          "snippet_count": 1,
+          "task_type": "code_completion"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "hard",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 45.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": 32.1977050832484,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 32.197705030441284,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.71550455740552,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "hard",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 45.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": true,
+        "gap_seconds": 2.0,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 1.0,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "hard",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 45.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 4,
+          "difficulty": "medium",
+          "option_count": 4,
+          "penalty_weights": [
+            0.5,
+            0.5
+          ],
+          "reference_seconds": 97.02,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": 71.56035385742418,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 71.56035375595093,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.7375835276996926,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 4,
+          "difficulty": "medium",
+          "option_count": 4,
+          "penalty_weights": [
+            0.5,
+            0.5
+          ],
+          "reference_seconds": 97.02,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 0.09999990463256836,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.6666666667,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 4,
+          "difficulty": "medium",
+          "option_count": 4,
+          "penalty_weights": [
+            0.5,
+            0.5
+          ],
+          "reference_seconds": 97.02,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "help_request",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 4,
+          "difficulty": "medium",
+          "option_count": 4,
+          "penalty_weights": [
+            0.5,
+            0.5
+          ],
+          "reference_seconds": 97.02,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 8.0,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": "conceptual",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 4,
+          "difficulty": "medium",
+          "option_count": 4,
+          "penalty_weights": [
+            0.5,
+            0.5
+          ],
+          "reference_seconds": 97.02,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 12.0,
+        "grading_status": null,
+        "hint_count": 2,
+        "hint_type": "targeted",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 4,
+          "difficulty": "medium",
+          "option_count": 4,
+          "penalty_weights": [
+            0.5,
+            0.5
+          ],
+          "reference_seconds": 97.02,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": 2,
+        "event_type": "retry",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 4,
+          "difficulty": "medium",
+          "option_count": 4,
+          "penalty_weights": [
+            0.5,
+            0.5
+          ],
+          "reference_seconds": 97.02,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": 89.90536971331491,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 89.90536975860596,
+        "grading_status": null,
+        "hint_count": 2,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.9266684159277975,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 4,
+          "difficulty": "medium",
+          "option_count": 4,
+          "penalty_weights": [
+            0.5,
+            0.5
+          ],
+          "reference_seconds": 97.02,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 2.0,
+        "grading_status": "resolved",
+        "hint_count": 2,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.3333333333,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 4,
+          "difficulty": "medium",
+          "option_count": 4,
+          "penalty_weights": [
+            0.5,
+            0.5
+          ],
+          "reference_seconds": 97.02,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": true,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "solution_reveal",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 4,
+          "difficulty": "medium",
+          "option_count": 4,
+          "penalty_weights": [
+            0.5,
+            0.5
+          ],
+          "reference_seconds": 97.02,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 60.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 47.6,
+          "snippet_count": 3,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": 26.031383019885087,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 26.03138303756714,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.546877794535401,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 47.6,
+          "snippet_count": 3,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 2.0,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.6666666667,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 47.6,
+          "snippet_count": 3,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 569470.5399141312,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": true,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 84.96,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": 39.228351960764606,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 39.228352069854736,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.4617273065061748,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 84.96,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 0.09999990463256836,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.6666666667,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 84.96,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 8.0,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": "conceptual",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 84.96,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": 2,
+        "event_type": "retry",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 84.96,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": 75.02085776098507,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 75.02085781097412,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.883013862535135,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 84.96,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 30.0,
+        "grading_status": "resolved",
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.6666666667,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 84.96,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 12.0,
+        "grading_status": null,
+        "hint_count": 2,
+        "hint_type": "targeted",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 84.96,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 16.0,
+        "grading_status": null,
+        "hint_count": 3,
+        "hint_type": "scaffold",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 84.96,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": 3,
+        "event_type": "retry",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 84.96,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": 41.402003446839025,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 3,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 41.40200352668762,
+        "grading_status": null,
+        "hint_count": 3,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.48731171665300177,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 84.96,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 3,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 30.0,
+        "grading_status": "resolved",
+        "hint_count": 3,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.3333333333,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 84.96,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": true,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "solution_reveal",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 84.96,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 60.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "medium",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 142.8,
+          "snippet_count": 1,
+          "task_type": "code_completion"
+        }
+      },
+      {
+        "active_response_seconds": 175.56796688037093,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 175.5679669380188,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 1.2294675551846703,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "medium",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 142.8,
+          "snippet_count": 1,
+          "task_type": "code_completion"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 30.0,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.8333333333,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "medium",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 142.8,
+          "snippet_count": 1,
+          "task_type": "code_completion"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 25.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": 24.49989336365323,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 24.49989342689514,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.9799957345461291,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 25.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 0.09999990463256836,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.0,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 25.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "help_request",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 25.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 8.0,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": "conceptual",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 25.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": 2,
+        "event_type": "retry",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 25.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 16.39385962486267,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 25.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 2.0,
+        "grading_status": "resolved",
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.0,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 25.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": true,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "solution_reveal",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 25.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 60.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": 36.63740917069064,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 36.63740921020508,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.4285077095987209,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 0.09999990463256836,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.8333333333,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 74.34,
+          "snippet_count": 2,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": 54.10208319303041,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 54.10208320617676,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.7277654451577941,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 74.34,
+          "snippet_count": 2,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 0.09999990463256836,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.6666666667,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 74.34,
+          "snippet_count": 2,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 8.0,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": "conceptual",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 74.34,
+          "snippet_count": 2,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": 2,
+        "event_type": "retry",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 74.34,
+          "snippet_count": 2,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": 69.74221238499328,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 69.74221229553223,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.938151901869697,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 74.34,
+          "snippet_count": 2,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 2.0,
+        "grading_status": "resolved",
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.3333333333,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 74.34,
+          "snippet_count": 2,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "help_request",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 74.34,
+          "snippet_count": 2,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 12.0,
+        "grading_status": null,
+        "hint_count": 2,
+        "hint_type": "targeted",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 74.34,
+          "snippet_count": 2,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "help_request",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 74.34,
+          "snippet_count": 2,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 16.0,
+        "grading_status": null,
+        "hint_count": 3,
+        "hint_type": "scaffold",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 74.34,
+          "snippet_count": 2,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": 3,
+        "event_type": "retry",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 74.34,
+          "snippet_count": 2,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 3,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 31.377230405807495,
+        "grading_status": null,
+        "hint_count": 3,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 74.34,
+          "snippet_count": 2,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 3,
+        "event_type": "grade",
+        "full_success": true,
+        "gap_seconds": 0.09999990463256836,
+        "grading_status": "resolved",
+        "hint_count": 3,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 1.0,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 74.34,
+          "snippet_count": 2,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 60.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 72.0,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": 50.33618776667864,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 50.33618783950806,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.6991137189816478,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 72.0,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": true,
+        "gap_seconds": 2.0,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 1.0,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 72.0,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.1,
+            0.2,
+            0.3,
+            0.4
+          ],
+          "criterion_count": 4,
+          "difficulty": "medium",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 161.7,
+          "snippet_count": 1,
+          "task_type": "code_completion"
+        }
+      },
+      {
+        "active_response_seconds": 145.94988326336886,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 145.94988322257996,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.9025966806640005,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.1,
+            0.2,
+            0.3,
+            0.4
+          ],
+          "criterion_count": 4,
+          "difficulty": "medium",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 161.7,
+          "snippet_count": 1,
+          "task_type": "code_completion"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": true,
+        "gap_seconds": 2.0,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 1.0,
+        "task": {
+          "credit_weights": [
+            0.1,
+            0.2,
+            0.3,
+            0.4
+          ],
+          "criterion_count": 4,
+          "difficulty": "medium",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 161.7,
+          "snippet_count": 1,
+          "task_type": "code_completion"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 1580464.6560077667,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": true,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "medium",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 35.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": 22.323662569701515,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 22.323662519454956,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.6378189305629004,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "medium",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 35.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": true,
+        "gap_seconds": 30.0,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 1.0,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "medium",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 35.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": 95.18163838526687,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 95.18163847923279,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 1.113235536669788,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 2.0,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.6666666667,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "help_request",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 8.0,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": "conceptual",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": 2,
+        "event_type": "retry",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": 43.57503335098701,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 43.57503342628479,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.5096495128770411,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 2.0,
+        "grading_status": "resolved",
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.5,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 12.0,
+        "grading_status": null,
+        "hint_count": 2,
+        "hint_type": "targeted",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "help_request",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 16.0,
+        "grading_status": null,
+        "hint_count": 3,
+        "hint_type": "scaffold",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": 3,
+        "event_type": "retry",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": 73.93553507686326,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 3,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 73.93553519248962,
+        "grading_status": null,
+        "hint_count": 3,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.8647431003141902,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 3,
+        "event_type": "grade",
+        "full_success": true,
+        "gap_seconds": 2.0,
+        "grading_status": "resolved",
+        "hint_count": 3,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 1.0,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 60.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "medium",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 57.82,
+          "snippet_count": 2,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": 40.19998500663138,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 40.19998502731323,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.6952608959984673,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "medium",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 57.82,
+          "snippet_count": 2,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 0.09999990463256836,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.3333333333,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "medium",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 57.82,
+          "snippet_count": 2,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 47.2,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": 34.98382274593999,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 34.9838228225708,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.7411826852953387,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 47.2,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 30.0,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.6666666667,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 47.2,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "help_request",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 47.2,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 8.0,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": "conceptual",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 47.2,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": 2,
+        "event_type": "retry",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 47.2,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": 37.6754797057711,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 37.67547965049744,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.7982093158002351,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 47.2,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "grade",
+        "full_success": true,
+        "gap_seconds": 30.0,
+        "grading_status": "resolved",
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 1.0,
+        "task": {
+          "credit_weights": [
+            0.3333333333333333,
+            0.6666666666666666
+          ],
+          "criterion_count": 2,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 47.2,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 60.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.1,
+            0.2,
+            0.3,
+            0.4
+          ],
+          "criterion_count": 4,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 115.5,
+          "snippet_count": 1,
+          "task_type": "code_completion"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 113.47387170791626,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.1,
+            0.2,
+            0.3,
+            0.4
+          ],
+          "criterion_count": 4,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 115.5,
+          "snippet_count": 1,
+          "task_type": "code_completion"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 30.0,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.7,
+        "task": {
+          "credit_weights": [
+            0.1,
+            0.2,
+            0.3,
+            0.4
+          ],
+          "criterion_count": 4,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 115.5,
+          "snippet_count": 1,
+          "task_type": "code_completion"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 25.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": 40.4199351527962,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 40.41993522644043,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 1.616797406111848,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 25.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": true,
+        "gap_seconds": 2.0,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 1.0,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 25.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 523524.57558631897,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": true,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "help_request",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 8.0,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": "conceptual",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": 77.22051526800549,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 77.22051525115967,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.9031639212632221,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": true,
+        "gap_seconds": 2.0,
+        "grading_status": "resolved",
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 1.0,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "easy",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": 85.5,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 60.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 35.0,
+          "snippet_count": 1,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": 40.23590355476844,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 40.23590350151062,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 1.1495972444219555,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 35.0,
+          "snippet_count": 1,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": true,
+        "gap_seconds": 2.0,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 1.0,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 35.0,
+          "snippet_count": 1,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 97.92,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": 63.44132716074341,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 63.44132709503174,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.647889370514128,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 97.92,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 2.0,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 97.92,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 8.0,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": "conceptual",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 97.92,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": 2,
+        "event_type": "retry",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 97.92,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": 39.52402983545817,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 39.52402973175049,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.40363592560721173,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 97.92,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 2.0,
+        "grading_status": "resolved",
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.5,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 97.92,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "help_request",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 97.92,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 12.0,
+        "grading_status": null,
+        "hint_count": 2,
+        "hint_type": "targeted",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 97.92,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": 3,
+        "event_type": "retry",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 97.92,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": 128.13010295477716,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 3,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 128.1301028728485,
+        "grading_status": null,
+        "hint_count": 2,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 1.3085182082799955,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 97.92,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 3,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 2.0,
+        "grading_status": "resolved",
+        "hint_count": 2,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.5,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 97.92,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": true,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "solution_reveal",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 97.92,
+          "snippet_count": 1,
+          "task_type": "fill_in_the_blank"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 60.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.1,
+            0.2,
+            0.3,
+            0.4
+          ],
+          "criterion_count": 4,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 207.9,
+          "snippet_count": 1,
+          "task_type": "code_completion"
+        }
+      },
+      {
+        "active_response_seconds": 206.4565514017713,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 206.45655131340027,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.9930570052995252,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.1,
+            0.2,
+            0.3,
+            0.4
+          ],
+          "criterion_count": 4,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 207.9,
+          "snippet_count": 1,
+          "task_type": "code_completion"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 0.09999990463256836,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.4,
+        "task": {
+          "credit_weights": [
+            0.1,
+            0.2,
+            0.3,
+            0.4
+          ],
+          "criterion_count": 4,
+          "difficulty": "hard",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 207.9,
+          "snippet_count": 1,
+          "task_type": "code_completion"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "hard",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 45.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": 30.209901993948932,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 30.209902048110962,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.6713311554210873,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "hard",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 45.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": true,
+        "gap_seconds": 30.0,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 1.0,
+        "task": {
+          "credit_weights": [
+            1.0
+          ],
+          "criterion_count": 1,
+          "difficulty": "hard",
+          "option_count": 4,
+          "penalty_weights": [],
+          "reference_seconds": 45.0,
+          "snippet_count": 0,
+          "task_type": "single_choice"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "hard",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": null,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": 59.011319893565386,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 59.01131987571716,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "hard",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": null,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 30.0,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.3333333333,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "hard",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": null,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "help_request",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "hard",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": null,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "hint",
+        "full_success": null,
+        "gap_seconds": 8.0,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": "conceptual",
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "hard",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": null,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": 2,
+        "event_type": "retry",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "hard",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": null,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": 113.18233610220508,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 113.18233609199524,
+        "grading_status": null,
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "hard",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": null,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "assisted",
+        "attempt_number": 2,
+        "event_type": "grade",
+        "full_success": false,
+        "gap_seconds": 0.09999990463256836,
+        "grading_status": "resolved",
+        "hint_count": 1,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 0.3333333333,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "hard",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": null,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": true,
+        "assistance": "assisted",
+        "attempt_number": null,
+        "event_type": "solution_reveal",
+        "full_success": null,
+        "gap_seconds": 0.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 6,
+          "difficulty": "hard",
+          "option_count": 6,
+          "penalty_weights": [
+            0.3333333333333333,
+            0.3333333333333333,
+            0.3333333333333333
+          ],
+          "reference_seconds": null,
+          "snippet_count": 0,
+          "task_type": "multiple_select"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": null,
+        "assistance": null,
+        "attempt_number": null,
+        "event_type": "task",
+        "full_success": null,
+        "gap_seconds": 60.0,
+        "grading_status": null,
+        "hint_count": null,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 47.6,
+          "snippet_count": 3,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": 33.10854139451335,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "response",
+        "full_success": null,
+        "gap_seconds": 33.10854148864746,
+        "grading_status": null,
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": 0.6955575923217091,
+        "score": null,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 47.6,
+          "snippet_count": 3,
+          "task_type": "output_prediction"
+        }
+      },
+      {
+        "active_response_seconds": null,
+        "answer_revealed": false,
+        "assistance": "independent",
+        "attempt_number": 1,
+        "event_type": "grade",
+        "full_success": true,
+        "gap_seconds": 2.0,
+        "grading_status": "resolved",
+        "hint_count": 0,
+        "hint_type": null,
+        "new_session": false,
+        "relative_response_time": null,
+        "score": 1.0,
+        "task": {
+          "credit_weights": [
+            0.16666666666666666,
+            0.3333333333333333,
+            0.5
+          ],
+          "criterion_count": 3,
+          "difficulty": "easy",
+          "option_count": 0,
+          "penalty_weights": [],
+          "reference_seconds": 47.6,
+          "snippet_count": 3,
+          "task_type": "output_prediction"
+        }
+      }
+    ],
+    "learner_id": "v21_power_law_00035",
+    "queries": [
+      {
+        "history_end": 0,
+        "input": {
+          "since_last_event_seconds": null,
+          "since_last_response_seconds": null,
+          "target_task": {
+            "credit_weights": [
+              1.0
+            ],
+            "criterion_count": 1,
+            "difficulty": "medium",
+            "option_count": 0,
+            "penalty_weights": [],
+            "reference_seconds": 49.0,
+            "snippet_count": 1,
+            "task_type": "output_prediction"
+          }
+        },
+        "phase": "practice",
+        "purpose": "ordinary",
+        "query_id": "v21_power_law_00035/practice/e00000",
+        "target": {
+          "full_success": 0,
+          "score": 0
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 7,
+        "input": {
+          "since_last_event_seconds": 60.0,
+          "since_last_response_seconds": 90.0,
+          "target_task": {
+            "credit_weights": [
+              1.0
+            ],
+            "criterion_count": 1,
+            "difficulty": "easy",
+            "option_count": 0,
+            "penalty_weights": [],
+            "reference_seconds": 40.0,
+            "snippet_count": 1,
+            "task_type": "fill_in_the_blank"
+          }
+        },
+        "phase": "practice",
+        "purpose": "followup",
+        "query_id": "v21_power_law_00035/practice/e00007",
+        "target": null,
+        "target_exclusion": "unresolved_grade"
+      },
+      {
+        "history_end": 10,
+        "input": {
+          "since_last_event_seconds": 0.0,
+          "since_last_response_seconds": 30.0,
+          "target_task": {
+            "credit_weights": [
+              0.16666666666666666,
+              0.3333333333333333,
+              0.5
+            ],
+            "criterion_count": 3,
+            "difficulty": "easy",
+            "option_count": 0,
+            "penalty_weights": [],
+            "reference_seconds": 102.0,
+            "snippet_count": 1,
+            "task_type": "code_completion"
+          }
+        },
+        "phase": "practice",
+        "purpose": "ordinary",
+        "query_id": "v21_power_law_00035/practice/e00010",
+        "target": {
+          "full_success": 1,
+          "score": 1.0
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 13,
+        "input": {
+          "since_last_event_seconds": 0.0,
+          "since_last_response_seconds": 30.0,
+          "target_task": {
+            "credit_weights": [
+              1.0
+            ],
+            "criterion_count": 1,
+            "difficulty": "hard",
+            "option_count": 4,
+            "penalty_weights": [],
+            "reference_seconds": 45.0,
+            "snippet_count": 0,
+            "task_type": "single_choice"
+          }
+        },
+        "phase": "practice",
+        "purpose": "ordinary",
+        "query_id": "v21_power_law_00035/practice/e00013",
+        "target": {
+          "full_success": 1,
+          "score": 1.0
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 16,
+        "input": {
+          "since_last_event_seconds": 0.0,
+          "since_last_response_seconds": 2.0,
+          "target_task": {
+            "credit_weights": [
+              0.3333333333333333,
+              0.6666666666666666
+            ],
+            "criterion_count": 4,
+            "difficulty": "medium",
+            "option_count": 4,
+            "penalty_weights": [
+              0.5,
+              0.5
+            ],
+            "reference_seconds": 97.02,
+            "snippet_count": 0,
+            "task_type": "multiple_select"
+          }
+        },
+        "phase": "practice",
+        "purpose": "ordinary",
+        "query_id": "v21_power_law_00035/practice/e00016",
+        "target": {
+          "full_success": 0,
+          "score": 0.6666666667
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 26,
+        "input": {
+          "since_last_event_seconds": 60.0,
+          "since_last_response_seconds": 62.0,
+          "target_task": {
+            "credit_weights": [
+              0.16666666666666666,
+              0.3333333333333333,
+              0.5
+            ],
+            "criterion_count": 3,
+            "difficulty": "easy",
+            "option_count": 0,
+            "penalty_weights": [],
+            "reference_seconds": 47.6,
+            "snippet_count": 3,
+            "task_type": "output_prediction"
+          }
+        },
+        "phase": "practice",
+        "purpose": "followup",
+        "query_id": "v21_power_law_00035/practice/e00026",
+        "target": {
+          "full_success": 0,
+          "score": 0.6666666667
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 29,
+        "input": {
+          "since_last_event_seconds": 569470.5399141312,
+          "since_last_response_seconds": 569472.5399141312,
+          "target_task": {
+            "credit_weights": [
+              0.3333333333333333,
+              0.6666666666666666
+            ],
+            "criterion_count": 2,
+            "difficulty": "hard",
+            "option_count": 0,
+            "penalty_weights": [],
+            "reference_seconds": 84.96,
+            "snippet_count": 1,
+            "task_type": "fill_in_the_blank"
+          }
+        },
+        "phase": "practice",
+        "purpose": "ordinary",
+        "query_id": "v21_power_law_00035/practice/e00152",
+        "target": {
+          "full_success": 0,
+          "score": 0.6666666667
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 42,
+        "input": {
+          "since_last_event_seconds": 60.0,
+          "since_last_response_seconds": 90.0,
+          "target_task": {
+            "credit_weights": [
+              0.16666666666666666,
+              0.3333333333333333,
+              0.5
+            ],
+            "criterion_count": 3,
+            "difficulty": "medium",
+            "option_count": 0,
+            "penalty_weights": [],
+            "reference_seconds": 142.8,
+            "snippet_count": 1,
+            "task_type": "code_completion"
+          }
+        },
+        "phase": "practice",
+        "purpose": "followup",
+        "query_id": "v21_power_law_00035/practice/e00165",
+        "target": {
+          "full_success": 0,
+          "score": 0.8333333333
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 45,
+        "input": {
+          "since_last_event_seconds": 0.0,
+          "since_last_response_seconds": 30.0,
+          "target_task": {
+            "credit_weights": [
+              1.0
+            ],
+            "criterion_count": 1,
+            "difficulty": "easy",
+            "option_count": 4,
+            "penalty_weights": [],
+            "reference_seconds": 25.0,
+            "snippet_count": 0,
+            "task_type": "single_choice"
+          }
+        },
+        "phase": "practice",
+        "purpose": "ordinary",
+        "query_id": "v21_power_law_00035/practice/e00168",
+        "target": {
+          "full_success": 0,
+          "score": 0.0
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 54,
+        "input": {
+          "since_last_event_seconds": 60.0,
+          "since_last_response_seconds": 62.0,
+          "target_task": {
+            "credit_weights": [
+              0.16666666666666666,
+              0.3333333333333333,
+              0.5
+            ],
+            "criterion_count": 6,
+            "difficulty": "easy",
+            "option_count": 6,
+            "penalty_weights": [
+              0.3333333333333333,
+              0.3333333333333333,
+              0.3333333333333333
+            ],
+            "reference_seconds": 85.5,
+            "snippet_count": 0,
+            "task_type": "multiple_select"
+          }
+        },
+        "phase": "practice",
+        "purpose": "followup",
+        "query_id": "v21_power_law_00035/practice/e00177",
+        "target": {
+          "full_success": 0,
+          "score": 0.8333333333
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 57,
+        "input": {
+          "since_last_event_seconds": 0.0,
+          "since_last_response_seconds": 0.09999990463256836,
+          "target_task": {
+            "credit_weights": [
+              0.3333333333333333,
+              0.6666666666666666
+            ],
+            "criterion_count": 2,
+            "difficulty": "hard",
+            "option_count": 0,
+            "penalty_weights": [],
+            "reference_seconds": 74.34,
+            "snippet_count": 2,
+            "task_type": "output_prediction"
+          }
+        },
+        "phase": "practice",
+        "purpose": "ordinary",
+        "query_id": "v21_power_law_00035/practice/e00180",
+        "target": {
+          "full_success": 0,
+          "score": 0.6666666667
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 71,
+        "input": {
+          "since_last_event_seconds": 60.0,
+          "since_last_response_seconds": 60.09999990463257,
+          "target_task": {
+            "credit_weights": [
+              1.0
+            ],
+            "criterion_count": 1,
+            "difficulty": "hard",
+            "option_count": 0,
+            "penalty_weights": [],
+            "reference_seconds": 72.0,
+            "snippet_count": 1,
+            "task_type": "fill_in_the_blank"
+          }
+        },
+        "phase": "practice",
+        "purpose": "followup",
+        "query_id": "v21_power_law_00035/practice/e00194",
+        "target": {
+          "full_success": 1,
+          "score": 1.0
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 74,
+        "input": {
+          "since_last_event_seconds": 0.0,
+          "since_last_response_seconds": 2.0,
+          "target_task": {
+            "credit_weights": [
+              0.1,
+              0.2,
+              0.3,
+              0.4
+            ],
+            "criterion_count": 4,
+            "difficulty": "medium",
+            "option_count": 0,
+            "penalty_weights": [],
+            "reference_seconds": 161.7,
+            "snippet_count": 1,
+            "task_type": "code_completion"
+          }
+        },
+        "phase": "practice",
+        "purpose": "ordinary",
+        "query_id": "v21_power_law_00035/practice/e00197",
+        "target": {
+          "full_success": 1,
+          "score": 1.0
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 77,
+        "input": {
+          "since_last_event_seconds": 1580464.6560077667,
+          "since_last_response_seconds": 1580466.6560077667,
+          "target_task": {
+            "credit_weights": [
+              1.0
+            ],
+            "criterion_count": 1,
+            "difficulty": "medium",
+            "option_count": 4,
+            "penalty_weights": [],
+            "reference_seconds": 35.0,
+            "snippet_count": 0,
+            "task_type": "single_choice"
+          }
+        },
+        "phase": "practice",
+        "purpose": "ordinary",
+        "query_id": "v21_power_law_00035/practice/e00368",
+        "target": {
+          "full_success": 1,
+          "score": 1.0
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 80,
+        "input": {
+          "since_last_event_seconds": 0.0,
+          "since_last_response_seconds": 30.0,
+          "target_task": {
+            "credit_weights": [
+              0.16666666666666666,
+              0.3333333333333333,
+              0.5
+            ],
+            "criterion_count": 6,
+            "difficulty": "easy",
+            "option_count": 6,
+            "penalty_weights": [
+              0.3333333333333333,
+              0.3333333333333333,
+              0.3333333333333333
+            ],
+            "reference_seconds": 85.5,
+            "snippet_count": 0,
+            "task_type": "multiple_select"
+          }
+        },
+        "phase": "practice",
+        "purpose": "ordinary",
+        "query_id": "v21_power_law_00035/practice/e00371",
+        "target": {
+          "full_success": 0,
+          "score": 0.6666666667
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 94,
+        "input": {
+          "since_last_event_seconds": 60.0,
+          "since_last_response_seconds": 62.0,
+          "target_task": {
+            "credit_weights": [
+              0.3333333333333333,
+              0.6666666666666666
+            ],
+            "criterion_count": 2,
+            "difficulty": "medium",
+            "option_count": 0,
+            "penalty_weights": [],
+            "reference_seconds": 57.82,
+            "snippet_count": 2,
+            "task_type": "output_prediction"
+          }
+        },
+        "phase": "practice",
+        "purpose": "followup",
+        "query_id": "v21_power_law_00035/practice/e00385",
+        "target": {
+          "full_success": 0,
+          "score": 0.3333333333
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 97,
+        "input": {
+          "since_last_event_seconds": 0.0,
+          "since_last_response_seconds": 0.09999990463256836,
+          "target_task": {
+            "credit_weights": [
+              0.3333333333333333,
+              0.6666666666666666
+            ],
+            "criterion_count": 2,
+            "difficulty": "easy",
+            "option_count": 0,
+            "penalty_weights": [],
+            "reference_seconds": 47.2,
+            "snippet_count": 1,
+            "task_type": "fill_in_the_blank"
+          }
+        },
+        "phase": "practice",
+        "purpose": "ordinary",
+        "query_id": "v21_power_law_00035/practice/e00388",
+        "target": {
+          "full_success": 0,
+          "score": 0.6666666667
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 105,
+        "input": {
+          "since_last_event_seconds": 60.0,
+          "since_last_response_seconds": 90.0,
+          "target_task": {
+            "credit_weights": [
+              0.1,
+              0.2,
+              0.3,
+              0.4
+            ],
+            "criterion_count": 4,
+            "difficulty": "easy",
+            "option_count": 0,
+            "penalty_weights": [],
+            "reference_seconds": 115.5,
+            "snippet_count": 1,
+            "task_type": "code_completion"
+          }
+        },
+        "phase": "practice",
+        "purpose": "followup",
+        "query_id": "v21_power_law_00035/practice/e00396",
+        "target": {
+          "full_success": 0,
+          "score": 0.7
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 108,
+        "input": {
+          "since_last_event_seconds": 0.0,
+          "since_last_response_seconds": 30.0,
+          "target_task": {
+            "credit_weights": [
+              1.0
+            ],
+            "criterion_count": 1,
+            "difficulty": "easy",
+            "option_count": 4,
+            "penalty_weights": [],
+            "reference_seconds": 25.0,
+            "snippet_count": 0,
+            "task_type": "single_choice"
+          }
+        },
+        "phase": "practice",
+        "purpose": "ordinary",
+        "query_id": "v21_power_law_00035/practice/e00399",
+        "target": {
+          "full_success": 1,
+          "score": 1.0
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 111,
+        "input": {
+          "since_last_event_seconds": 523524.57558631897,
+          "since_last_response_seconds": 523526.57558631897,
+          "target_task": {
+            "credit_weights": [
+              0.16666666666666666,
+              0.3333333333333333,
+              0.5
+            ],
+            "criterion_count": 6,
+            "difficulty": "easy",
+            "option_count": 6,
+            "penalty_weights": [
+              0.3333333333333333,
+              0.3333333333333333,
+              0.3333333333333333
+            ],
+            "reference_seconds": 85.5,
+            "snippet_count": 0,
+            "task_type": "multiple_select"
+          }
+        },
+        "phase": "practice",
+        "purpose": "ordinary",
+        "query_id": "v21_power_law_00035/practice/e00584",
+        "target": null,
+        "target_exclusion": "assisted_or_review_first_attempt"
+      },
+      {
+        "history_end": 116,
+        "input": {
+          "since_last_event_seconds": 60.0,
+          "since_last_response_seconds": 62.0,
+          "target_task": {
+            "credit_weights": [
+              1.0
+            ],
+            "criterion_count": 1,
+            "difficulty": "easy",
+            "option_count": 0,
+            "penalty_weights": [],
+            "reference_seconds": 35.0,
+            "snippet_count": 1,
+            "task_type": "output_prediction"
+          }
+        },
+        "phase": "practice",
+        "purpose": "followup",
+        "query_id": "v21_power_law_00035/practice/e00589",
+        "target": {
+          "full_success": 1,
+          "score": 1.0
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 119,
+        "input": {
+          "since_last_event_seconds": 0.0,
+          "since_last_response_seconds": 2.0,
+          "target_task": {
+            "credit_weights": [
+              0.16666666666666666,
+              0.3333333333333333,
+              0.5
+            ],
+            "criterion_count": 3,
+            "difficulty": "hard",
+            "option_count": 0,
+            "penalty_weights": [],
+            "reference_seconds": 97.92,
+            "snippet_count": 1,
+            "task_type": "fill_in_the_blank"
+          }
+        },
+        "phase": "practice",
+        "purpose": "ordinary",
+        "query_id": "v21_power_law_00035/practice/e00592",
+        "target": {
+          "full_success": 0,
+          "score": 0
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 132,
+        "input": {
+          "since_last_event_seconds": 60.0,
+          "since_last_response_seconds": 62.0,
+          "target_task": {
+            "credit_weights": [
+              0.1,
+              0.2,
+              0.3,
+              0.4
+            ],
+            "criterion_count": 4,
+            "difficulty": "hard",
+            "option_count": 0,
+            "penalty_weights": [],
+            "reference_seconds": 207.9,
+            "snippet_count": 1,
+            "task_type": "code_completion"
+          }
+        },
+        "phase": "practice",
+        "purpose": "followup",
+        "query_id": "v21_power_law_00035/practice/e00605",
+        "target": {
+          "full_success": 0,
+          "score": 0.4
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 135,
+        "input": {
+          "since_last_event_seconds": 0.0,
+          "since_last_response_seconds": 0.09999990463256836,
+          "target_task": {
+            "credit_weights": [
+              1.0
+            ],
+            "criterion_count": 1,
+            "difficulty": "hard",
+            "option_count": 4,
+            "penalty_weights": [],
+            "reference_seconds": 45.0,
+            "snippet_count": 0,
+            "task_type": "single_choice"
+          }
+        },
+        "phase": "practice",
+        "purpose": "ordinary",
+        "query_id": "v21_power_law_00035/practice/e00608",
+        "target": {
+          "full_success": 1,
+          "score": 1.0
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 138,
+        "input": {
+          "since_last_event_seconds": 0.0,
+          "since_last_response_seconds": 30.0,
+          "target_task": {
+            "credit_weights": [
+              0.16666666666666666,
+              0.3333333333333333,
+              0.5
+            ],
+            "criterion_count": 6,
+            "difficulty": "hard",
+            "option_count": 6,
+            "penalty_weights": [
+              0.3333333333333333,
+              0.3333333333333333,
+              0.3333333333333333
+            ],
+            "reference_seconds": null,
+            "snippet_count": 0,
+            "task_type": "multiple_select"
+          }
+        },
+        "phase": "practice",
+        "purpose": "ordinary",
+        "query_id": "v21_power_law_00035/practice/e00611",
+        "target": {
+          "full_success": 0,
+          "score": 0.3333333333
+        },
+        "target_exclusion": null
+      },
+      {
+        "history_end": 147,
+        "input": {
+          "since_last_event_seconds": 60.0,
+          "since_last_response_seconds": 60.09999990463257,
+          "target_task": {
+            "credit_weights": [
+              0.16666666666666666,
+              0.3333333333333333,
+              0.5
+            ],
+            "criterion_count": 3,
+            "difficulty": "easy",
+            "option_count": 0,
+            "penalty_weights": [],
+            "reference_seconds": 47.6,
+            "snippet_count": 3,
+            "task_type": "output_prediction"
+          }
+        },
+        "phase": "practice",
+        "purpose": "followup",
+        "query_id": "v21_power_law_00035/practice/e00620",
+        "target": {
+          "full_success": 1,
+          "score": 1.0
+        },
+        "target_exclusion": null
+      }
+    ],
+    "skill_id": "conditional_evaluation"
+  },
+  "learner_id": "v21_power_law_00035",
+  "schedule": "blocked",
+  "split": "test"
+}

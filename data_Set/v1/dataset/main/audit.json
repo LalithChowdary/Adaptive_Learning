@@ -1,0 +1,228 @@
+{
+  "active_response_seconds": {
+    "max": 581.2693473432033,
+    "median": 48.505167743332024,
+    "min": 3.270912287627821,
+    "p95": 131.9207174777849
+  },
+  "check_categories_passed": 17,
+  "checks": [
+    "file checksums",
+    "generation source fingerprints",
+    "unique disjoint learner assignments",
+    "balanced declared schedules",
+    "six-skill budgets",
+    "strict event schema",
+    "event and grade causality",
+    "assistance consistency",
+    "rubric derivation and unresolved labels",
+    "simulated grading provenance",
+    "independent delayed assessment branches",
+    "assessment delays and coverage",
+    "separate task pools",
+    "all prepared records match causal replay",
+    "no delayed fitting labels",
+    "model feature allowlist",
+    "no missing/extra observation, model, assessment or administration learner rows"
+  ],
+  "cohort": "main",
+  "delayed_by_day": {
+    "test/1d": {
+      "eligible": 1140,
+      "successes": 813
+    },
+    "test/30d": {
+      "eligible": 1143,
+      "successes": 344
+    },
+    "test/7d": {
+      "eligible": 1135,
+      "successes": 642
+    },
+    "train/1d": {
+      "eligible": 9116,
+      "successes": 6314
+    },
+    "train/30d": {
+      "eligible": 9081,
+      "successes": 2614
+    },
+    "train/7d": {
+      "eligible": 9111,
+      "successes": 5110
+    },
+    "validation/1d": {
+      "eligible": 1151,
+      "successes": 816
+    },
+    "validation/30d": {
+      "eligible": 1132,
+      "successes": 315
+    },
+    "validation/7d": {
+      "eligible": 1141,
+      "successes": 656
+    }
+  },
+  "learner_count": 2000,
+  "limitations": "Internal consistency of synthetic data, not human fidelity or model effectiveness.",
+  "practice_span_days": {
+    "max": 19.165527940072394,
+    "median": 10.107086460408237,
+    "min": 1.8892514624832957,
+    "p95": 15.625006729778317
+  },
+  "primary_by_skill": {
+    "test/accumulator_initialization": {
+      "eligible": 3048,
+      "successes": 1954
+    },
+    "test/conditional_evaluation": {
+      "eligible": 3039,
+      "successes": 2033
+    },
+    "test/function_returns": {
+      "eligible": 3055,
+      "successes": 2041
+    },
+    "test/list_indexing": {
+      "eligible": 3024,
+      "successes": 2033
+    },
+    "test/loop_tracing": {
+      "eligible": 3047,
+      "successes": 2055
+    },
+    "test/range_boundaries": {
+      "eligible": 3048,
+      "successes": 2100
+    },
+    "train/accumulator_initialization": {
+      "eligible": 24363,
+      "successes": 16264
+    },
+    "train/conditional_evaluation": {
+      "eligible": 24310,
+      "successes": 16536
+    },
+    "train/function_returns": {
+      "eligible": 24343,
+      "successes": 16595
+    },
+    "train/list_indexing": {
+      "eligible": 24355,
+      "successes": 16596
+    },
+    "train/loop_tracing": {
+      "eligible": 24362,
+      "successes": 16511
+    },
+    "train/range_boundaries": {
+      "eligible": 24302,
+      "successes": 16976
+    },
+    "validation/accumulator_initialization": {
+      "eligible": 3061,
+      "successes": 2052
+    },
+    "validation/conditional_evaluation": {
+      "eligible": 3037,
+      "successes": 2137
+    },
+    "validation/function_returns": {
+      "eligible": 3057,
+      "successes": 2081
+    },
+    "validation/list_indexing": {
+      "eligible": 3045,
+      "successes": 2100
+    },
+    "validation/loop_tracing": {
+      "eligible": 3042,
+      "successes": 2084
+    },
+    "validation/range_boundaries": {
+      "eligible": 3042,
+      "successes": 2152
+    }
+  },
+  "skill_event_gaps_days": {
+    "max": 15.375498733051398,
+    "median": 0.00034722222222222224,
+    "min": 0.0,
+    "p95": 0.2571964387540464
+  },
+  "splits": {
+    "test": {
+      "assisted": 3923,
+      "blocked": 100,
+      "eligible_assessment": 3418,
+      "eligible_practice": 18261,
+      "event_grade": 26797,
+      "event_help": 3997,
+      "event_instruction": 12475,
+      "event_response": 26797,
+      "event_task": 22800,
+      "events": 92866,
+      "independent": 22320,
+      "learners": 200,
+      "missing_active_time": 1075,
+      "missing_reference_time": 926,
+      "mixed": 100,
+      "partial_grades": 6586,
+      "resolved": 26027,
+      "retries": 3997,
+      "successes_assessment": 1799,
+      "successes_practice": 12216,
+      "unknown": 554,
+      "unresolved": 770
+    },
+    "train": {
+      "assisted": 30087,
+      "blocked": 800,
+      "eligible_practice": 146035,
+      "event_grade": 213117,
+      "event_help": 30717,
+      "event_instruction": 100015,
+      "event_response": 213117,
+      "event_task": 182400,
+      "events": 739366,
+      "independent": 178766,
+      "learners": 1600,
+      "missing_active_time": 8433,
+      "missing_reference_time": 7303,
+      "mixed": 800,
+      "partial_grades": 51171,
+      "resolved": 206648,
+      "retries": 30717,
+      "successes_practice": 99478,
+      "unknown": 4264,
+      "unresolved": 6469
+    },
+    "validation": {
+      "assisted": 3607,
+      "blocked": 100,
+      "eligible_assessment": 3424,
+      "eligible_practice": 18284,
+      "event_grade": 26485,
+      "event_help": 3685,
+      "event_instruction": 12492,
+      "event_response": 26485,
+      "event_task": 22800,
+      "events": 91947,
+      "independent": 22324,
+      "learners": 200,
+      "missing_active_time": 1117,
+      "missing_reference_time": 930,
+      "mixed": 100,
+      "partial_grades": 6241,
+      "resolved": 25734,
+      "retries": 3685,
+      "successes_assessment": 1787,
+      "successes_practice": 12606,
+      "unknown": 554,
+      "unresolved": 751
+    }
+  },
+  "status": "passed"
+}

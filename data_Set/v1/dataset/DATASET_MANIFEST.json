@@ -1,0 +1,63 @@
+{
+  "catalog_sha256": "afdf5cd653057467d2ff8815580299f5f2d2978779ecb7bf497d9d7f66deb3aa",
+  "cohorts": {
+    "long_gap": {
+      "counts": {
+        "eligible_assessment": 3437,
+        "eligible_practice": 18227,
+        "event_response": 28323,
+        "event_task": 22800,
+        "events": 97486,
+        "retries": 5523
+      },
+      "learners": 200,
+      "manifest_sha256": "b4c57058df05acedcc8ad5f9e51716c5d1426363bf8379b8d832d5ef8c163cdd",
+      "status": "passed"
+    },
+    "main": {
+      "counts": {
+        "eligible_assessment": 6842,
+        "eligible_practice": 182580,
+        "event_response": 266399,
+        "event_task": 228000,
+        "events": 924179,
+        "retries": 38399
+      },
+      "learners": 2000,
+      "manifest_sha256": "f217e424003fa28e6cf449ac456c0f8e9273aae2d56043461d9eb6065ad13879",
+      "status": "passed"
+    },
+    "pilot": {
+      "counts": {
+        "eligible_assessment": 690,
+        "eligible_practice": 18234,
+        "event_response": 26481,
+        "event_task": 22800,
+        "events": 91932,
+        "retries": 3681
+      },
+      "learners": 200,
+      "manifest_sha256": "dfd12b8319acf0d2ca84c5d09960de441fbb4ffa42ff85c9572659785151fee0",
+      "status": "passed"
+    },
+    "power_law": {
+      "counts": {
+        "eligible_assessment": 3420,
+        "eligible_practice": 18260,
+        "event_response": 26658,
+        "event_task": 22800,
+        "events": 92372,
+        "retries": 3858
+      },
+      "learners": 200,
+      "manifest_sha256": "da5971c76db78f477ce48792244bbf88815a4f516f0e06dc54a6fb74e5d6ef65",
+      "status": "passed"
+    }
+  },
+  "cross_cohort_ids_disjoint": true,
+  "task_catalog_matches_source": true,
+  "total_events": 1205969,
+  "total_learners": 2600,
+  "total_responses": 347861,
+  "version": "1.0.0"
+}

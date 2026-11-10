@@ -1,0 +1,23 @@
+{
+  "files": {
+    "administration/test.jsonl.gz": "43c0b8a91d01b8a05f6148c4d9fc81678ab81454200602542c9d7936fa32e2c8",
+    "assessments/test.jsonl.gz": "7ded9c454e0fea314cd8c35588d2ca049c5460667aaced29e1c924485af01cc1",
+    "config.json": "facbe8aea71550913b8ee9e8da935fd382abe12aaddbbddb7436ac4366f1601c",
+    "example_learner.json": "66cb682d1b66439da2f875738f9be734ab25dd6355427c29a9c65208222bc4ff",
+    "model_data/test.jsonl.gz": "c6094c0e030879e2cff0d5d5d2819f1f25dae19ab8c7df10cc492f5335984377",
+    "observations/test.jsonl.gz": "46884e454bd3b54368e7dbce378c2a58b905c9a40cf33e0fdeeeecf7c7c7639d"
+  },
+  "python": "3.12.14",
+  "source_files": {
+    "audit_dataset.py": "899f538e439f9fcf4e78e69ff4864afd5b7b8f2b9a2641fd13c6844c1305aa2a",
+    "build_dataset.py": "b5f5195ce3f31a8bbf5da9609efd8b63869551317f8c33798bf0216fd4c5b6dd",
+    "build_fixtures.py": "56da65a9cf5aa078b57eeb691f11a2a95713694b993b59eea93d69ac156ff4a2",
+    "catalog.py": "5a8b9fde52c8732560bac9e7f85d5f183e0ad61774517583852f253148bec100",
+    "loader.py": "e04226e271681fa4f309a00d8615cbdcf6b088dd9ddc8178730136da2fdbf88d",
+    "replay.py": "5a8b76419d73f0d8e266b0ddbeb9d9eaebd18f51700b4df6545efaff50518e92",
+    "run_tests.py": "bf0a431abbaa1bbe3105fc7e888905ae947bd33f273e5bb8234ef78da7831a98",
+    "simulator.py": "4cc06d8c8c8632790fd466424ed9b4a0e3abce61918cf380aa0b4e79bbc0c6db",
+    "storage.py": "55a2fbca62fc9060319226bce35d013718bf01e60e4805bc1471d4307c15d2b8"
+  },
+  "version": "1.0.0"
+}

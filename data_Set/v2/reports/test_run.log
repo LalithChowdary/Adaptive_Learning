@@ -1,0 +1,60 @@
+test_catalog_covers_all_skill_format_difficulty_pool_combinations (test_dataset.CatalogTests.test_catalog_covers_all_skill_format_difficulty_pool_combinations) ... ok
+test_completion_reference_passes_every_authored_case (test_dataset.CatalogTests.test_completion_reference_passes_every_authored_case) ... ok
+test_fill_keys_reconstruct_reference_code (test_dataset.CatalogTests.test_fill_keys_reconstruct_reference_code) ... ok
+test_invalid_grade_evidence_rejected (test_dataset.CatalogTests.test_invalid_grade_evidence_rejected) ... ok
+test_multiple_select_all_and_none_earn_zero (test_dataset.CatalogTests.test_multiple_select_all_and_none_earn_zero) ... ok
+test_multiple_select_wrong_selection_reduces_credit (test_dataset.CatalogTests.test_multiple_select_wrong_selection_reduces_credit) ... ok
+test_output_keys_match_trusted_reference_execution (test_dataset.CatalogTests.test_output_keys_match_trusted_reference_execution) ... ok
+test_single_choice_exact_scoring (test_dataset.CatalogTests.test_single_choice_exact_scoring) ... ok
+test_snippets_and_criteria_are_variable (test_dataset.CatalogTests.test_snippets_and_criteria_are_variable) ... ok
+test_weight_normalization_and_positive_penalty_totals (test_dataset.CatalogTests.test_weight_normalization_and_positive_penalty_totals) ... ok
+test_weighted_partial_credit_does_not_imply_full_success (test_dataset.CatalogTests.test_weighted_partial_credit_does_not_imply_full_success) ... ok
+test_checksum_tampering_detected (test_dataset.DiskTests.test_checksum_tampering_detected) ... ok
+test_evaluation_loader_has_all_clean_delayed_labels (test_dataset.DiskTests.test_evaluation_loader_has_all_clean_delayed_labels) ... ok
+test_full_audit_passes (test_dataset.DiskTests.test_full_audit_passes) ... ok
+test_future_prefix_tampering_detected_even_with_new_checksum (test_dataset.DiskTests.test_future_prefix_tampering_detected_even_with_new_checksum) ... ok
+test_overwrite_refused (test_dataset.DiskTests.test_overwrite_refused) ... ok
+test_regeneration_byte_identical (test_dataset.DiskTests.test_regeneration_byte_identical) ... ok
+test_splits_disjoint_and_balanced (test_dataset.DiskTests.test_splits_disjoint_and_balanced) ... ok
+test_training_loader_returns_only_input_and_binary_label (test_dataset.DiskTests.test_training_loader_returns_only_input_and_binary_label) ... ok
+test_training_records_exclude_delayed_queries (test_dataset.DiskTests.test_training_records_exclude_delayed_queries) ... ok
+test_assessment_help_after_answer_does_not_replace_label (test_dataset.EvidenceTests.test_assessment_help_after_answer_does_not_replace_label) ... ok
+test_assessment_request_before_answer_is_incomplete (test_dataset.EvidenceTests.test_assessment_request_before_answer_is_incomplete) ... ok
+test_assisted_retry_keeps_original_independent_failure_label (test_dataset.EvidenceTests.test_assisted_retry_keeps_original_independent_failure_label) ... ok
+test_delayed_queries_share_only_original_practice_prefix (test_dataset.EvidenceTests.test_delayed_queries_share_only_original_practice_prefix) ... ok
+test_hidden_or_text_fields_in_features_rejected (test_dataset.EvidenceTests.test_hidden_or_text_fields_in_features_rejected) ... ok
+test_hint_before_first_answer_has_no_independent_label (test_dataset.EvidenceTests.test_hint_before_first_answer_has_no_independent_label) ... ok
+test_invalid_event_mutations_rejected (test_dataset.EvidenceTests.test_invalid_event_mutations_rejected) ... ok
+test_missing_times_remain_null (test_dataset.EvidenceTests.test_missing_times_remain_null) ... ok
+test_other_skill_events_do_not_erase_elapsed_gap (test_dataset.EvidenceTests.test_other_skill_events_do_not_erase_elapsed_gap) ... ok
+test_prediction_cannot_see_current_response_or_grade (test_dataset.EvidenceTests.test_prediction_cannot_see_current_response_or_grade) ... ok
+test_query_identity_feature_rejected (test_dataset.EvidenceTests.test_query_identity_feature_rejected) ... ok
+test_renaming_learner_does_not_change_network_inputs (test_dataset.EvidenceTests.test_renaming_learner_does_not_change_network_inputs) ... ok
+test_retry_without_retry_event_rejected (test_dataset.EvidenceTests.test_retry_without_retry_event_rejected) ... ok
+test_unjustified_instruction_rejected (test_dataset.EvidenceTests.test_unjustified_instruction_rejected) ... ok
+test_unknown_assistance_excludes_target (test_dataset.EvidenceTests.test_unknown_assistance_excludes_target) ... ok
+test_unresolved_grade_excludes_target (test_dataset.EvidenceTests.test_unresolved_grade_excludes_target) ... ok
+test_assessment_branch_does_not_modify_practice_or_learn (test_dataset.SimulationTests.test_assessment_branch_does_not_modify_practice_or_learn) ... ok
+test_each_assisted_practice_has_fresh_unaided_followup (test_dataset.SimulationTests.test_each_assisted_practice_has_fresh_unaided_followup) ... ok
+test_formats_have_distinct_guessing_time_and_help_rules (test_dataset.SimulationTests.test_formats_have_distinct_guessing_time_and_help_rules) ... ok
+test_four_hint_configuration (test_dataset.SimulationTests.test_four_hint_configuration) ... ok
+test_help_changes_current_probability (test_dataset.SimulationTests.test_help_changes_current_probability) ... ok
+test_hint_event_has_no_retained_gain (test_dataset.SimulationTests.test_hint_event_has_no_retained_gain) ... ok
+test_initial_strength_varies_and_is_not_assumed_zero (test_dataset.SimulationTests.test_initial_strength_varies_and_is_not_assumed_zero) ... ok
+test_invalid_configuration_rejected (test_dataset.SimulationTests.test_invalid_configuration_rejected) ... ok
+test_learning_is_bounded_and_zero_dose_is_noop (test_dataset.SimulationTests.test_learning_is_bounded_and_zero_dose_is_noop) ... ok
+test_no_routine_instruction_and_question_first (test_dataset.SimulationTests.test_no_routine_instruction_and_question_first) ... ok
+test_querying_strength_does_not_change_state (test_dataset.SimulationTests.test_querying_strength_does_not_change_state) ... ok
+test_requested_lesson_content_exists (test_dataset.SimulationTests.test_requested_lesson_content_exists) ... ok
+test_requested_lesson_has_no_direct_learning_gain (test_dataset.SimulationTests.test_requested_lesson_has_no_direct_learning_gain) ... ok
+test_retention_half_life_and_alternative_tail (test_dataset.SimulationTests.test_retention_half_life_and_alternative_tail) ... ok
+test_seed_reproduces_full_history_and_hidden_state (test_dataset.SimulationTests.test_seed_reproduces_full_history_and_hidden_state) ... ok
+test_strength_changes_current_probability (test_dataset.SimulationTests.test_strength_changes_current_probability) ... ok
+test_three_hints_and_two_retries_are_chronological (test_dataset.SimulationTests.test_three_hints_and_two_retries_are_chronological) ... ok
+test_zero_help_and_retry_caps (test_dataset.SimulationTests.test_zero_help_and_retry_caps) ... ok
+
+----------------------------------------------------------------------
+Ran 54 tests in 0.468s
+
+OK
+

@@ -1,0 +1,111 @@
+{
+  "memory_event": [
+    "active_response_seconds",
+    "answer_revealed",
+    "assistance",
+    "attempt_number",
+    "event_type",
+    "full_success",
+    "gap_seconds",
+    "grading_status",
+    "hint_count",
+    "hint_type",
+    "new_session",
+    "relative_response_time",
+    "score",
+    "task"
+  ],
+  "memory_task": [
+    "credit_weights",
+    "criterion_count",
+    "difficulty",
+    "option_count",
+    "penalty_weights",
+    "reference_seconds",
+    "snippet_count",
+    "task_type"
+  ],
+  "raw_by_event": {
+    "assessment_end": [
+      "reason",
+      "status",
+      "task_id"
+    ],
+    "grade": [
+      "criteria",
+      "evidence",
+      "full_success",
+      "grader",
+      "grader_confidence",
+      "grading_status",
+      "response_id",
+      "rubric_id",
+      "score",
+      "task_id"
+    ],
+    "help_request": [
+      "reason",
+      "task_id"
+    ],
+    "hint": [
+      "content_ref",
+      "hint_number",
+      "hint_type",
+      "reason",
+      "task_id"
+    ],
+    "instruction": [
+      "content_ref",
+      "reason",
+      "teaching_action"
+    ],
+    "lesson_request": [
+      "reason"
+    ],
+    "mode_switch": [
+      "reason",
+      "task_id"
+    ],
+    "response": [
+      "active_response_seconds",
+      "answer_revealed",
+      "assistance",
+      "attempt_number",
+      "hint_count",
+      "task_id"
+    ],
+    "retry": [
+      "attempt_number",
+      "reason",
+      "task_id"
+    ],
+    "solution_reveal": [
+      "content_ref",
+      "reason",
+      "task_id"
+    ],
+    "task": [
+      "max_hints",
+      "max_retries",
+      "parent_interaction_id",
+      "purpose",
+      "reference_seconds",
+      "task_id"
+    ]
+  },
+  "raw_common": [
+    "available_at",
+    "branch",
+    "course_id",
+    "event_id",
+    "event_type",
+    "interaction_id",
+    "learner_id",
+    "occurred_at",
+    "phase",
+    "schema_version",
+    "session_id",
+    "skill_id"
+  ],
+  "version": "2.1.0"
+}

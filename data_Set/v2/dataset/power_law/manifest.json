@@ -1,0 +1,29 @@
+{
+  "catalog_files": {
+    "lesson_catalog.json": "6505ef771d5dfa5b7482b63759ff5e0dbfb8eb5ce4db86241044e0cf8e095803",
+    "task_catalog.json": "9c6b1332fba8c4e947cb67b498d578c10dda4ee1efcae454fa50dc8ba575868a"
+  },
+  "files": {
+    "administration/test.jsonl.gz": "daacc9a0d748d1ae3be97ef899ebddd2f8e599b3568da04c36869fa2a9e40149",
+    "assessments/test.jsonl.gz": "f8e9efeaad2633f3142becc03a4c5102ff16949cbe477bf8b4505e41c9a71d4d",
+    "config.json": "e6b4f4fc44dee3f2f64e48f01ffb8da697dc481b5c5fa15f368a5fff87879feb",
+    "example_learner.json": "7498b14a5349589f2324cdca5c6d95945f25c6fe695fbcf664c3b8707fe7b8ab",
+    "model_data/test.jsonl.gz": "acb7d4de9acd0c91309102eff24631f2469b1d38e2fc32d0f011518aaf06a830",
+    "observations/test.jsonl.gz": "9dec5566e7b6cae6147e5e5e5605571ffe680b9389e79740c36d2d79a876112e"
+  },
+  "python": "3.12.14",
+  "source_files": {
+    "audit_dataset.py": "2758a5e03ceeac0d29e57f386369e9400101fa2fdfab0d18a221e6a0cd080438",
+    "build_dataset.py": "77366e84988c07edc543d34da43ee123c680b152913919380744babf2f645bc0",
+    "build_fixtures.py": "a98c9ea5046142d4231312b8d4f0d9ff49cb03e4aea70b9f1850c024b99b0e7c",
+    "catalog.py": "cda160fdd0209b179c08ee3b5d7d2fdeddb254473367559dbe93c634b92b5ccf",
+    "loader.py": "264b1adf1f8353e50368f1b7c71b4272e384038f8cc49fd9b4f6c5254c68c447",
+    "release.py": "6d063350a8739dce73dc916db8d54873bc1781d5e05b68e189067593f2908936",
+    "replay.py": "92d95aa5c37cebd54adc6fa80e303b5dc6c7952da4ad8be0e6af48b5150ef141",
+    "run_tests.py": "bf0a431abbaa1bbe3105fc7e888905ae947bd33f273e5bb8234ef78da7831a98",
+    "simulator.py": "6ab0434782968d75594cff4c471a96970e032c111109554ea1dff0919058c96a",
+    "storage.py": "55a2fbca62fc9060319226bce35d013718bf01e60e4805bc1471d4307c15d2b8",
+    "tests/test_dataset.py": "92f790ee2e020a3dbd718e60052087430e3ebe82e485b6f865fd4940cadec16e"
+  },
+  "version": "2.0.0"
+}

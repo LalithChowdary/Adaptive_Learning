@@ -1,0 +1,1879 @@
+{
+  "checkpoint_sha256": "353ccee669f66f60acf1a6e08f9cae410f2c1ea7744c7c56e2a5523a834866de",
+  "device": "cpu",
+  "method": "Empty event history; first assessment-pool reference task per skill/difficulty/format; no learner data read or written.",
+  "rows": [
+    {
+      "skill": "range_boundaries",
+      "difficulty": "easy",
+      "format": "single_choice",
+      "task": "range_boundaries.easy.single_choice.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "single_choice",
+        "reference_seconds": 25.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.7981905341148376
+    },
+    {
+      "skill": "range_boundaries",
+      "difficulty": "easy",
+      "format": "multiple_select",
+      "task": "range_boundaries.easy.multiple_select.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "multiple_select",
+        "reference_seconds": 77.4,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.5265786051750183
+    },
+    {
+      "skill": "range_boundaries",
+      "difficulty": "easy",
+      "format": "output_prediction",
+      "task": "range_boundaries.easy.output_prediction.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "output_prediction",
+        "reference_seconds": 41.3,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.6197265982627869
+    },
+    {
+      "skill": "range_boundaries",
+      "difficulty": "easy",
+      "format": "fill_in_the_blank",
+      "task": "range_boundaries.easy.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 47.2,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.609582781791687
+    },
+    {
+      "skill": "range_boundaries",
+      "difficulty": "easy",
+      "format": "code_completion",
+      "task": "range_boundaries.easy.code_completion.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "code_completion",
+        "reference_seconds": 102.0,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.49568498134613037
+    },
+    {
+      "skill": "range_boundaries",
+      "difficulty": "medium",
+      "format": "single_choice",
+      "task": "range_boundaries.medium.single_choice.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "single_choice",
+        "reference_seconds": 35.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.708847165107727
+    },
+    {
+      "skill": "range_boundaries",
+      "difficulty": "medium",
+      "format": "multiple_select",
+      "task": "range_boundaries.medium.multiple_select.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "multiple_select",
+        "reference_seconds": 108.36,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.36662784218788147
+    },
+    {
+      "skill": "range_boundaries",
+      "difficulty": "medium",
+      "format": "output_prediction",
+      "task": "range_boundaries.medium.output_prediction.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "output_prediction",
+        "reference_seconds": 57.82,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.4296424090862274
+    },
+    {
+      "skill": "range_boundaries",
+      "difficulty": "medium",
+      "format": "fill_in_the_blank",
+      "task": "range_boundaries.medium.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 66.08,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.4224632680416107
+    },
+    {
+      "skill": "range_boundaries",
+      "difficulty": "medium",
+      "format": "code_completion",
+      "task": "range_boundaries.medium.code_completion.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "code_completion",
+        "reference_seconds": 142.8,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.2993971109390259
+    },
+    {
+      "skill": "range_boundaries",
+      "difficulty": "hard",
+      "format": "single_choice",
+      "task": "range_boundaries.hard.single_choice.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "single_choice",
+        "reference_seconds": 45.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.6058436632156372
+    },
+    {
+      "skill": "range_boundaries",
+      "difficulty": "hard",
+      "format": "multiple_select",
+      "task": "range_boundaries.hard.multiple_select.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "multiple_select",
+        "reference_seconds": 139.32,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.23262788355350494
+    },
+    {
+      "skill": "range_boundaries",
+      "difficulty": "hard",
+      "format": "output_prediction",
+      "task": "range_boundaries.hard.output_prediction.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "output_prediction",
+        "reference_seconds": 74.34,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.2711638808250427
+    },
+    {
+      "skill": "range_boundaries",
+      "difficulty": "hard",
+      "format": "fill_in_the_blank",
+      "task": "range_boundaries.hard.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 84.96,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.26782000064849854
+    },
+    {
+      "skill": "range_boundaries",
+      "difficulty": "hard",
+      "format": "code_completion",
+      "task": "range_boundaries.hard.code_completion.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "code_completion",
+        "reference_seconds": 183.6,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.15973106026649475
+    },
+    {
+      "skill": "loop_tracing",
+      "difficulty": "easy",
+      "format": "single_choice",
+      "task": "loop_tracing.easy.single_choice.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "single_choice",
+        "reference_seconds": 25.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.7981905341148376
+    },
+    {
+      "skill": "loop_tracing",
+      "difficulty": "easy",
+      "format": "multiple_select",
+      "task": "loop_tracing.easy.multiple_select.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "multiple_select",
+        "reference_seconds": 77.4,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.5265786051750183
+    },
+    {
+      "skill": "loop_tracing",
+      "difficulty": "easy",
+      "format": "output_prediction",
+      "task": "loop_tracing.easy.output_prediction.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "output_prediction",
+        "reference_seconds": 41.3,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.6197265982627869
+    },
+    {
+      "skill": "loop_tracing",
+      "difficulty": "easy",
+      "format": "fill_in_the_blank",
+      "task": "loop_tracing.easy.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 47.2,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.609582781791687
+    },
+    {
+      "skill": "loop_tracing",
+      "difficulty": "easy",
+      "format": "code_completion",
+      "task": "loop_tracing.easy.code_completion.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "code_completion",
+        "reference_seconds": 102.0,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.49568498134613037
+    },
+    {
+      "skill": "loop_tracing",
+      "difficulty": "medium",
+      "format": "single_choice",
+      "task": "loop_tracing.medium.single_choice.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "single_choice",
+        "reference_seconds": 35.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.708847165107727
+    },
+    {
+      "skill": "loop_tracing",
+      "difficulty": "medium",
+      "format": "multiple_select",
+      "task": "loop_tracing.medium.multiple_select.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "multiple_select",
+        "reference_seconds": 108.36,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.36662784218788147
+    },
+    {
+      "skill": "loop_tracing",
+      "difficulty": "medium",
+      "format": "output_prediction",
+      "task": "loop_tracing.medium.output_prediction.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "output_prediction",
+        "reference_seconds": 57.82,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.4296424090862274
+    },
+    {
+      "skill": "loop_tracing",
+      "difficulty": "medium",
+      "format": "fill_in_the_blank",
+      "task": "loop_tracing.medium.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 66.08,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.4224632680416107
+    },
+    {
+      "skill": "loop_tracing",
+      "difficulty": "medium",
+      "format": "code_completion",
+      "task": "loop_tracing.medium.code_completion.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "code_completion",
+        "reference_seconds": 142.8,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.2993971109390259
+    },
+    {
+      "skill": "loop_tracing",
+      "difficulty": "hard",
+      "format": "single_choice",
+      "task": "loop_tracing.hard.single_choice.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "single_choice",
+        "reference_seconds": 45.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.6058436632156372
+    },
+    {
+      "skill": "loop_tracing",
+      "difficulty": "hard",
+      "format": "multiple_select",
+      "task": "loop_tracing.hard.multiple_select.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "multiple_select",
+        "reference_seconds": 139.32,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.23262788355350494
+    },
+    {
+      "skill": "loop_tracing",
+      "difficulty": "hard",
+      "format": "output_prediction",
+      "task": "loop_tracing.hard.output_prediction.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "output_prediction",
+        "reference_seconds": 74.34,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.2711638808250427
+    },
+    {
+      "skill": "loop_tracing",
+      "difficulty": "hard",
+      "format": "fill_in_the_blank",
+      "task": "loop_tracing.hard.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 84.96,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.26782000064849854
+    },
+    {
+      "skill": "loop_tracing",
+      "difficulty": "hard",
+      "format": "code_completion",
+      "task": "loop_tracing.hard.code_completion.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "code_completion",
+        "reference_seconds": 183.6,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.15973106026649475
+    },
+    {
+      "skill": "accumulator_initialization",
+      "difficulty": "easy",
+      "format": "single_choice",
+      "task": "accumulator_initialization.easy.single_choice.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "single_choice",
+        "reference_seconds": 25.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.7981905341148376
+    },
+    {
+      "skill": "accumulator_initialization",
+      "difficulty": "easy",
+      "format": "multiple_select",
+      "task": "accumulator_initialization.easy.multiple_select.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "multiple_select",
+        "reference_seconds": 77.4,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.5265786051750183
+    },
+    {
+      "skill": "accumulator_initialization",
+      "difficulty": "easy",
+      "format": "output_prediction",
+      "task": "accumulator_initialization.easy.output_prediction.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "output_prediction",
+        "reference_seconds": 41.3,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.6197265982627869
+    },
+    {
+      "skill": "accumulator_initialization",
+      "difficulty": "easy",
+      "format": "fill_in_the_blank",
+      "task": "accumulator_initialization.easy.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 47.2,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.609582781791687
+    },
+    {
+      "skill": "accumulator_initialization",
+      "difficulty": "easy",
+      "format": "code_completion",
+      "task": "accumulator_initialization.easy.code_completion.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "code_completion",
+        "reference_seconds": 102.0,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.49568498134613037
+    },
+    {
+      "skill": "accumulator_initialization",
+      "difficulty": "medium",
+      "format": "single_choice",
+      "task": "accumulator_initialization.medium.single_choice.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "single_choice",
+        "reference_seconds": 35.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.708847165107727
+    },
+    {
+      "skill": "accumulator_initialization",
+      "difficulty": "medium",
+      "format": "multiple_select",
+      "task": "accumulator_initialization.medium.multiple_select.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "multiple_select",
+        "reference_seconds": 108.36,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.36662784218788147
+    },
+    {
+      "skill": "accumulator_initialization",
+      "difficulty": "medium",
+      "format": "output_prediction",
+      "task": "accumulator_initialization.medium.output_prediction.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "output_prediction",
+        "reference_seconds": 57.82,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.4296424090862274
+    },
+    {
+      "skill": "accumulator_initialization",
+      "difficulty": "medium",
+      "format": "fill_in_the_blank",
+      "task": "accumulator_initialization.medium.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 66.08,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.4224632680416107
+    },
+    {
+      "skill": "accumulator_initialization",
+      "difficulty": "medium",
+      "format": "code_completion",
+      "task": "accumulator_initialization.medium.code_completion.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "code_completion",
+        "reference_seconds": 142.8,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.2993971109390259
+    },
+    {
+      "skill": "accumulator_initialization",
+      "difficulty": "hard",
+      "format": "single_choice",
+      "task": "accumulator_initialization.hard.single_choice.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "single_choice",
+        "reference_seconds": 45.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.6058436632156372
+    },
+    {
+      "skill": "accumulator_initialization",
+      "difficulty": "hard",
+      "format": "multiple_select",
+      "task": "accumulator_initialization.hard.multiple_select.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "multiple_select",
+        "reference_seconds": 139.32,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.23262788355350494
+    },
+    {
+      "skill": "accumulator_initialization",
+      "difficulty": "hard",
+      "format": "output_prediction",
+      "task": "accumulator_initialization.hard.output_prediction.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "output_prediction",
+        "reference_seconds": 74.34,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.2711638808250427
+    },
+    {
+      "skill": "accumulator_initialization",
+      "difficulty": "hard",
+      "format": "fill_in_the_blank",
+      "task": "accumulator_initialization.hard.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 84.96,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.26782000064849854
+    },
+    {
+      "skill": "accumulator_initialization",
+      "difficulty": "hard",
+      "format": "code_completion",
+      "task": "accumulator_initialization.hard.code_completion.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "code_completion",
+        "reference_seconds": 183.6,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.15973106026649475
+    },
+    {
+      "skill": "conditional_evaluation",
+      "difficulty": "easy",
+      "format": "single_choice",
+      "task": "conditional_evaluation.easy.single_choice.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "single_choice",
+        "reference_seconds": 25.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.7981905341148376
+    },
+    {
+      "skill": "conditional_evaluation",
+      "difficulty": "easy",
+      "format": "multiple_select",
+      "task": "conditional_evaluation.easy.multiple_select.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "multiple_select",
+        "reference_seconds": 77.4,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.5265786051750183
+    },
+    {
+      "skill": "conditional_evaluation",
+      "difficulty": "easy",
+      "format": "output_prediction",
+      "task": "conditional_evaluation.easy.output_prediction.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "output_prediction",
+        "reference_seconds": 41.3,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.6197265982627869
+    },
+    {
+      "skill": "conditional_evaluation",
+      "difficulty": "easy",
+      "format": "fill_in_the_blank",
+      "task": "conditional_evaluation.easy.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 47.2,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.609582781791687
+    },
+    {
+      "skill": "conditional_evaluation",
+      "difficulty": "easy",
+      "format": "code_completion",
+      "task": "conditional_evaluation.easy.code_completion.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "code_completion",
+        "reference_seconds": 102.0,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.49568498134613037
+    },
+    {
+      "skill": "conditional_evaluation",
+      "difficulty": "medium",
+      "format": "single_choice",
+      "task": "conditional_evaluation.medium.single_choice.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "single_choice",
+        "reference_seconds": 35.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.708847165107727
+    },
+    {
+      "skill": "conditional_evaluation",
+      "difficulty": "medium",
+      "format": "multiple_select",
+      "task": "conditional_evaluation.medium.multiple_select.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "multiple_select",
+        "reference_seconds": 108.36,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.36662784218788147
+    },
+    {
+      "skill": "conditional_evaluation",
+      "difficulty": "medium",
+      "format": "output_prediction",
+      "task": "conditional_evaluation.medium.output_prediction.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "output_prediction",
+        "reference_seconds": 57.82,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.4296424090862274
+    },
+    {
+      "skill": "conditional_evaluation",
+      "difficulty": "medium",
+      "format": "fill_in_the_blank",
+      "task": "conditional_evaluation.medium.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 66.08,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.4224632680416107
+    },
+    {
+      "skill": "conditional_evaluation",
+      "difficulty": "medium",
+      "format": "code_completion",
+      "task": "conditional_evaluation.medium.code_completion.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "code_completion",
+        "reference_seconds": 142.8,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.2993971109390259
+    },
+    {
+      "skill": "conditional_evaluation",
+      "difficulty": "hard",
+      "format": "single_choice",
+      "task": "conditional_evaluation.hard.single_choice.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "single_choice",
+        "reference_seconds": 45.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.6058436632156372
+    },
+    {
+      "skill": "conditional_evaluation",
+      "difficulty": "hard",
+      "format": "multiple_select",
+      "task": "conditional_evaluation.hard.multiple_select.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "multiple_select",
+        "reference_seconds": 139.32,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.23262788355350494
+    },
+    {
+      "skill": "conditional_evaluation",
+      "difficulty": "hard",
+      "format": "output_prediction",
+      "task": "conditional_evaluation.hard.output_prediction.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "output_prediction",
+        "reference_seconds": 74.34,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.2711638808250427
+    },
+    {
+      "skill": "conditional_evaluation",
+      "difficulty": "hard",
+      "format": "fill_in_the_blank",
+      "task": "conditional_evaluation.hard.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 84.96,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.26782000064849854
+    },
+    {
+      "skill": "conditional_evaluation",
+      "difficulty": "hard",
+      "format": "code_completion",
+      "task": "conditional_evaluation.hard.code_completion.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "code_completion",
+        "reference_seconds": 183.6,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.15973106026649475
+    },
+    {
+      "skill": "function_returns",
+      "difficulty": "easy",
+      "format": "single_choice",
+      "task": "function_returns.easy.single_choice.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "single_choice",
+        "reference_seconds": 25.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.7981905341148376
+    },
+    {
+      "skill": "function_returns",
+      "difficulty": "easy",
+      "format": "multiple_select",
+      "task": "function_returns.easy.multiple_select.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "multiple_select",
+        "reference_seconds": 77.4,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.5265786051750183
+    },
+    {
+      "skill": "function_returns",
+      "difficulty": "easy",
+      "format": "output_prediction",
+      "task": "function_returns.easy.output_prediction.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "output_prediction",
+        "reference_seconds": 41.3,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.6197265982627869
+    },
+    {
+      "skill": "function_returns",
+      "difficulty": "easy",
+      "format": "fill_in_the_blank",
+      "task": "function_returns.easy.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 47.2,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.609582781791687
+    },
+    {
+      "skill": "function_returns",
+      "difficulty": "easy",
+      "format": "code_completion",
+      "task": "function_returns.easy.code_completion.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "code_completion",
+        "reference_seconds": 102.0,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.49568498134613037
+    },
+    {
+      "skill": "function_returns",
+      "difficulty": "medium",
+      "format": "single_choice",
+      "task": "function_returns.medium.single_choice.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "single_choice",
+        "reference_seconds": 35.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.708847165107727
+    },
+    {
+      "skill": "function_returns",
+      "difficulty": "medium",
+      "format": "multiple_select",
+      "task": "function_returns.medium.multiple_select.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "multiple_select",
+        "reference_seconds": 108.36,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.36662784218788147
+    },
+    {
+      "skill": "function_returns",
+      "difficulty": "medium",
+      "format": "output_prediction",
+      "task": "function_returns.medium.output_prediction.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "output_prediction",
+        "reference_seconds": 57.82,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.4296424090862274
+    },
+    {
+      "skill": "function_returns",
+      "difficulty": "medium",
+      "format": "fill_in_the_blank",
+      "task": "function_returns.medium.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 66.08,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.4224632680416107
+    },
+    {
+      "skill": "function_returns",
+      "difficulty": "medium",
+      "format": "code_completion",
+      "task": "function_returns.medium.code_completion.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "code_completion",
+        "reference_seconds": 142.8,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.2993971109390259
+    },
+    {
+      "skill": "function_returns",
+      "difficulty": "hard",
+      "format": "single_choice",
+      "task": "function_returns.hard.single_choice.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "single_choice",
+        "reference_seconds": 45.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.6058436632156372
+    },
+    {
+      "skill": "function_returns",
+      "difficulty": "hard",
+      "format": "multiple_select",
+      "task": "function_returns.hard.multiple_select.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "multiple_select",
+        "reference_seconds": 139.32,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.23262788355350494
+    },
+    {
+      "skill": "function_returns",
+      "difficulty": "hard",
+      "format": "output_prediction",
+      "task": "function_returns.hard.output_prediction.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "output_prediction",
+        "reference_seconds": 74.34,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.2711638808250427
+    },
+    {
+      "skill": "function_returns",
+      "difficulty": "hard",
+      "format": "fill_in_the_blank",
+      "task": "function_returns.hard.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 84.96,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.26782000064849854
+    },
+    {
+      "skill": "function_returns",
+      "difficulty": "hard",
+      "format": "code_completion",
+      "task": "function_returns.hard.code_completion.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "code_completion",
+        "reference_seconds": 183.6,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.15973106026649475
+    },
+    {
+      "skill": "list_indexing",
+      "difficulty": "easy",
+      "format": "single_choice",
+      "task": "list_indexing.easy.single_choice.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "single_choice",
+        "reference_seconds": 25.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.7981905341148376
+    },
+    {
+      "skill": "list_indexing",
+      "difficulty": "easy",
+      "format": "multiple_select",
+      "task": "list_indexing.easy.multiple_select.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "multiple_select",
+        "reference_seconds": 77.4,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.5265786051750183
+    },
+    {
+      "skill": "list_indexing",
+      "difficulty": "easy",
+      "format": "output_prediction",
+      "task": "list_indexing.easy.output_prediction.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "output_prediction",
+        "reference_seconds": 41.3,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.6197265982627869
+    },
+    {
+      "skill": "list_indexing",
+      "difficulty": "easy",
+      "format": "fill_in_the_blank",
+      "task": "list_indexing.easy.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 47.2,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.609582781791687
+    },
+    {
+      "skill": "list_indexing",
+      "difficulty": "easy",
+      "format": "code_completion",
+      "task": "list_indexing.easy.code_completion.16",
+      "features": {
+        "difficulty": "easy",
+        "task_type": "code_completion",
+        "reference_seconds": 102.0,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.49568498134613037
+    },
+    {
+      "skill": "list_indexing",
+      "difficulty": "medium",
+      "format": "single_choice",
+      "task": "list_indexing.medium.single_choice.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "single_choice",
+        "reference_seconds": 35.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.708847165107727
+    },
+    {
+      "skill": "list_indexing",
+      "difficulty": "medium",
+      "format": "multiple_select",
+      "task": "list_indexing.medium.multiple_select.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "multiple_select",
+        "reference_seconds": 108.36,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.36662784218788147
+    },
+    {
+      "skill": "list_indexing",
+      "difficulty": "medium",
+      "format": "output_prediction",
+      "task": "list_indexing.medium.output_prediction.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "output_prediction",
+        "reference_seconds": 57.82,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.4296424090862274
+    },
+    {
+      "skill": "list_indexing",
+      "difficulty": "medium",
+      "format": "fill_in_the_blank",
+      "task": "list_indexing.medium.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 66.08,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.4224632680416107
+    },
+    {
+      "skill": "list_indexing",
+      "difficulty": "medium",
+      "format": "code_completion",
+      "task": "list_indexing.medium.code_completion.16",
+      "features": {
+        "difficulty": "medium",
+        "task_type": "code_completion",
+        "reference_seconds": 142.8,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.2993971109390259
+    },
+    {
+      "skill": "list_indexing",
+      "difficulty": "hard",
+      "format": "single_choice",
+      "task": "list_indexing.hard.single_choice.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "single_choice",
+        "reference_seconds": 45.0,
+        "snippet_count": 0,
+        "option_count": 4,
+        "criterion_count": 1,
+        "credit_weights": [
+          1.0
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.6058436632156372
+    },
+    {
+      "skill": "list_indexing",
+      "difficulty": "hard",
+      "format": "multiple_select",
+      "task": "list_indexing.hard.multiple_select.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "multiple_select",
+        "reference_seconds": 139.32,
+        "snippet_count": 0,
+        "option_count": 5,
+        "criterion_count": 5,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": [
+          0.5,
+          0.5
+        ]
+      },
+      "probability": 0.23262788355350494
+    },
+    {
+      "skill": "list_indexing",
+      "difficulty": "hard",
+      "format": "output_prediction",
+      "task": "list_indexing.hard.output_prediction.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "output_prediction",
+        "reference_seconds": 74.34,
+        "snippet_count": 2,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.2711638808250427
+    },
+    {
+      "skill": "list_indexing",
+      "difficulty": "hard",
+      "format": "fill_in_the_blank",
+      "task": "list_indexing.hard.fill_in_the_blank.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "fill_in_the_blank",
+        "reference_seconds": 84.96,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 2,
+        "credit_weights": [
+          0.3333333333333333,
+          0.6666666666666666
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.26782000064849854
+    },
+    {
+      "skill": "list_indexing",
+      "difficulty": "hard",
+      "format": "code_completion",
+      "task": "list_indexing.hard.code_completion.16",
+      "features": {
+        "difficulty": "hard",
+        "task_type": "code_completion",
+        "reference_seconds": 183.6,
+        "snippet_count": 1,
+        "option_count": 0,
+        "criterion_count": 3,
+        "credit_weights": [
+          0.16666666666666666,
+          0.3333333333333333,
+          0.5
+        ],
+        "penalty_weights": []
+      },
+      "probability": 0.15973106026649475
+    }
+  ]
+}

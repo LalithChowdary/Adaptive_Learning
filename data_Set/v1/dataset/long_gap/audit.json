@@ -1,0 +1,110 @@
+{
+  "active_response_seconds": {
+    "max": 600,
+    "median": 51.92292141131668,
+    "min": 4.364567589013033,
+    "p95": 142.00038071553868
+  },
+  "check_categories_passed": 17,
+  "checks": [
+    "file checksums",
+    "generation source fingerprints",
+    "unique disjoint learner assignments",
+    "balanced declared schedules",
+    "six-skill budgets",
+    "strict event schema",
+    "event and grade causality",
+    "assistance consistency",
+    "rubric derivation and unresolved labels",
+    "simulated grading provenance",
+    "independent delayed assessment branches",
+    "assessment delays and coverage",
+    "separate task pools",
+    "all prepared records match causal replay",
+    "no delayed fitting labels",
+    "model feature allowlist",
+    "no missing/extra observation, model, assessment or administration learner rows"
+  ],
+  "cohort": "long_gap",
+  "delayed_by_day": {
+    "test/1d": {
+      "eligible": 1147,
+      "successes": 530
+    },
+    "test/30d": {
+      "eligible": 1145,
+      "successes": 248
+    },
+    "test/7d": {
+      "eligible": 1145,
+      "successes": 415
+    }
+  },
+  "learner_count": 200,
+  "limitations": "Internal consistency of synthetic data, not human fidelity or model effectiveness.",
+  "practice_span_days": {
+    "max": 269.12287608271396,
+    "median": 107.18518023966364,
+    "min": 7.592138451343334,
+    "p95": 201.11506869890073
+  },
+  "primary_by_skill": {
+    "test/accumulator_initialization": {
+      "eligible": 3026,
+      "successes": 1582
+    },
+    "test/conditional_evaluation": {
+      "eligible": 3045,
+      "successes": 1685
+    },
+    "test/function_returns": {
+      "eligible": 3048,
+      "successes": 1675
+    },
+    "test/list_indexing": {
+      "eligible": 3005,
+      "successes": 1672
+    },
+    "test/loop_tracing": {
+      "eligible": 3046,
+      "successes": 1680
+    },
+    "test/range_boundaries": {
+      "eligible": 3057,
+      "successes": 1710
+    }
+  },
+  "skill_event_gaps_days": {
+    "max": 209.10160878958249,
+    "median": 0.00034722222222222224,
+    "min": 0.0,
+    "p95": 0.2616262280333925
+  },
+  "splits": {
+    "test": {
+      "assisted": 5389,
+      "blocked": 100,
+      "eligible_assessment": 3437,
+      "eligible_practice": 18227,
+      "event_grade": 28323,
+      "event_help": 5523,
+      "event_instruction": 12517,
+      "event_response": 28323,
+      "event_task": 22800,
+      "events": 97486,
+      "independent": 22349,
+      "learners": 200,
+      "missing_active_time": 1115,
+      "missing_reference_time": 911,
+      "mixed": 100,
+      "partial_grades": 8073,
+      "resolved": 27459,
+      "retries": 5523,
+      "successes_assessment": 1193,
+      "successes_practice": 10004,
+      "unknown": 585,
+      "unresolved": 864
+    }
+  },
+  "status": "passed"
+}

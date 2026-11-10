@@ -1,0 +1,1637 @@
+{
+  "active_response_seconds": {
+    "max": 746.3258896274494,
+    "median": 67.27842374927192,
+    "min": 4.203255239457109,
+    "p95": 209.85003885070637
+  },
+  "check_categories_passed": 23,
+  "checks": [
+    "question-first default with no routine instruction",
+    "fresh followup for every assisted practice task",
+    "configurable caps and per-hint/per-retry chronology",
+    "assessment interruption and review semantics",
+    "five-format skill coverage",
+    "hidden trace attribution and bounded response-only gains",
+    "file checksums",
+    "generation source fingerprints",
+    "unique disjoint learner assignments",
+    "balanced declared schedules",
+    "six-skill budgets",
+    "strict event schema",
+    "event and grade causality",
+    "assistance consistency",
+    "rubric derivation and unresolved labels",
+    "simulated grading provenance",
+    "independent delayed assessment branches",
+    "assessment delays and coverage",
+    "separate task pools",
+    "all prepared records match causal replay",
+    "no delayed fitting labels",
+    "model feature allowlist",
+    "no missing/extra observation, model, assessment or administration learner rows"
+  ],
+  "cohort": "pilot",
+  "coverage": {
+    "test/accumulator_initialization/code_completion/assessment/1d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 0
+    },
+    "test/accumulator_initialization/code_completion/assessment/30d": {},
+    "test/accumulator_initialization/code_completion/assessment/7d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 2
+    },
+    "test/accumulator_initialization/code_completion/practice/0d": {
+      "eligible": 73,
+      "queries": 83,
+      "successes": 43
+    },
+    "test/accumulator_initialization/fill_in_the_blank/assessment/1d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 2
+    },
+    "test/accumulator_initialization/fill_in_the_blank/assessment/30d": {
+      "eligible": 7,
+      "queries": 7,
+      "successes": 4
+    },
+    "test/accumulator_initialization/fill_in_the_blank/assessment/7d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 1
+    },
+    "test/accumulator_initialization/fill_in_the_blank/practice/0d": {
+      "eligible": 76,
+      "queries": 83,
+      "successes": 42
+    },
+    "test/accumulator_initialization/multiple_select/assessment/1d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 2
+    },
+    "test/accumulator_initialization/multiple_select/assessment/30d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 0
+    },
+    "test/accumulator_initialization/multiple_select/assessment/7d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 2
+    },
+    "test/accumulator_initialization/multiple_select/practice/0d": {
+      "eligible": 77,
+      "queries": 87,
+      "successes": 37
+    },
+    "test/accumulator_initialization/output_prediction/assessment/1d": {
+      "eligible": 5,
+      "queries": 6,
+      "successes": 3
+    },
+    "test/accumulator_initialization/output_prediction/assessment/30d": {
+      "eligible": 6,
+      "queries": 7,
+      "successes": 2
+    },
+    "test/accumulator_initialization/output_prediction/assessment/7d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 1
+    },
+    "test/accumulator_initialization/output_prediction/practice/0d": {
+      "eligible": 83,
+      "queries": 87,
+      "successes": 58
+    },
+    "test/accumulator_initialization/single_choice/assessment/1d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 3
+    },
+    "test/accumulator_initialization/single_choice/assessment/30d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 3
+    },
+    "test/accumulator_initialization/single_choice/assessment/7d": {
+      "eligible": 7,
+      "queries": 8,
+      "successes": 5
+    },
+    "test/accumulator_initialization/single_choice/practice/0d": {
+      "eligible": 72,
+      "queries": 83,
+      "successes": 63
+    },
+    "test/conditional_evaluation/code_completion/assessment/1d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 1
+    },
+    "test/conditional_evaluation/code_completion/assessment/30d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 0
+    },
+    "test/conditional_evaluation/code_completion/assessment/7d": {
+      "eligible": 3,
+      "queries": 4,
+      "successes": 0
+    },
+    "test/conditional_evaluation/code_completion/practice/0d": {
+      "eligible": 71,
+      "queries": 80,
+      "successes": 27
+    },
+    "test/conditional_evaluation/fill_in_the_blank/assessment/1d": {
+      "eligible": 6,
+      "queries": 6,
+      "successes": 5
+    },
+    "test/conditional_evaluation/fill_in_the_blank/assessment/30d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 1
+    },
+    "test/conditional_evaluation/fill_in_the_blank/assessment/7d": {
+      "eligible": 2,
+      "queries": 3,
+      "successes": 2
+    },
+    "test/conditional_evaluation/fill_in_the_blank/practice/0d": {
+      "eligible": 81,
+      "queries": 85,
+      "successes": 50
+    },
+    "test/conditional_evaluation/multiple_select/assessment/1d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 2
+    },
+    "test/conditional_evaluation/multiple_select/assessment/30d": {
+      "eligible": 1,
+      "queries": 2,
+      "successes": 0
+    },
+    "test/conditional_evaluation/multiple_select/assessment/7d": {
+      "eligible": 4,
+      "queries": 5,
+      "successes": 1
+    },
+    "test/conditional_evaluation/multiple_select/practice/0d": {
+      "eligible": 80,
+      "queries": 85,
+      "successes": 39
+    },
+    "test/conditional_evaluation/output_prediction/assessment/1d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 2
+    },
+    "test/conditional_evaluation/output_prediction/assessment/30d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 1
+    },
+    "test/conditional_evaluation/output_prediction/assessment/7d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 2
+    },
+    "test/conditional_evaluation/output_prediction/practice/0d": {
+      "eligible": 80,
+      "queries": 87,
+      "successes": 56
+    },
+    "test/conditional_evaluation/single_choice/assessment/1d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 2
+    },
+    "test/conditional_evaluation/single_choice/assessment/30d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 4
+    },
+    "test/conditional_evaluation/single_choice/assessment/7d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 5
+    },
+    "test/conditional_evaluation/single_choice/practice/0d": {
+      "eligible": 76,
+      "queries": 81,
+      "successes": 55
+    },
+    "test/function_returns/code_completion/assessment/1d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 3
+    },
+    "test/function_returns/code_completion/assessment/30d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 1
+    },
+    "test/function_returns/code_completion/assessment/7d": {},
+    "test/function_returns/code_completion/practice/0d": {
+      "eligible": 82,
+      "queries": 86,
+      "successes": 38
+    },
+    "test/function_returns/fill_in_the_blank/assessment/1d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 2
+    },
+    "test/function_returns/fill_in_the_blank/assessment/30d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 1
+    },
+    "test/function_returns/fill_in_the_blank/assessment/7d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 1
+    },
+    "test/function_returns/fill_in_the_blank/practice/0d": {
+      "eligible": 82,
+      "queries": 88,
+      "successes": 46
+    },
+    "test/function_returns/multiple_select/assessment/1d": {},
+    "test/function_returns/multiple_select/assessment/30d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 0
+    },
+    "test/function_returns/multiple_select/assessment/7d": {
+      "eligible": 5,
+      "queries": 8,
+      "successes": 3
+    },
+    "test/function_returns/multiple_select/practice/0d": {
+      "eligible": 77,
+      "queries": 86,
+      "successes": 37
+    },
+    "test/function_returns/output_prediction/assessment/1d": {
+      "eligible": 8,
+      "queries": 8,
+      "successes": 7
+    },
+    "test/function_returns/output_prediction/assessment/30d": {
+      "eligible": 4,
+      "queries": 5,
+      "successes": 0
+    },
+    "test/function_returns/output_prediction/assessment/7d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 2
+    },
+    "test/function_returns/output_prediction/practice/0d": {
+      "eligible": 80,
+      "queries": 88,
+      "successes": 46
+    },
+    "test/function_returns/single_choice/assessment/1d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 5
+    },
+    "test/function_returns/single_choice/assessment/30d": {
+      "eligible": 2,
+      "queries": 3,
+      "successes": 2
+    },
+    "test/function_returns/single_choice/assessment/7d": {
+      "eligible": 6,
+      "queries": 6,
+      "successes": 5
+    },
+    "test/function_returns/single_choice/practice/0d": {
+      "eligible": 78,
+      "queries": 82,
+      "successes": 62
+    },
+    "test/list_indexing/code_completion/assessment/1d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 4
+    },
+    "test/list_indexing/code_completion/assessment/30d": {
+      "eligible": 7,
+      "queries": 7,
+      "successes": 1
+    },
+    "test/list_indexing/code_completion/assessment/7d": {
+      "eligible": 5,
+      "queries": 6,
+      "successes": 3
+    },
+    "test/list_indexing/code_completion/practice/0d": {
+      "eligible": 76,
+      "queries": 83,
+      "successes": 45
+    },
+    "test/list_indexing/fill_in_the_blank/assessment/1d": {
+      "eligible": 1,
+      "queries": 1,
+      "successes": 0
+    },
+    "test/list_indexing/fill_in_the_blank/assessment/30d": {
+      "eligible": 6,
+      "queries": 6,
+      "successes": 2
+    },
+    "test/list_indexing/fill_in_the_blank/assessment/7d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 1
+    },
+    "test/list_indexing/fill_in_the_blank/practice/0d": {
+      "eligible": 76,
+      "queries": 83,
+      "successes": 46
+    },
+    "test/list_indexing/multiple_select/assessment/1d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 2
+    },
+    "test/list_indexing/multiple_select/assessment/30d": {},
+    "test/list_indexing/multiple_select/assessment/7d": {
+      "eligible": 5,
+      "queries": 6,
+      "successes": 2
+    },
+    "test/list_indexing/multiple_select/practice/0d": {
+      "eligible": 80,
+      "queries": 85,
+      "successes": 50
+    },
+    "test/list_indexing/output_prediction/assessment/1d": {
+      "eligible": 5,
+      "queries": 6,
+      "successes": 4
+    },
+    "test/list_indexing/output_prediction/assessment/30d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 2
+    },
+    "test/list_indexing/output_prediction/assessment/7d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 2
+    },
+    "test/list_indexing/output_prediction/practice/0d": {
+      "eligible": 78,
+      "queries": 84,
+      "successes": 46
+    },
+    "test/list_indexing/single_choice/assessment/1d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 2
+    },
+    "test/list_indexing/single_choice/assessment/30d": {
+      "eligible": 2,
+      "queries": 3,
+      "successes": 1
+    },
+    "test/list_indexing/single_choice/assessment/7d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 2
+    },
+    "test/list_indexing/single_choice/practice/0d": {
+      "eligible": 74,
+      "queries": 81,
+      "successes": 61
+    },
+    "test/loop_tracing/code_completion/assessment/1d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 2
+    },
+    "test/loop_tracing/code_completion/assessment/30d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 0
+    },
+    "test/loop_tracing/code_completion/assessment/7d": {
+      "eligible": 3,
+      "queries": 4,
+      "successes": 0
+    },
+    "test/loop_tracing/code_completion/practice/0d": {
+      "eligible": 80,
+      "queries": 83,
+      "successes": 40
+    },
+    "test/loop_tracing/fill_in_the_blank/assessment/1d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 3
+    },
+    "test/loop_tracing/fill_in_the_blank/assessment/30d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 1
+    },
+    "test/loop_tracing/fill_in_the_blank/assessment/7d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 3
+    },
+    "test/loop_tracing/fill_in_the_blank/practice/0d": {
+      "eligible": 79,
+      "queries": 82,
+      "successes": 50
+    },
+    "test/loop_tracing/multiple_select/assessment/1d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 0
+    },
+    "test/loop_tracing/multiple_select/assessment/30d": {
+      "eligible": 7,
+      "queries": 7,
+      "successes": 2
+    },
+    "test/loop_tracing/multiple_select/assessment/7d": {
+      "eligible": 1,
+      "queries": 1,
+      "successes": 1
+    },
+    "test/loop_tracing/multiple_select/practice/0d": {
+      "eligible": 78,
+      "queries": 85,
+      "successes": 49
+    },
+    "test/loop_tracing/output_prediction/assessment/1d": {
+      "eligible": 5,
+      "queries": 6,
+      "successes": 5
+    },
+    "test/loop_tracing/output_prediction/assessment/30d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 0
+    },
+    "test/loop_tracing/output_prediction/assessment/7d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 0
+    },
+    "test/loop_tracing/output_prediction/practice/0d": {
+      "eligible": 77,
+      "queries": 84,
+      "successes": 52
+    },
+    "test/loop_tracing/single_choice/assessment/1d": {
+      "eligible": 3,
+      "queries": 4,
+      "successes": 2
+    },
+    "test/loop_tracing/single_choice/assessment/30d": {
+      "eligible": 4,
+      "queries": 5,
+      "successes": 3
+    },
+    "test/loop_tracing/single_choice/assessment/7d": {
+      "eligible": 8,
+      "queries": 8,
+      "successes": 6
+    },
+    "test/loop_tracing/single_choice/practice/0d": {
+      "eligible": 81,
+      "queries": 83,
+      "successes": 67
+    },
+    "test/range_boundaries/code_completion/assessment/1d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 1
+    },
+    "test/range_boundaries/code_completion/assessment/30d": {
+      "eligible": 3,
+      "queries": 4,
+      "successes": 0
+    },
+    "test/range_boundaries/code_completion/assessment/7d": {
+      "eligible": 4,
+      "queries": 5,
+      "successes": 2
+    },
+    "test/range_boundaries/code_completion/practice/0d": {
+      "eligible": 76,
+      "queries": 81,
+      "successes": 31
+    },
+    "test/range_boundaries/fill_in_the_blank/assessment/1d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 2
+    },
+    "test/range_boundaries/fill_in_the_blank/assessment/30d": {
+      "eligible": 1,
+      "queries": 1,
+      "successes": 0
+    },
+    "test/range_boundaries/fill_in_the_blank/assessment/7d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 2
+    },
+    "test/range_boundaries/fill_in_the_blank/practice/0d": {
+      "eligible": 73,
+      "queries": 82,
+      "successes": 41
+    },
+    "test/range_boundaries/multiple_select/assessment/1d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 3
+    },
+    "test/range_boundaries/multiple_select/assessment/30d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 0
+    },
+    "test/range_boundaries/multiple_select/assessment/7d": {
+      "eligible": 7,
+      "queries": 8,
+      "successes": 2
+    },
+    "test/range_boundaries/multiple_select/practice/0d": {
+      "eligible": 76,
+      "queries": 84,
+      "successes": 37
+    },
+    "test/range_boundaries/output_prediction/assessment/1d": {
+      "eligible": 9,
+      "queries": 9,
+      "successes": 4
+    },
+    "test/range_boundaries/output_prediction/assessment/30d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 0
+    },
+    "test/range_boundaries/output_prediction/assessment/7d": {
+      "queries": 3
+    },
+    "test/range_boundaries/output_prediction/practice/0d": {
+      "eligible": 82,
+      "queries": 85,
+      "successes": 47
+    },
+    "test/range_boundaries/single_choice/assessment/1d": {
+      "eligible": 1,
+      "queries": 2,
+      "successes": 1
+    },
+    "test/range_boundaries/single_choice/assessment/30d": {
+      "eligible": 7,
+      "queries": 8,
+      "successes": 4
+    },
+    "test/range_boundaries/single_choice/assessment/7d": {},
+    "test/range_boundaries/single_choice/practice/0d": {
+      "eligible": 79,
+      "queries": 83,
+      "successes": 68
+    },
+    "train/accumulator_initialization/code_completion/practice/0d": {
+      "eligible": 629,
+      "queries": 674,
+      "successes": 284
+    },
+    "train/accumulator_initialization/fill_in_the_blank/practice/0d": {
+      "eligible": 620,
+      "queries": 670,
+      "successes": 394
+    },
+    "train/accumulator_initialization/multiple_select/practice/0d": {
+      "eligible": 616,
+      "queries": 664,
+      "successes": 313
+    },
+    "train/accumulator_initialization/output_prediction/practice/0d": {
+      "eligible": 628,
+      "queries": 668,
+      "successes": 375
+    },
+    "train/accumulator_initialization/single_choice/practice/0d": {
+      "eligible": 622,
+      "queries": 674,
+      "successes": 517
+    },
+    "train/conditional_evaluation/code_completion/practice/0d": {
+      "eligible": 629,
+      "queries": 665,
+      "successes": 321
+    },
+    "train/conditional_evaluation/fill_in_the_blank/practice/0d": {
+      "eligible": 621,
+      "queries": 671,
+      "successes": 391
+    },
+    "train/conditional_evaluation/multiple_select/practice/0d": {
+      "eligible": 617,
+      "queries": 663,
+      "successes": 313
+    },
+    "train/conditional_evaluation/output_prediction/practice/0d": {
+      "eligible": 613,
+      "queries": 661,
+      "successes": 371
+    },
+    "train/conditional_evaluation/single_choice/practice/0d": {
+      "eligible": 626,
+      "queries": 664,
+      "successes": 506
+    },
+    "train/function_returns/code_completion/practice/0d": {
+      "eligible": 620,
+      "queries": 675,
+      "successes": 316
+    },
+    "train/function_returns/fill_in_the_blank/practice/0d": {
+      "eligible": 619,
+      "queries": 670,
+      "successes": 381
+    },
+    "train/function_returns/multiple_select/practice/0d": {
+      "eligible": 609,
+      "queries": 661,
+      "successes": 313
+    },
+    "train/function_returns/output_prediction/practice/0d": {
+      "eligible": 608,
+      "queries": 661,
+      "successes": 356
+    },
+    "train/function_returns/single_choice/practice/0d": {
+      "eligible": 617,
+      "queries": 657,
+      "successes": 503
+    },
+    "train/list_indexing/code_completion/practice/0d": {
+      "eligible": 619,
+      "queries": 675,
+      "successes": 319
+    },
+    "train/list_indexing/fill_in_the_blank/practice/0d": {
+      "eligible": 618,
+      "queries": 661,
+      "successes": 374
+    },
+    "train/list_indexing/multiple_select/practice/0d": {
+      "eligible": 612,
+      "queries": 662,
+      "successes": 343
+    },
+    "train/list_indexing/output_prediction/practice/0d": {
+      "eligible": 617,
+      "queries": 658,
+      "successes": 391
+    },
+    "train/list_indexing/single_choice/practice/0d": {
+      "eligible": 614,
+      "queries": 657,
+      "successes": 510
+    },
+    "train/loop_tracing/code_completion/practice/0d": {
+      "eligible": 625,
+      "queries": 671,
+      "successes": 302
+    },
+    "train/loop_tracing/fill_in_the_blank/practice/0d": {
+      "eligible": 634,
+      "queries": 669,
+      "successes": 394
+    },
+    "train/loop_tracing/multiple_select/practice/0d": {
+      "eligible": 611,
+      "queries": 660,
+      "successes": 319
+    },
+    "train/loop_tracing/output_prediction/practice/0d": {
+      "eligible": 608,
+      "queries": 656,
+      "successes": 376
+    },
+    "train/loop_tracing/single_choice/practice/0d": {
+      "eligible": 627,
+      "queries": 666,
+      "successes": 499
+    },
+    "train/range_boundaries/code_completion/practice/0d": {
+      "eligible": 631,
+      "queries": 664,
+      "successes": 307
+    },
+    "train/range_boundaries/fill_in_the_blank/practice/0d": {
+      "eligible": 614,
+      "queries": 665,
+      "successes": 394
+    },
+    "train/range_boundaries/multiple_select/practice/0d": {
+      "eligible": 611,
+      "queries": 664,
+      "successes": 332
+    },
+    "train/range_boundaries/output_prediction/practice/0d": {
+      "eligible": 625,
+      "queries": 666,
+      "successes": 374
+    },
+    "train/range_boundaries/single_choice/practice/0d": {
+      "eligible": 604,
+      "queries": 663,
+      "successes": 482
+    },
+    "validation/accumulator_initialization/code_completion/assessment/1d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 2
+    },
+    "validation/accumulator_initialization/code_completion/assessment/30d": {
+      "eligible": 1,
+      "queries": 1,
+      "successes": 0
+    },
+    "validation/accumulator_initialization/code_completion/assessment/7d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 3
+    },
+    "validation/accumulator_initialization/code_completion/practice/0d": {
+      "eligible": 78,
+      "queries": 81,
+      "successes": 40
+    },
+    "validation/accumulator_initialization/fill_in_the_blank/assessment/1d": {
+      "eligible": 4,
+      "queries": 6,
+      "successes": 4
+    },
+    "validation/accumulator_initialization/fill_in_the_blank/assessment/30d": {
+      "eligible": 7,
+      "queries": 7,
+      "successes": 1
+    },
+    "validation/accumulator_initialization/fill_in_the_blank/assessment/7d": {
+      "eligible": 6,
+      "queries": 6,
+      "successes": 1
+    },
+    "validation/accumulator_initialization/fill_in_the_blank/practice/0d": {
+      "eligible": 76,
+      "queries": 83,
+      "successes": 40
+    },
+    "validation/accumulator_initialization/multiple_select/assessment/1d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 2
+    },
+    "validation/accumulator_initialization/multiple_select/assessment/30d": {
+      "eligible": 6,
+      "queries": 6,
+      "successes": 0
+    },
+    "validation/accumulator_initialization/multiple_select/assessment/7d": {
+      "eligible": 5,
+      "queries": 6,
+      "successes": 3
+    },
+    "validation/accumulator_initialization/multiple_select/practice/0d": {
+      "eligible": 84,
+      "queries": 86,
+      "successes": 41
+    },
+    "validation/accumulator_initialization/output_prediction/assessment/1d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 2
+    },
+    "validation/accumulator_initialization/output_prediction/assessment/30d": {
+      "eligible": 2,
+      "queries": 3,
+      "successes": 0
+    },
+    "validation/accumulator_initialization/output_prediction/assessment/7d": {
+      "eligible": 1,
+      "queries": 1,
+      "successes": 1
+    },
+    "validation/accumulator_initialization/output_prediction/practice/0d": {
+      "eligible": 79,
+      "queries": 85,
+      "successes": 49
+    },
+    "validation/accumulator_initialization/single_choice/assessment/1d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 2
+    },
+    "validation/accumulator_initialization/single_choice/assessment/30d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 2
+    },
+    "validation/accumulator_initialization/single_choice/assessment/7d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 2
+    },
+    "validation/accumulator_initialization/single_choice/practice/0d": {
+      "eligible": 81,
+      "queries": 85,
+      "successes": 64
+    },
+    "validation/conditional_evaluation/code_completion/assessment/1d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 2
+    },
+    "validation/conditional_evaluation/code_completion/assessment/30d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 1
+    },
+    "validation/conditional_evaluation/code_completion/assessment/7d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 1
+    },
+    "validation/conditional_evaluation/code_completion/practice/0d": {
+      "eligible": 84,
+      "queries": 86,
+      "successes": 42
+    },
+    "validation/conditional_evaluation/fill_in_the_blank/assessment/1d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 3
+    },
+    "validation/conditional_evaluation/fill_in_the_blank/assessment/30d": {
+      "eligible": 7,
+      "queries": 7,
+      "successes": 3
+    },
+    "validation/conditional_evaluation/fill_in_the_blank/assessment/7d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 3
+    },
+    "validation/conditional_evaluation/fill_in_the_blank/practice/0d": {
+      "eligible": 77,
+      "queries": 84,
+      "successes": 42
+    },
+    "validation/conditional_evaluation/multiple_select/assessment/1d": {
+      "eligible": 5,
+      "queries": 6,
+      "successes": 5
+    },
+    "validation/conditional_evaluation/multiple_select/assessment/30d": {
+      "eligible": 1,
+      "queries": 2,
+      "successes": 0
+    },
+    "validation/conditional_evaluation/multiple_select/assessment/7d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 0
+    },
+    "validation/conditional_evaluation/multiple_select/practice/0d": {
+      "eligible": 75,
+      "queries": 84,
+      "successes": 34
+    },
+    "validation/conditional_evaluation/output_prediction/assessment/1d": {
+      "eligible": 4,
+      "queries": 5,
+      "successes": 2
+    },
+    "validation/conditional_evaluation/output_prediction/assessment/30d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 1
+    },
+    "validation/conditional_evaluation/output_prediction/assessment/7d": {
+      "eligible": 8,
+      "queries": 9,
+      "successes": 6
+    },
+    "validation/conditional_evaluation/output_prediction/practice/0d": {
+      "eligible": 77,
+      "queries": 84,
+      "successes": 50
+    },
+    "validation/conditional_evaluation/single_choice/assessment/1d": {
+      "eligible": 1,
+      "queries": 2,
+      "successes": 1
+    },
+    "validation/conditional_evaluation/single_choice/assessment/30d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 1
+    },
+    "validation/conditional_evaluation/single_choice/assessment/7d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 2
+    },
+    "validation/conditional_evaluation/single_choice/practice/0d": {
+      "eligible": 77,
+      "queries": 87,
+      "successes": 58
+    },
+    "validation/function_returns/code_completion/assessment/1d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 3
+    },
+    "validation/function_returns/code_completion/assessment/30d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 0
+    },
+    "validation/function_returns/code_completion/assessment/7d": {
+      "eligible": 6,
+      "queries": 6,
+      "successes": 3
+    },
+    "validation/function_returns/code_completion/practice/0d": {
+      "eligible": 78,
+      "queries": 83,
+      "successes": 42
+    },
+    "validation/function_returns/fill_in_the_blank/assessment/1d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 1
+    },
+    "validation/function_returns/fill_in_the_blank/assessment/30d": {
+      "eligible": 2,
+      "queries": 3,
+      "successes": 1
+    },
+    "validation/function_returns/fill_in_the_blank/assessment/7d": {
+      "eligible": 1,
+      "queries": 1,
+      "successes": 1
+    },
+    "validation/function_returns/fill_in_the_blank/practice/0d": {
+      "eligible": 74,
+      "queries": 82,
+      "successes": 44
+    },
+    "validation/function_returns/multiple_select/assessment/1d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 2
+    },
+    "validation/function_returns/multiple_select/assessment/30d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 1
+    },
+    "validation/function_returns/multiple_select/assessment/7d": {
+      "eligible": 2,
+      "queries": 3,
+      "successes": 1
+    },
+    "validation/function_returns/multiple_select/practice/0d": {
+      "eligible": 78,
+      "queries": 84,
+      "successes": 41
+    },
+    "validation/function_returns/output_prediction/assessment/1d": {
+      "eligible": 5,
+      "queries": 6,
+      "successes": 2
+    },
+    "validation/function_returns/output_prediction/assessment/30d": {
+      "eligible": 8,
+      "queries": 8,
+      "successes": 2
+    },
+    "validation/function_returns/output_prediction/assessment/7d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 4
+    },
+    "validation/function_returns/output_prediction/practice/0d": {
+      "eligible": 78,
+      "queries": 84,
+      "successes": 43
+    },
+    "validation/function_returns/single_choice/assessment/1d": {
+      "eligible": 2,
+      "queries": 3,
+      "successes": 1
+    },
+    "validation/function_returns/single_choice/assessment/30d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 1
+    },
+    "validation/function_returns/single_choice/assessment/7d": {
+      "eligible": 4,
+      "queries": 5,
+      "successes": 2
+    },
+    "validation/function_returns/single_choice/practice/0d": {
+      "eligible": 79,
+      "queries": 85,
+      "successes": 67
+    },
+    "validation/list_indexing/code_completion/assessment/1d": {
+      "eligible": 3,
+      "queries": 4,
+      "successes": 3
+    },
+    "validation/list_indexing/code_completion/assessment/30d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 0
+    },
+    "validation/list_indexing/code_completion/assessment/7d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 2
+    },
+    "validation/list_indexing/code_completion/practice/0d": {
+      "eligible": 74,
+      "queries": 82,
+      "successes": 33
+    },
+    "validation/list_indexing/fill_in_the_blank/assessment/1d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 1
+    },
+    "validation/list_indexing/fill_in_the_blank/assessment/30d": {
+      "eligible": 6,
+      "queries": 8,
+      "successes": 4
+    },
+    "validation/list_indexing/fill_in_the_blank/assessment/7d": {
+      "eligible": 6,
+      "queries": 6,
+      "successes": 3
+    },
+    "validation/list_indexing/fill_in_the_blank/practice/0d": {
+      "eligible": 79,
+      "queries": 81,
+      "successes": 54
+    },
+    "validation/list_indexing/multiple_select/assessment/1d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 3
+    },
+    "validation/list_indexing/multiple_select/assessment/30d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 1
+    },
+    "validation/list_indexing/multiple_select/assessment/7d": {
+      "eligible": 6,
+      "queries": 6,
+      "successes": 3
+    },
+    "validation/list_indexing/multiple_select/practice/0d": {
+      "eligible": 78,
+      "queries": 83,
+      "successes": 52
+    },
+    "validation/list_indexing/output_prediction/assessment/1d": {
+      "eligible": 1,
+      "queries": 1,
+      "successes": 0
+    },
+    "validation/list_indexing/output_prediction/assessment/30d": {
+      "eligible": 2,
+      "queries": 3,
+      "successes": 0
+    },
+    "validation/list_indexing/output_prediction/assessment/7d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 1
+    },
+    "validation/list_indexing/output_prediction/practice/0d": {
+      "eligible": 73,
+      "queries": 82,
+      "successes": 44
+    },
+    "validation/list_indexing/single_choice/assessment/1d": {
+      "eligible": 6,
+      "queries": 7,
+      "successes": 5
+    },
+    "validation/list_indexing/single_choice/assessment/30d": {
+      "eligible": 1,
+      "queries": 1,
+      "successes": 1
+    },
+    "validation/list_indexing/single_choice/assessment/7d": {
+      "eligible": 1,
+      "queries": 1,
+      "successes": 1
+    },
+    "validation/list_indexing/single_choice/practice/0d": {
+      "eligible": 79,
+      "queries": 82,
+      "successes": 65
+    },
+    "validation/loop_tracing/code_completion/assessment/1d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 3
+    },
+    "validation/loop_tracing/code_completion/assessment/30d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 0
+    },
+    "validation/loop_tracing/code_completion/assessment/7d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 0
+    },
+    "validation/loop_tracing/code_completion/practice/0d": {
+      "eligible": 82,
+      "queries": 87,
+      "successes": 37
+    },
+    "validation/loop_tracing/fill_in_the_blank/assessment/1d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 0
+    },
+    "validation/loop_tracing/fill_in_the_blank/assessment/30d": {
+      "eligible": 4,
+      "queries": 5,
+      "successes": 2
+    },
+    "validation/loop_tracing/fill_in_the_blank/assessment/7d": {
+      "eligible": 3,
+      "queries": 4,
+      "successes": 0
+    },
+    "validation/loop_tracing/fill_in_the_blank/practice/0d": {
+      "eligible": 85,
+      "queries": 87,
+      "successes": 46
+    },
+    "validation/loop_tracing/multiple_select/assessment/1d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 1
+    },
+    "validation/loop_tracing/multiple_select/assessment/30d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 1
+    },
+    "validation/loop_tracing/multiple_select/assessment/7d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 1
+    },
+    "validation/loop_tracing/multiple_select/practice/0d": {
+      "eligible": 83,
+      "queries": 86,
+      "successes": 42
+    },
+    "validation/loop_tracing/output_prediction/assessment/1d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 5
+    },
+    "validation/loop_tracing/output_prediction/assessment/30d": {
+      "eligible": 4,
+      "queries": 4,
+      "successes": 1
+    },
+    "validation/loop_tracing/output_prediction/assessment/7d": {
+      "eligible": 7,
+      "queries": 7,
+      "successes": 5
+    },
+    "validation/loop_tracing/output_prediction/practice/0d": {
+      "eligible": 80,
+      "queries": 87,
+      "successes": 42
+    },
+    "validation/loop_tracing/single_choice/assessment/1d": {
+      "eligible": 6,
+      "queries": 6,
+      "successes": 5
+    },
+    "validation/loop_tracing/single_choice/assessment/30d": {
+      "eligible": 3,
+      "queries": 3,
+      "successes": 3
+    },
+    "validation/loop_tracing/single_choice/assessment/7d": {
+      "eligible": 1,
+      "queries": 1,
+      "successes": 1
+    },
+    "validation/loop_tracing/single_choice/practice/0d": {
+      "eligible": 82,
+      "queries": 88,
+      "successes": 67
+    },
+    "validation/range_boundaries/code_completion/assessment/1d": {
+      "eligible": 5,
+      "queries": 6,
+      "successes": 1
+    },
+    "validation/range_boundaries/code_completion/assessment/30d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 1
+    },
+    "validation/range_boundaries/code_completion/assessment/7d": {
+      "eligible": 6,
+      "queries": 6,
+      "successes": 3
+    },
+    "validation/range_boundaries/code_completion/practice/0d": {
+      "eligible": 79,
+      "queries": 83,
+      "successes": 37
+    },
+    "validation/range_boundaries/fill_in_the_blank/assessment/1d": {
+      "eligible": 1,
+      "queries": 1,
+      "successes": 0
+    },
+    "validation/range_boundaries/fill_in_the_blank/assessment/30d": {
+      "eligible": 4,
+      "queries": 5,
+      "successes": 2
+    },
+    "validation/range_boundaries/fill_in_the_blank/assessment/7d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 2
+    },
+    "validation/range_boundaries/fill_in_the_blank/practice/0d": {
+      "eligible": 78,
+      "queries": 83,
+      "successes": 44
+    },
+    "validation/range_boundaries/multiple_select/assessment/1d": {
+      "eligible": 6,
+      "queries": 6,
+      "successes": 5
+    },
+    "validation/range_boundaries/multiple_select/assessment/30d": {
+      "queries": 1
+    },
+    "validation/range_boundaries/multiple_select/assessment/7d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 3
+    },
+    "validation/range_boundaries/multiple_select/practice/0d": {
+      "eligible": 80,
+      "queries": 85,
+      "successes": 46
+    },
+    "validation/range_boundaries/output_prediction/assessment/1d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 2
+    },
+    "validation/range_boundaries/output_prediction/assessment/30d": {
+      "eligible": 5,
+      "queries": 6,
+      "successes": 0
+    },
+    "validation/range_boundaries/output_prediction/assessment/7d": {
+      "eligible": 2,
+      "queries": 2,
+      "successes": 2
+    },
+    "validation/range_boundaries/output_prediction/practice/0d": {
+      "eligible": 79,
+      "queries": 82,
+      "successes": 52
+    },
+    "validation/range_boundaries/single_choice/assessment/1d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 5
+    },
+    "validation/range_boundaries/single_choice/assessment/30d": {
+      "eligible": 6,
+      "queries": 6,
+      "successes": 3
+    },
+    "validation/range_boundaries/single_choice/assessment/7d": {
+      "eligible": 5,
+      "queries": 5,
+      "successes": 5
+    },
+    "validation/range_boundaries/single_choice/practice/0d": {
+      "eligible": 77,
+      "queries": 83,
+      "successes": 64
+    }
+  },
+  "delayed_by_day": {
+    "test/1d": {
+      "eligible": 115,
+      "successes": 74
+    },
+    "test/30d": {
+      "eligible": 112,
+      "successes": 35
+    },
+    "test/7d": {
+      "eligible": 105,
+      "successes": 58
+    },
+    "train/1d": {
+      "eligible": 887,
+      "successes": 563
+    },
+    "train/30d": {
+      "eligible": 888,
+      "successes": 253
+    },
+    "train/7d": {
+      "eligible": 898,
+      "successes": 444
+    },
+    "validation/1d": {
+      "eligible": 110,
+      "successes": 73
+    },
+    "validation/30d": {
+      "eligible": 110,
+      "successes": 33
+    },
+    "validation/7d": {
+      "eligible": 115,
+      "successes": 65
+    }
+  },
+  "learner_count": 200,
+  "limitations": "Internal consistency of synthetic data, not human fidelity or model effectiveness.",
+  "missing_assessment_coverage_cells": [
+    "test/range_boundaries/single_choice/7d",
+    "test/accumulator_initialization/code_completion/30d",
+    "test/function_returns/multiple_select/1d",
+    "test/function_returns/code_completion/7d",
+    "test/list_indexing/multiple_select/30d"
+  ],
+  "practice_span_days": {
+    "max": 16.512542693543214,
+    "median": 10.393508987951058,
+    "min": 1.8739335676834539,
+    "p95": 14.500905906317962
+  },
+  "primary_by_skill": {
+    "test/accumulator_initialization": {
+      "eligible": 381,
+      "successes": 243
+    },
+    "test/conditional_evaluation": {
+      "eligible": 388,
+      "successes": 227
+    },
+    "test/function_returns": {
+      "eligible": 399,
+      "successes": 229
+    },
+    "test/list_indexing": {
+      "eligible": 384,
+      "successes": 248
+    },
+    "test/loop_tracing": {
+      "eligible": 395,
+      "successes": 258
+    },
+    "test/range_boundaries": {
+      "eligible": 386,
+      "successes": 224
+    },
+    "train/accumulator_initialization": {
+      "eligible": 3115,
+      "successes": 1883
+    },
+    "train/conditional_evaluation": {
+      "eligible": 3106,
+      "successes": 1902
+    },
+    "train/function_returns": {
+      "eligible": 3073,
+      "successes": 1869
+    },
+    "train/list_indexing": {
+      "eligible": 3080,
+      "successes": 1937
+    },
+    "train/loop_tracing": {
+      "eligible": 3105,
+      "successes": 1890
+    },
+    "train/range_boundaries": {
+      "eligible": 3085,
+      "successes": 1889
+    },
+    "validation/accumulator_initialization": {
+      "eligible": 398,
+      "successes": 234
+    },
+    "validation/conditional_evaluation": {
+      "eligible": 390,
+      "successes": 226
+    },
+    "validation/function_returns": {
+      "eligible": 387,
+      "successes": 237
+    },
+    "validation/list_indexing": {
+      "eligible": 383,
+      "successes": 248
+    },
+    "validation/loop_tracing": {
+      "eligible": 412,
+      "successes": 234
+    },
+    "validation/range_boundaries": {
+      "eligible": 393,
+      "successes": 243
+    }
+  },
+  "response_attempt_numbers": {
+    "1": 28598,
+    "2": 5876,
+    "3": 1620
+  },
+  "response_hint_counts": {
+    "0": 27413,
+    "1": 4380,
+    "2": 2693,
+    "3": 883,
+    "None": 725
+  },
+  "response_time_by_format": {
+    "code_completion": {
+      "max": 746.3258896274494,
+      "median": 124.35278589267462,
+      "min": 22.904086222199687,
+      "p95": 303.3703514660388
+    },
+    "fill_in_the_blank": {
+      "max": 486.57875276015574,
+      "median": 58.61889537641535,
+      "min": 7.5672213595322,
+      "p95": 136.56850629548387
+    },
+    "multiple_select": {
+      "max": 672.6111273499496,
+      "median": 94.70452379691979,
+      "min": 15.39146009660004,
+      "p95": 224.93838693749922
+    },
+    "output_prediction": {
+      "max": 348.70324750466716,
+      "median": 50.95584030179493,
+      "min": 7.048896325670156,
+      "p95": 121.40988126806056
+    },
+    "single_choice": {
+      "max": 196.1171259657939,
+      "median": 31.472234472567497,
+      "min": 4.203255239457109,
+      "p95": 71.93127101199707
+    }
+  },
+  "skill_event_gaps_days": {
+    "max": 3.0620750029247117,
+    "median": 0.00028937311912024464,
+    "min": 0.0,
+    "p95": 0.017722578633714604
+  },
+  "splits": {
+    "test": {
+      "assessment_complete": 346,
+      "assessment_incomplete": 14,
+      "assisted": 808,
+      "blocked": 10,
+      "eligible_assessment": 332,
+      "eligible_practice": 2333,
+      "event_assessment_end": 360,
+      "event_grade": 3634,
+      "event_help_request": 585,
+      "event_hint": 1046,
+      "event_mode_switch": 71,
+      "event_response": 3634,
+      "event_retry": 755,
+      "event_solution_reveal": 122,
+      "event_task": 2879,
+      "events": 13086,
+      "independent": 2746,
+      "learners": 20,
+      "missing_active_time": 149,
+      "missing_reference_time": 109,
+      "mixed": 10,
+      "partial_grades": 955,
+      "resolved": 3528,
+      "retries": 755,
+      "successes_assessment": 167,
+      "successes_practice": 1429,
+      "unknown": 80,
+      "unresolved": 106
+    },
+    "train": {
+      "assessment_complete": 2808,
+      "assessment_incomplete": 72,
+      "assisted": 6325,
+      "blocked": 80,
+      "eligible_practice": 18564,
+      "event_assessment_end": 2880,
+      "event_grade": 28801,
+      "event_help_request": 4284,
+      "event_hint": 8261,
+      "event_mode_switch": 591,
+      "event_response": 28801,
+      "event_retry": 5966,
+      "event_solution_reveal": 923,
+      "event_task": 22835,
+      "events": 103342,
+      "independent": 21899,
+      "learners": 160,
+      "missing_active_time": 1127,
+      "missing_reference_time": 916,
+      "mixed": 80,
+      "partial_grades": 7578,
+      "resolved": 27934,
+      "retries": 5966,
+      "successes_practice": 11370,
+      "unknown": 577,
+      "unresolved": 867
+    },
+    "validation": {
+      "assessment_complete": 348,
+      "assessment_incomplete": 12,
+      "assisted": 823,
+      "blocked": 10,
+      "eligible_assessment": 335,
+      "eligible_practice": 2363,
+      "event_assessment_end": 360,
+      "event_grade": 3659,
+      "event_help_request": 574,
+      "event_hint": 1101,
+      "event_mode_switch": 66,
+      "event_response": 3659,
+      "event_retry": 775,
+      "event_solution_reveal": 131,
+      "event_task": 2884,
+      "events": 13209,
+      "independent": 2768,
+      "learners": 20,
+      "missing_active_time": 140,
+      "missing_reference_time": 111,
+      "mixed": 10,
+      "partial_grades": 927,
+      "resolved": 3572,
+      "retries": 775,
+      "successes_assessment": 171,
+      "successes_practice": 1422,
+      "unknown": 68,
+      "unresolved": 87
+    }
+  },
+  "status": "passed",
+  "target_exclusions": {
+    "assisted_or_review_first_attempt": 540,
+    "unknown_assistance": 520,
+    "unresolved_grade": 731
+  },
+  "development_note": "Initial pilot passed consistency checks. Review found over-specific solution-reveal reason and missing stored introductory lesson content. Rebuild after correcting these; not final release counts."
+}

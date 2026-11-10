@@ -1,0 +1,31 @@
+{
+  "files": {
+    "administration/test.jsonl.gz": "fdca0b2ff1c03de8bddadc9f105872fe8925a99047f658b1abb53ec4b7fcd392",
+    "administration/train.jsonl.gz": "1a88d3003f2ca15685633fb79c097647c59ea5539a1b1ec65388d90a67e85ff9",
+    "administration/validation.jsonl.gz": "e380d32a768bb2a87c4044dfcd4f8d5943077aacb5ef08874dc0c4b7fecb6ffa",
+    "assessments/test.jsonl.gz": "3a04a03a31d0614e360a9b0dd8889f6b1ea244d22a717f4ec362d59d18bbfd83",
+    "assessments/train.jsonl.gz": "5a0a7a3e7ff03516c5cceb92fae1cf5ad15c48b6964f5c7da2d3793aafa20b8e",
+    "assessments/validation.jsonl.gz": "99c92e2b49905d121643634ae4544165cba8a73d112b6da6d5dd92dba0aea256",
+    "config.json": "7da7f00c44fe81a60ac01bada175ac75145e1f81eae5b61e478c7f489368906c",
+    "example_learner.json": "54e1c75532a56ee5f4dd224c27107d789a2d572e2b58eba18dff0a649abaff78",
+    "model_data/test.jsonl.gz": "d1386148e0e0abe456cffffe953d67465ccb02244f7840ab3d4bdf15801e7a25",
+    "model_data/train.jsonl.gz": "756fadedc297cb895b256225f8ffe822802990fb990b4df168012f1eec82e3a0",
+    "model_data/validation.jsonl.gz": "2f47c6c2f65962988eea9eae102af62764efb3871f747168f9d741ab7e4699b8",
+    "observations/test.jsonl.gz": "f8a261be8d23c1e334d3e479a87015eca64a762e1047d0defa1ea1b1dc0d6ccf",
+    "observations/train.jsonl.gz": "d41e52ef3082a11a2158b3a1c54b53c7eb485eb3897a8ac2c76aa36487837a54",
+    "observations/validation.jsonl.gz": "b62e51f416a5934526b48f073e6cc0c75c69892179a2f498a8a1d45b8bc786d4"
+  },
+  "python": "3.12.14",
+  "source_files": {
+    "audit_dataset.py": "899f538e439f9fcf4e78e69ff4864afd5b7b8f2b9a2641fd13c6844c1305aa2a",
+    "build_dataset.py": "b5f5195ce3f31a8bbf5da9609efd8b63869551317f8c33798bf0216fd4c5b6dd",
+    "build_fixtures.py": "56da65a9cf5aa078b57eeb691f11a2a95713694b993b59eea93d69ac156ff4a2",
+    "catalog.py": "5a8b9fde52c8732560bac9e7f85d5f183e0ad61774517583852f253148bec100",
+    "loader.py": "e04226e271681fa4f309a00d8615cbdcf6b088dd9ddc8178730136da2fdbf88d",
+    "replay.py": "5a8b76419d73f0d8e266b0ddbeb9d9eaebd18f51700b4df6545efaff50518e92",
+    "run_tests.py": "bf0a431abbaa1bbe3105fc7e888905ae947bd33f273e5bb8234ef78da7831a98",
+    "simulator.py": "4cc06d8c8c8632790fd466424ed9b4a0e3abce61918cf380aa0b4e79bbc0c6db",
+    "storage.py": "55a2fbca62fc9060319226bce35d013718bf01e60e4805bc1471d4307c15d2b8"
+  },
+  "version": "1.0.0"
+}

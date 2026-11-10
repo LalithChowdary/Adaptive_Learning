@@ -1,0 +1,202 @@
+{
+  "errors": 0,
+  "failed": 0,
+  "passed": 48,
+  "results": [
+    {
+      "status": "passed",
+      "test": "test_dataset.DiskAuditTests.test_causal_audit_rejects_future_features_even_with_new_checksum"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.DiskAuditTests.test_complete_regeneration_is_byte_identical"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.DiskAuditTests.test_delayed_labels_absent_from_training_records"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.DiskAuditTests.test_evaluation_loader_has_delayed_targets"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.DiskAuditTests.test_full_audit_passes"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.DiskAuditTests.test_modified_file_is_rejected"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.DiskAuditTests.test_overwrite_is_refused"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.DiskAuditTests.test_training_loader_only_exposes_permitted_input"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_assisted_success_is_not_unaided_target"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_cross_course_reuses_same_skill_record"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_duplicate_event_rejected"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_false_independence_rejected"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_first_query_has_empty_history"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_future_grade_availability_reordering_rejected"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_future_result_cannot_change_prior_input"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_intervening_skill_does_not_erase_elapsed_gap"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_missing_duration_and_reference_stay_missing"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_model_features_reject_hidden_field"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_new_task_resets_help_and_attempt"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_partial_credit_is_not_full_success"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_query_rejects_identity_feature"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_raw_events_reject_hidden_field"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_reveal_does_not_create_perfect_hidden_knowledge"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_student_id_renaming_does_not_change_features"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_unknown_assistance_excluded"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_unresolved_grade_has_no_target"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.EvidenceTests.test_wrong_rubric_score_rejected"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.GenerationTests.test_assessment_cannot_modify_training_state"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.GenerationTests.test_assessment_history_has_no_other_probe"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.GenerationTests.test_assessments_do_not_gain_strength_from_response"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.GenerationTests.test_catalog_answers_match_trusted_snippet_execution"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.GenerationTests.test_help_improves_current_probability_under_matched_randomness"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.GenerationTests.test_higher_strength_increases_probability_under_matched_randomness"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.GenerationTests.test_no_repeated_task_ids_per_learner"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.GenerationTests.test_schedule_has_exact_budget_per_skill"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.GenerationTests.test_seed_reproduces_all_observations"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.GenerationTests.test_split_is_disjoint_and_balanced"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.GenerationTests.test_three_controlled_histories_validate"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.RetentionTests.test_half_life_is_half_strength"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.RetentionTests.test_instruction_does_not_update_unrelated_skill"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.RetentionTests.test_invalid_config_rejected"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.RetentionTests.test_invalid_time_or_half_life_rejected"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.RetentionTests.test_learning_is_bounded_and_zero_dose_has_no_gain"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.RetentionTests.test_parameters_vary_between_learners_and_skills"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.RetentionTests.test_partitioned_time_matches_single_advance"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.RetentionTests.test_power_law_agrees_at_half_life_but_differs_later"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.RetentionTests.test_repeated_queries_do_not_accelerate_forgetting"
+    },
+    {
+      "status": "passed",
+      "test": "test_dataset.RetentionTests.test_zero_gap_preserves_strength"
+    }
+  ],
+  "skipped": 0,
+  "successful": true,
+  "tests_run": 48
+}

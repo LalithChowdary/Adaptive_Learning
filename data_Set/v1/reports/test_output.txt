@@ -1,0 +1,53 @@
+test_causal_audit_rejects_future_features_even_with_new_checksum (test_dataset.DiskAuditTests.test_causal_audit_rejects_future_features_even_with_new_checksum) ... ok
+test_complete_regeneration_is_byte_identical (test_dataset.DiskAuditTests.test_complete_regeneration_is_byte_identical) ... ok
+test_delayed_labels_absent_from_training_records (test_dataset.DiskAuditTests.test_delayed_labels_absent_from_training_records) ... ok
+test_evaluation_loader_has_delayed_targets (test_dataset.DiskAuditTests.test_evaluation_loader_has_delayed_targets) ... ok
+test_full_audit_passes (test_dataset.DiskAuditTests.test_full_audit_passes) ... ok
+test_modified_file_is_rejected (test_dataset.DiskAuditTests.test_modified_file_is_rejected) ... ok
+test_overwrite_is_refused (test_dataset.DiskAuditTests.test_overwrite_is_refused) ... ok
+test_training_loader_only_exposes_permitted_input (test_dataset.DiskAuditTests.test_training_loader_only_exposes_permitted_input) ... ok
+test_assisted_success_is_not_unaided_target (test_dataset.EvidenceTests.test_assisted_success_is_not_unaided_target) ... ok
+test_cross_course_reuses_same_skill_record (test_dataset.EvidenceTests.test_cross_course_reuses_same_skill_record) ... ok
+test_duplicate_event_rejected (test_dataset.EvidenceTests.test_duplicate_event_rejected) ... ok
+test_false_independence_rejected (test_dataset.EvidenceTests.test_false_independence_rejected) ... ok
+test_first_query_has_empty_history (test_dataset.EvidenceTests.test_first_query_has_empty_history) ... ok
+test_future_grade_availability_reordering_rejected (test_dataset.EvidenceTests.test_future_grade_availability_reordering_rejected) ... ok
+test_future_result_cannot_change_prior_input (test_dataset.EvidenceTests.test_future_result_cannot_change_prior_input) ... ok
+test_intervening_skill_does_not_erase_elapsed_gap (test_dataset.EvidenceTests.test_intervening_skill_does_not_erase_elapsed_gap) ... ok
+test_missing_duration_and_reference_stay_missing (test_dataset.EvidenceTests.test_missing_duration_and_reference_stay_missing) ... ok
+test_model_features_reject_hidden_field (test_dataset.EvidenceTests.test_model_features_reject_hidden_field) ... ok
+test_new_task_resets_help_and_attempt (test_dataset.EvidenceTests.test_new_task_resets_help_and_attempt) ... ok
+test_partial_credit_is_not_full_success (test_dataset.EvidenceTests.test_partial_credit_is_not_full_success) ... ok
+test_query_rejects_identity_feature (test_dataset.EvidenceTests.test_query_rejects_identity_feature) ... ok
+test_raw_events_reject_hidden_field (test_dataset.EvidenceTests.test_raw_events_reject_hidden_field) ... ok
+test_reveal_does_not_create_perfect_hidden_knowledge (test_dataset.EvidenceTests.test_reveal_does_not_create_perfect_hidden_knowledge) ... ok
+test_student_id_renaming_does_not_change_features (test_dataset.EvidenceTests.test_student_id_renaming_does_not_change_features) ... ok
+test_unknown_assistance_excluded (test_dataset.EvidenceTests.test_unknown_assistance_excluded) ... ok
+test_unresolved_grade_has_no_target (test_dataset.EvidenceTests.test_unresolved_grade_has_no_target) ... ok
+test_wrong_rubric_score_rejected (test_dataset.EvidenceTests.test_wrong_rubric_score_rejected) ... ok
+test_assessment_cannot_modify_training_state (test_dataset.GenerationTests.test_assessment_cannot_modify_training_state) ... ok
+test_assessment_history_has_no_other_probe (test_dataset.GenerationTests.test_assessment_history_has_no_other_probe) ... ok
+test_assessments_do_not_gain_strength_from_response (test_dataset.GenerationTests.test_assessments_do_not_gain_strength_from_response) ... ok
+test_catalog_answers_match_trusted_snippet_execution (test_dataset.GenerationTests.test_catalog_answers_match_trusted_snippet_execution) ... ok
+test_help_improves_current_probability_under_matched_randomness (test_dataset.GenerationTests.test_help_improves_current_probability_under_matched_randomness) ... ok
+test_higher_strength_increases_probability_under_matched_randomness (test_dataset.GenerationTests.test_higher_strength_increases_probability_under_matched_randomness) ... ok
+test_no_repeated_task_ids_per_learner (test_dataset.GenerationTests.test_no_repeated_task_ids_per_learner) ... ok
+test_schedule_has_exact_budget_per_skill (test_dataset.GenerationTests.test_schedule_has_exact_budget_per_skill) ... ok
+test_seed_reproduces_all_observations (test_dataset.GenerationTests.test_seed_reproduces_all_observations) ... ok
+test_split_is_disjoint_and_balanced (test_dataset.GenerationTests.test_split_is_disjoint_and_balanced) ... ok
+test_three_controlled_histories_validate (test_dataset.GenerationTests.test_three_controlled_histories_validate) ... ok
+test_half_life_is_half_strength (test_dataset.RetentionTests.test_half_life_is_half_strength) ... ok
+test_instruction_does_not_update_unrelated_skill (test_dataset.RetentionTests.test_instruction_does_not_update_unrelated_skill) ... ok
+test_invalid_config_rejected (test_dataset.RetentionTests.test_invalid_config_rejected) ... ok
+test_invalid_time_or_half_life_rejected (test_dataset.RetentionTests.test_invalid_time_or_half_life_rejected) ... ok
+test_learning_is_bounded_and_zero_dose_has_no_gain (test_dataset.RetentionTests.test_learning_is_bounded_and_zero_dose_has_no_gain) ... ok
+test_parameters_vary_between_learners_and_skills (test_dataset.RetentionTests.test_parameters_vary_between_learners_and_skills) ... ok
+test_partitioned_time_matches_single_advance (test_dataset.RetentionTests.test_partitioned_time_matches_single_advance) ... ok
+test_power_law_agrees_at_half_life_but_differs_later (test_dataset.RetentionTests.test_power_law_agrees_at_half_life_but_differs_later) ... ok
+test_repeated_queries_do_not_accelerate_forgetting (test_dataset.RetentionTests.test_repeated_queries_do_not_accelerate_forgetting) ... ok
+test_zero_gap_preserves_strength (test_dataset.RetentionTests.test_zero_gap_preserves_strength) ... ok
+
+----------------------------------------------------------------------
+Ran 48 tests in 0.209s
+
+OK
