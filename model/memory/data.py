@@ -14,6 +14,7 @@ from .features import (
 V2_ROOT = Path(__file__).resolve().parents[2] / "data_Set" / "v2"
 DATA_ROOT = V2_ROOT / "dataset"
 DATA_ROOT_V21 = V2_ROOT.with_name("v2.1") / "dataset"
+DATA_ROOT_V22 = V2_ROOT.with_name("v2.2") / "dataset"
 
 # The audited v2 loader is a standalone module with sibling imports.
 sys.path.insert(0, str(V2_ROOT))
@@ -131,18 +132,18 @@ class Partition:
         return np.concatenate((tasks, summaries), axis=1)
 
 
-def checked_v21_records(cohort, split):
-    """Accept audited v2.1 exports from the requested learner partition only."""
+def checked_v21_records(cohort, split, *, version="2.1.0"):
+    """Accept audited v2.1/v2.2 exports from the requested learner partition only."""
     manifest_path = cohort / "manifest.json"
     manifest = json.loads(manifest_path.read_text())
     audit = json.loads((cohort / "audit.json").read_text())
-    if (manifest["version"] != "2.1.0" or audit["status"] != "passed"
+    if (manifest["version"] != version or audit["status"] != "passed"
             or audit["audited_manifest_sha256"] != digest(manifest_path)):
-        raise ValueError("An audited v2.1 cohort is required")
+        raise ValueError(f"An audited {version} cohort is required")
     relative = f"model_data/{split}.jsonl.gz"
     for path in ("config.json", relative):
         if path not in manifest["files"] or digest(cohort / path) != manifest["files"][path]:
-            raise ValueError(f"Missing or modified v2.1 input {path}")
+            raise ValueError(f"Missing or modified {version} input {path}")
     config = json.loads((cohort / "config.json").read_text())
     if config["evaluation_only"] and split != "test":
         raise ValueError("Stress cohorts may only be evaluated")
@@ -157,10 +158,10 @@ def load_partition(root, cohort, split, *, learner_limit=None, version="2.0.0"):
     learners = set()
     sequences = []
     record_keys = set()
-    if version not in {"2.0.0", "2.1.0"}:
+    if version not in {"2.0.0", "2.1.0", "2.2.0"}:
         raise ValueError(f"Unsupported dataset version {version}")
-    load_records = checked_v21_records if version == "2.1.0" else checked_records
-    for record in load_records(root / cohort, split):
+    records = checked_records(root / cohort, split) if version == "2.0.0" else checked_v21_records(root / cohort, split, version=version)
+    for record in records:
         learner = record["learner_id"]
         if learner_limit is not None and learner not in learners and len(learners) >= learner_limit:
             break
@@ -170,7 +171,7 @@ def load_partition(root, cohort, split, *, learner_limit=None, version="2.0.0"):
             raise ValueError(f"Duplicate learner-skill record {key}")
         record_keys.add(key)
         sequence = encode_record(
-            record, training=split == "train", include_training_assessments=version == "2.1.0",
+            record, training=split == "train", include_training_assessments=version in {"2.1.0", "2.2.0"},
         )
         if sequence is not None:
             sequences.append(sequence)

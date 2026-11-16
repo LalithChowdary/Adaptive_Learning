@@ -33,8 +33,8 @@ def oracle_predictions(root, cohort, split, partition):
         raise ValueError("Private oracle traces are for evaluation only")
     folder = root / cohort
     manifest = json.loads((folder / "manifest.json").read_text())
-    if manifest["version"] != "2.1.0":
-        raise ValueError("The oracle requires v2.1 pre-attempt strength")
+    if manifest["version"] not in {"2.1.0", "2.2.0"}:
+        raise ValueError("The oracle requires v2.1/v2.2 pre-attempt strength")
     catalog_path = root / "task_catalog.json"
     if digest(catalog_path) != manifest["catalog_files"]["task_catalog.json"]:
         raise ValueError("Oracle task catalog checksum mismatch")

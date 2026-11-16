@@ -51,7 +51,7 @@ class Dashboard:
 
     def bootstrap(self,learner=None):
         profiles=[dict(r) for r in self.store.db.execute('SELECT * FROM profiles ORDER BY created')]
-        result=dict(profiles=profiles,skills=[dict(id=k,name=v[0],description=v[1],number=v[2]) for k,v in SKILLS.items()],formats=list(FORMATS),device=self.memory.device,model='Time-decayed GRU · v2.1',model_sha256=self.memory.version)
+        result=dict(profiles=profiles,skills=[dict(id=k,name=v[0],description=v[1],number=v[2]) for k,v in SKILLS.items()],formats=list(FORMATS),device=self.memory.device,model='Monotonic GRU · v2.2',model_sha256=self.memory.version)
         if learner:
             self.profile(learner); result['learner']=learner
             items=self.store.interactions(learner)
@@ -84,7 +84,9 @@ class Dashboard:
         task=TASKS[task_id] if task_id else self.references[skill][2]
         if task['skill_id']!=skill: raise ValueError('Task does not match skill')
         now=time.time()
-        return dict(skill=skill,task=dict(task_id=task['task_id'],difficulty=task['difficulty'],task_type=task['task_type']),
+        ev=self.store.events(learner,skill)
+        assessed=any(e['kind']=='grade' and e['features']['grading_status']=='resolved' for e in ev)
+        return dict(skill=skill,assessed=assessed,task=dict(task_id=task['task_id'],difficulty=task['difficulty'],task_type=task['task_type']),
                     points=[dict(day=d,probability=self.predict(learner,skill,task,now+d*86400)) for d in (0,1,3,7,14,30,45,60)])
 
     def command(self,action,data):

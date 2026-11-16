@@ -1,11 +1,11 @@
-"""Read-only v2.1 catalogue with reviewed presentation hints and feature mapping."""
+"""Read-only v2.2 catalogue with reviewed presentation hints and feature mapping."""
 import copy
 import importlib.util
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-DATA = ROOT.parent / 'data_Set' / 'v2.1'
+DATA = ROOT.parent / 'data_Set' / 'v2.2'
 spec = importlib.util.spec_from_file_location('dashboard_catalogue_source', DATA / 'catalog.py')
 source = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(source)

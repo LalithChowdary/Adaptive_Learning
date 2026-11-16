@@ -9,14 +9,14 @@ sys.path.insert(0,str(MODEL_ROOT))
 from memory.features import EvidenceStream, task_features, DAY
 from memory.recurrent import LearnerGRU
 
-CHECKPOINT = MODEL_ROOT / 'runs/v2.1-mps-main/time_decay_gru/seed_20261111/model.pt'
+CHECKPOINT = MODEL_ROOT / 'runs/v2.2-mps-main/monotonic_gru/seed_20261122/model.pt'
 
 class MemoryService:
     def __init__(self, device='auto'):
         self.device=('mps' if torch.backends.mps.is_available() else 'cpu') if device=='auto' else device
         if self.device=='mps' and not torch.backends.mps.is_available(): raise RuntimeError('MPS is not available in this process.')
         payload=torch.load(CHECKPOINT,map_location='cpu',weights_only=True)
-        if payload['dataset_version']!='2.1.0' or payload['mode']!='time_decay': raise ValueError('Unexpected checkpoint contract')
+        if payload['dataset_version']!='2.2.0' or payload['mode']!='monotonic': raise ValueError('Unexpected checkpoint contract')
         self.model=LearnerGRU(mode=payload['mode'],hidden_size=payload['hidden_size']).to(self.device)
         self.model.load_state_dict(payload['weights']); self.model.eval()
         for p in self.model.parameters(): p.requires_grad_(False)

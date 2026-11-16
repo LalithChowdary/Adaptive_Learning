@@ -1,6 +1,6 @@
 # Recall — interactive Python memory dashboard
 
-A local learner-facing dashboard for the frozen v2.1 time-decayed GRU. Answer actual Python questions, receive deterministic rubric grades, request prepared hints, and inspect the predictions produced from your own evidence. No LLM or API key is required.
+A local learner-facing dashboard for the frozen v2.2 Monotonic Grey-Box GRU (`monotonic_gru`). Answer actual Python questions, receive deterministic rubric grades, request prepared hints, and inspect the predictions produced from your own evidence. No LLM or API key is required.
 
 For the distinction between shared weights and personal states, measured starting probabilities, and difficulty-specific predictions, see [How the memory model works](MEMORY_MODEL_EXPLAINED.md).
 
@@ -43,7 +43,7 @@ A question's pre-answer probability is computed before presentation and saved wi
 
 The skill overview's prediction is the mean over **five fixed medium-difficulty reference tasks**, one per format, using that learner's current same-skill evidence. Those reference tasks are the first assessment-pool variant for each skill/format in the catalogue. All five have equal aggregation weight. This is a task-set summary, not mastery, grader confidence, or a validated cross-skill scale. The card says *Unassessed* until at least one resolved grade is recorded.
 
-The memory explorer uses a fixed medium-difficulty output-prediction reference task. It starts from the current evidence anchor and queries temporary decayed states. Its curve is a model forecast, not a measured human forgetting curve, and is not mathematically constrained to be monotonic. Empty histories use the shared learned prior.
+The memory explorer uses a fixed medium-difficulty output-prediction reference task. It starts from the current evidence anchor and queries temporary decayed states. Its curve is a model forecast from the v2.2 Monotonic GRU, whose readout guarantees non-increasing retention curves over elapsed time without additional practice. Skills with zero graded attempts display an explicit `Unassessed · 0 recorded attempts` status instead of a personal retention curve, while noting the generic cold-start reference estimate separately.
 
 ## Grading
 
@@ -84,7 +84,7 @@ Custom HTML/CSS was chosen instead of the earlier proposed Streamlit UI to give 
 
 ## Model and storage contracts
 
-The checkpoint is `../model/runs/v2.1-mps-main/time_decay_gru/seed_20261111/model.pt`. The service checks its mode/version, records its SHA-256, calls `.eval()`, disables parameter gradients, and performs inference only. The original dataset, model source, and checkpoints are read-only dependencies.
+The checkpoint is `../model/runs/v2.2-mps-main/monotonic_gru/seed_20261122/model.pt`. The service checks its mode/version (`monotonic` / `2.2.0`), records its SHA-256, calls `.eval()`, disables parameter gradients, and performs inference only. The original dataset, model source, and checkpoints are read-only dependencies.
 
 A cache entry is keyed by learner, canonical skill, and model hash. It contains the original EvidenceStream, hidden vector, last evidence anchor, and consumed event cursor. Only newly appended evidence is encoded. A restart reconstructs states from the retained journal; query calls never commit a decayed state. Dataset replay equivalence is tested against the existing full-sequence model implementation, including nonempty histories and delayed queries.
 

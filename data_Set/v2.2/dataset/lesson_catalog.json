@@ -1,0 +1,8 @@
+{
+  "python_intro_v2/accumulator_initialization": "An accumulator starts with its initialized value. Add each contribution to that value. Starting a total at 5 and adding 1 and 2 produces 8.",
+  "python_intro_v2/conditional_evaluation": "Evaluate the condition first. Execute the if branch when it is true and the else branch when it is false. A strict greater-than comparison is false at equality.",
+  "python_intro_v2/function_returns": "Replace each function parameter with its supplied argument and evaluate the return expression. A function returning x * 2 + 1 returns 7 when x is 3.",
+  "python_intro_v2/list_indexing": "Python lists use index 0 for the first element. Negative indices count from the end: -1 is the last element and -2 is the element before it.",
+  "python_intro_v2/loop_tracing": "Record the initial variable value, then apply the loop body once per iteration. Starting x at 2 and adding 3 twice gives 2, then 5, then 8.",
+  "python_intro_v2/range_boundaries": "range(start, stop, step) begins at start and excludes stop. With a positive step, continue while the value is below stop. For example, list(range(1, 5, 2)) is [1, 3]."
+}

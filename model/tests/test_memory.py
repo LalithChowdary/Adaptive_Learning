@@ -6,6 +6,7 @@ import unittest
 import numpy as np
 import torch
 
+from memory.behavioral import evaluate_behavioral_suite
 from memory.data import Partition, encode_record
 from memory.features import DAY, EvidenceStream, HistorySummary
 from memory.evaluation import validation_losses
@@ -163,7 +164,7 @@ class RecurrentTests(unittest.TestCase):
         encoded = encode_record(record())
         batch = make_batches(Partition([encoded]), 1, self.device)[0]
         tokens, gaps, positions, tasks, query_gaps = batch.inputs
-        for mode in ("time_input", "time_decay"):
+        for mode in ("time_input", "time_decay", "kt_decay", "monotonic"):
             model = LearnerGRU(mode=mode).to(self.device)
             with torch.no_grad():
                 logits = model(*batch.inputs)
@@ -180,6 +181,12 @@ class RecurrentTests(unittest.TestCase):
                     torch.testing.assert_close(first, logits[:, index])
                     torch.testing.assert_close(first, second)
                     torch.testing.assert_close(state, saved)
+
+    def test_monotonic_and_kt_decay_satisfy_all_behavioral_sanity_checks(self):
+        for mode in ("kt_decay", "monotonic"):
+            model = LearnerGRU(mode=mode).to(self.device)
+            report = evaluate_behavioral_suite(model)
+            self.assertTrue(report["all_passed"], f"{mode} failed checks: {report['checks']}")
 
     def test_decay_is_identity_at_zero_and_converges_toward_prior(self):
         model = LearnerGRU(mode="time_decay").to(self.device)

@@ -123,7 +123,7 @@ def fit_recurrent(
             loss_sum = (per_query * batch.valid).sum()
             (loss_sum / batch.count).backward()
             if verified_gradient is None:
-                gradient = model.cell.weight_hh.grad
+                gradient = model.cell.weight_hh.grad if hasattr(model, "cell") else model.gain_gate.weight.grad
                 if gradient is None or gradient.device.type != device.type or not gradient.isfinite().all().item():
                     raise RuntimeError("Recurrent backward pass did not produce finite gradients on the requested device")
                 verified_gradient = str(gradient.device)

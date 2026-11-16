@@ -138,7 +138,7 @@ class AppTests(unittest.TestCase):
     def test_replay_matches_original_model_queries(self):
         import torch
         from memory.data import encode_record
-        path=ROOT.parent/'data_Set/v2.1/dataset/main/model_data/test.jsonl.gz'
+        path=ROOT.parent/'data_Set/v2.2/dataset/main/model_data/test.jsonl.gz'
         with gzip.open(path,'rt') as f:record=json.loads(next(f))
         encoded=encode_record(record)
         with torch.inference_mode():
@@ -155,6 +155,38 @@ class AppTests(unittest.TestCase):
             self.assertAlmostEqual(p,expected[index],places=6)
             index+=1
         self.assertGreater(index,10)
+    def test_fast_wrong_answer_decreases_prediction_and_curve_non_increasing(self):
+        unassessed_curve=self.app.curve(self.learner,'conditional_evaluation')
+        self.assertFalse(unassessed_curve['assessed'])
+        p_before=unassessed_curve['points'][0]['probability']
+        i=self.command('start',skill='conditional_evaluation',format='output_prediction',difficulty='medium',mode='practice')
+        t=TASKS[i['task']]
+        wrong=['__wrong_output__' for _ in t['answer_key']]
+        i=self.command('submit',interaction=i['id'],answer=wrong,active_seconds=2.0)
+        self.assertFalse(i['results'][0]['full_success'])
+        self.assertEqual(i['results'][0]['score'],0.0)
+        assessed_curve=self.app.curve(self.learner,'conditional_evaluation')
+        self.assertTrue(assessed_curve['assessed'])
+        probs=[pt['probability'] for pt in assessed_curve['points']]
+        self.assertLess(probs[0],p_before)
+        for prev_p,next_p in zip(probs,probs[1:]):
+            self.assertLessEqual(next_p,prev_p+1e-7)
+    def test_two_hard_successes_retain_realistic_long_horizon_curve(self):
+        cold_p=self.app.curve(self.learner,'function_returns')['points'][0]['probability']
+        for fmt in ('fill_in_the_blank','single_choice'):
+            i=self.command('start',skill='function_returns',format=fmt,difficulty='hard',mode='practice')
+            t=TASKS[i['task']]
+            i=self.command('submit',interaction=i['id'],answer=t['answer_key'],active_seconds=2.0)
+            self.assertTrue(i['results'][0]['full_success'])
+            self.command('finish',interaction=i['id'])
+        curve=self.app.curve(self.learner,'function_returns')
+        self.assertTrue(curve['assessed'])
+        probs=[pt['probability'] for pt in curve['points']]
+        for prev_p,next_p in zip(probs,probs[1:]):
+            self.assertLessEqual(next_p,prev_p+1e-7)
+        self.assertGreater(probs[0],0.65)
+        self.assertGreater(probs[-2],0.55)
+        self.assertGreater(probs[-1],cold_p)
     def test_export_no_synthetic_events(self):
         i=self.start();data=self.app.export(self.learner)
         self.assertEqual(data['source'],'real_local_session');self.assertTrue(all(e['source']=='real_local_session' for e in data['events']))
