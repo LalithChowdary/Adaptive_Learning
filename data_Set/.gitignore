@@ -16,3 +16,8 @@ reports/*.log
 .venv/
 venv/
 
+# Uncompressed monolithic dataset splits (use .jsonl.gz or train_part*.jsonl instead)
+v2*/dataset/*/*/train.jsonl
+v2*/dataset/*/*/validation.jsonl
+v2*/dataset/*/*/test.jsonl
+
