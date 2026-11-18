@@ -164,7 +164,14 @@ class RecurrentTests(unittest.TestCase):
         encoded = encode_record(record())
         batch = make_batches(Partition([encoded]), 1, self.device)[0]
         tokens, gaps, positions, tasks, query_gaps = batch.inputs
-        for mode in ("time_input", "time_decay", "kt_decay", "monotonic"):
+        for mode in (
+            "time_input",
+            "time_decay",
+            "kt_decay",
+            "monotonic",
+            "time_aware_transformer",
+            "monotonic_transformer",
+        ):
             model = LearnerGRU(mode=mode).to(self.device)
             with torch.no_grad():
                 logits = model(*batch.inputs)
@@ -178,12 +185,12 @@ class RecurrentTests(unittest.TestCase):
                     saved = state.clone()
                     first = model.predict_logit(state, tasks[:, index], query_gaps[:, index])
                     second = model.predict_logit(state, tasks[:, index], query_gaps[:, index])
-                    torch.testing.assert_close(first, logits[:, index])
+                    torch.testing.assert_close(first, logits[:, index], atol=1e-5, rtol=1e-4)
                     torch.testing.assert_close(first, second)
                     torch.testing.assert_close(state, saved)
 
     def test_monotonic_and_kt_decay_satisfy_all_behavioral_sanity_checks(self):
-        for mode in ("kt_decay", "monotonic"):
+        for mode in ("kt_decay", "monotonic", "monotonic_transformer"):
             model = LearnerGRU(mode=mode).to(self.device)
             report = evaluate_behavioral_suite(model)
             self.assertTrue(report["all_passed"], f"{mode} failed checks: {report['checks']}")

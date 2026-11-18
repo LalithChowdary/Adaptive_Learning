@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import shutil
 import sys
 import time
 
@@ -15,6 +16,7 @@ import torch
 from memory.behavioral import evaluate_behavioral_suite
 from memory.data import DATA_ROOT_V22, digest, load_partition
 from memory.evaluation import groups, paired_intervals, probability_report
+from memory.recurrent import LearnerGRU
 from memory.tabular import TABULAR, fit_tabular, predict_tabular
 from memory.training import fit_recurrent, make_batches, predict_recurrent, training_device
 from run import MODEL_DIR, TIE_TOLERANCE, export_predictions, write_json
@@ -22,7 +24,14 @@ from run import MODEL_DIR, TIE_TOLERANCE, export_predictions, write_json
 
 VERSION = "2.2.0"
 SEEDS = (20261120, 20261121, 20261122)
-RECURRENT_V22 = ("time_input_gru", "time_decay_gru", "kt_decay_gru", "monotonic_gru")
+RECURRENT_V22 = (
+    "time_input_gru",
+    "time_decay_gru",
+    "time_aware_transformer",
+    "kt_decay_gru",
+    "monotonic_gru",
+    "monotonic_transformer",
+)
 MODELS_V22 = (*TABULAR, *RECURRENT_V22)
 HORIZON_GROUPS = ("day_1", "day_7", "day_30")
 METRICS = ("log_loss", "brier", "ece_10", "accuracy_05")
@@ -36,34 +45,57 @@ def fit_models(args, run, train, validation, device):
     masks = groups(validation.queries)
     models = {}
     for name in TABULAR:
-        print(f"Fitting {name} on CPU", flush=True)
-        model, fit = fit_tabular(name, train, validation, masks, seed=args.seeds[0], balanced=True)
         folder = args.output / name
         folder.mkdir()
-        joblib.dump(model, folder / "model.joblib")
-        write_json(folder / "fit.json", fit)
+        reused_model = args.reuse_from / name / "model.joblib" if args.reuse_from else None
+        reused_fit = args.reuse_from / name / "fit.json" if args.reuse_from else None
+        if reused_model and reused_model.exists() and reused_fit.exists():
+            print(f"Reusing {name} from {args.reuse_from}", flush=True)
+            shutil.copy2(reused_model, folder / "model.joblib")
+            shutil.copy2(reused_fit, folder / "fit.json")
+            model = joblib.load(folder / "model.joblib")
+            fit = json.loads((folder / "fit.json").read_text())
+        else:
+            print(f"Fitting {name} on CPU", flush=True)
+            model, fit = fit_tabular(name, train, validation, masks, seed=args.seeds[0], balanced=True)
+            joblib.dump(model, folder / "model.joblib")
+            write_json(folder / "fit.json", fit)
         models[name], run["models"][name] = [model], [fit]
 
-    training_batches = make_batches(train, args.batch_size, device)
+    training_batches = None
     validation_batches = make_batches(validation, args.batch_size, device)
     for name in RECURRENT_V22:
         mode = name.removesuffix("_gru")
         models[name], run["models"][name] = [], []
         for seed in args.seeds:
-            print(f"Fitting {name} on {device}, seed {seed}", flush=True)
-            model, fit = fit_recurrent(
-                mode, training_batches, validation, validation_batches, masks, device,
-                epochs=args.epochs, seed=seed, scheduled=True,
-            )
-            behavioral = evaluate_behavioral_suite(model)
-            fit["behavioral"] = behavioral
             folder = args.output / name / f"seed_{seed}"
             folder.mkdir(parents=True)
-            torch.save({
-                "dataset_version": VERSION, "mode": mode, "hidden_size": model.hidden_size,
-                "weights": {key: value.detach().cpu() for key, value in model.state_dict().items()},
-            }, folder / "model.pt")
-            write_json(folder / "fit.json", fit)
+            reused_pt = args.reuse_from / name / f"seed_{seed}" / "model.pt" if args.reuse_from else None
+            reused_fit = args.reuse_from / name / f"seed_{seed}" / "fit.json" if args.reuse_from else None
+            if reused_pt and reused_pt.exists() and reused_fit.exists():
+                print(f"Reusing {name} seed {seed} from {args.reuse_from}", flush=True)
+                shutil.copy2(reused_pt, folder / "model.pt")
+                shutil.copy2(reused_fit, folder / "fit.json")
+                payload = torch.load(folder / "model.pt", map_location=device, weights_only=True)
+                model = LearnerGRU(mode=payload["mode"], hidden_size=payload["hidden_size"]).to(device)
+                model.load_state_dict(payload["weights"])
+                model.eval()
+                fit = json.loads((folder / "fit.json").read_text())
+            else:
+                if training_batches is None:
+                    training_batches = make_batches(train, args.batch_size, device)
+                print(f"Fitting {name} on {device}, seed {seed}", flush=True)
+                model, fit = fit_recurrent(
+                    mode, training_batches, validation, validation_batches, masks, device,
+                    epochs=args.epochs, seed=seed, scheduled=True,
+                )
+                behavioral = evaluate_behavioral_suite(model)
+                fit["behavioral"] = behavioral
+                torch.save({
+                    "dataset_version": VERSION, "mode": mode, "hidden_size": model.hidden_size,
+                    "weights": {key: value.detach().cpu() for key, value in model.state_dict().items()},
+                }, folder / "model.pt")
+                write_json(folder / "fit.json", fit)
             models[name].append(model)
             run["models"][name].append(fit)
             write_json(args.output / "run.json", run)
@@ -147,6 +179,9 @@ def evaluate(args, run, models, partition, batches, cohort, split):
         ("history_boosting", "history_logistic"),
         ("monotonic_gru", "kt_decay_gru"),
         ("monotonic_gru", "time_decay_gru"),
+        ("monotonic_gru", "time_aware_transformer"),
+        ("monotonic_transformer", "time_aware_transformer"),
+        ("monotonic_transformer", "monotonic_gru"),
         ("monotonic_gru", best_tabular),
     ]
     paired = paired_intervals(partition, predictions, contrasts, masks, seed=args.seeds[0])
@@ -267,16 +302,20 @@ def main():
     parser.add_argument("--device", choices=("mps", "cpu"), default="mps")
     parser.add_argument("--epochs", type=int)
     parser.add_argument("--batch-size", type=int, default=64)
+    parser.add_argument("--reuse-from", type=Path, default=None)
     args = parser.parse_args()
     if args.epochs is None:
         args.epochs = 1 if args.mode == "smoke" else 35
     args.seeds = SEEDS[:1] if args.mode == "smoke" else SEEDS
     args.dataset, args.output = args.dataset.resolve(), args.output.resolve()
+    if args.reuse_from is not None:
+        args.reuse_from = args.reuse_from.resolve()
     torch.set_num_threads(min(os.cpu_count() or 1, 4))
     device = training_device(args.device)
     cohorts = ("pilot",) if args.mode == "smoke" else ("main", "power_law", "long_gap")
     run = {
         "status": "running", "mode": args.mode, "dataset_version": VERSION,
+        "reused_from": str(args.reuse_from) if args.reuse_from is not None else None,
         "recurrent_device": str(device), "mps_cpu_fallback_enabled": os.environ.get("PYTORCH_ENABLE_MPS_FALLBACK") == "1",
         "seeds": args.seeds, "epochs": args.epochs, "batch_size": args.batch_size,
         "selection_tolerance": TIE_TOLERANCE, "dataset": str(args.dataset),

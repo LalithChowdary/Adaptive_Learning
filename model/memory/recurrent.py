@@ -1,4 +1,4 @@
-"""Sequence memory models: unconstrained GRUs, interpretable KT-decay, and Monotonic Grey-Box GRU."""
+"""Sequence memory models: unconstrained GRUs, Transformers, interpretable KT-decay, and Monotonic Grey-Box models."""
 import math
 
 import torch
@@ -68,10 +68,65 @@ class TaskReadoutHead(nn.Module):
         return _logit(prob).squeeze(-1)
 
 
+class CausalTimeAttentionEncoder(nn.Module):
+    """Causal multi-head self-attention with learnable elapsed-time decay bias."""
+
+    def __init__(self, input_dim, d_model, num_heads=4):
+        super().__init__()
+        self.d_model = d_model
+        self.num_heads = num_heads
+        self.head_dim = d_model // num_heads
+        if self.head_dim * num_heads != d_model:
+            raise ValueError("d_model must be divisible by num_heads")
+        self.in_proj = nn.Linear(input_dim, d_model)
+        self.norm1 = nn.LayerNorm(d_model)
+        self.qkv = nn.Linear(d_model, 3 * d_model, bias=False)
+        self.out_proj = nn.Linear(d_model, d_model)
+        self.time_decay = nn.Parameter(torch.linspace(-1.5, 0.5, num_heads))
+        self.norm2 = nn.LayerNorm(d_model)
+        self.ffn = nn.Sequential(
+            nn.Linear(d_model, 2 * d_model),
+            nn.SiLU(),
+            nn.Linear(2 * d_model, d_model),
+        )
+        self.out_norm = nn.LayerNorm(d_model)
+
+    def forward(self, x, gaps):
+        b, t, _ = x.shape
+        if t == 0:
+            return torch.zeros((b, 0, self.d_model), device=x.device, dtype=x.dtype)
+        h = self.in_proj(x)
+        qkv = self.qkv(self.norm1(h)).view(b, t, 3, self.num_heads, self.head_dim)
+        q = qkv[:, :, 0].transpose(1, 2)
+        k = qkv[:, :, 1].transpose(1, 2)
+        v = qkv[:, :, 2].transpose(1, 2)
+
+        scores = torch.matmul(q, k.transpose(-1, -2)) / math.sqrt(self.head_dim)
+        cum_time = torch.cumsum(gaps, dim=1)
+        delta_t = torch.clamp(cum_time.unsqueeze(2) - cum_time.unsqueeze(1), min=0.0)
+        decay_rate = F.softplus(self.time_decay).view(1, self.num_heads, 1, 1)
+        scores = scores - decay_rate * torch.log1p(delta_t.unsqueeze(1))
+
+        causal_mask = torch.triu(torch.ones((t, t), device=x.device, dtype=torch.bool), diagonal=1)
+        scores = scores.masked_fill(causal_mask.unsqueeze(0).unsqueeze(0), float("-inf"))
+        attn = torch.softmax(scores, dim=-1)
+        attn_out = torch.matmul(attn, v).transpose(1, 2).contiguous().view(b, t, self.d_model)
+        h = h + self.out_proj(attn_out)
+        h = h + self.ffn(self.norm2(h))
+        return self.out_norm(h)
+
+
 class LearnerGRU(nn.Module):
     def __init__(self, *, mode, hidden_size=32):
         super().__init__()
-        if mode not in {"time_input", "time_decay", "kt_decay", "monotonic"}:
+        if mode not in {
+            "time_input",
+            "time_decay",
+            "kt_decay",
+            "monotonic",
+            "time_aware_transformer",
+            "monotonic_transformer",
+        }:
             raise ValueError(f"Unknown sequence model {mode!r}")
         self.mode = mode
         self.hidden_size = hidden_size
@@ -91,6 +146,15 @@ class LearnerGRU(nn.Module):
                 initial_rates = math.log(2) / half_lives
                 with torch.no_grad():
                     self.rate.bias.copy_(torch.log(torch.expm1(initial_rates)))
+        elif mode == "time_aware_transformer":
+            self.prior = nn.Parameter(torch.zeros(hidden_size))
+            num_heads = 4 if hidden_size % 4 == 0 else (2 if hidden_size % 2 == 0 else 1)
+            self.attn = CausalTimeAttentionEncoder(TOKEN_SIZE + 1, hidden_size, num_heads=num_heads)
+            self.head = nn.Sequential(
+                nn.Linear(hidden_size + TASK_SIZE + 1, hidden_size),
+                nn.SiLU(),
+                nn.Linear(hidden_size, 1),
+            )
         elif mode == "kt_decay":
             # Interpretable 2-channel HLR + Power-Law + Consolidated-Floor KT model (no black-box GRU context)
             self.skill_channels = 2
@@ -106,8 +170,8 @@ class LearnerGRU(nn.Module):
             self.assist_weight = nn.Parameter(torch.tensor(-1.1))
             self.partial_weight = nn.Parameter(torch.tensor(-0.4))
             self.readout = TaskReadoutHead(skill_channels=self.skill_channels, hidden_dim=16)
-        elif mode == "monotonic":
-            # Multi-scale Monotonic Grey-Box GRU with Duolingo HLR + Power-Law + Consolidated Floor
+        elif mode in {"monotonic", "monotonic_transformer"}:
+            # Multi-scale Monotonic Grey-Box model with Duolingo HLR + Power-Law + Consolidated Floor
             self.skill_channels = min(6, max(1, (hidden_size - 4) // 3))
             ctx_size = hidden_size - (2 * self.skill_channels + 2)
             self.ctx_size = ctx_size
@@ -120,7 +184,11 @@ class LearnerGRU(nn.Module):
             self.power_w = nn.Parameter(torch.zeros(self.skill_channels))
             self.permastore_drift = nn.Parameter(torch.full((self.skill_channels,), -1.5))
             self.consolidation = nn.Parameter(torch.full((self.skill_channels,), 0.2))
-            self.cell = nn.GRUCell(TOKEN_SIZE + 1, ctx_size)
+            if mode == "monotonic":
+                self.cell = nn.GRUCell(TOKEN_SIZE + 1, ctx_size)
+            else:
+                num_heads = 3 if ctx_size % 3 == 0 else (2 if ctx_size % 2 == 0 else 1)
+                self.ctx_attn = CausalTimeAttentionEncoder(TOKEN_SIZE + 1, ctx_size, num_heads=num_heads)
             self.ctx_rate = nn.Linear(ctx_size, ctx_size)
             gate_in_dim = TOKEN_SIZE + ctx_size + 2 * self.skill_channels
             self.gain_gate = nn.Sequential(
@@ -144,7 +212,9 @@ class LearnerGRU(nn.Module):
                 self.ctx_rate.bias.copy_(torch.log(torch.expm1(math.log(2) / ctx_hl)))
 
     def initial_state(self, batch_size=1):
-        if self.mode in {"time_input", "time_decay"}:
+        if self.mode in {"time_input", "time_decay", "time_aware_transformer"}:
+            if self.mode == "time_aware_transformer":
+                return self.prior.unsqueeze(0).expand(batch_size, -1).clone()
             return self.prior.unsqueeze(0).expand(batch_size, -1)
         device = self.skill_prior.device
         k0 = torch.sigmoid(self.skill_prior).unsqueeze(0).expand(batch_size, -1)
@@ -193,7 +263,7 @@ class LearnerGRU(nn.Module):
 
     def _at_time(self, state, elapsed_days):
         gap = elapsed_days.unsqueeze(-1)
-        if self.mode == "time_input":
+        if self.mode in {"time_input", "time_aware_transformer"}:
             return state, torch.log1p(gap)
         if self.mode == "time_decay":
             factor = torch.exp(-F.softplus(self.rate(state)) * gap)
@@ -208,7 +278,7 @@ class LearnerGRU(nn.Module):
         if self.mode == "kt_decay":
             k_dec, floor_dec = self._hlr_power_law_decay(k, floor, n_pos, n_neg, gap, ctx_mod=None)
             return torch.cat((k_dec, floor_dec, n_pos, n_neg, rest), dim=-1), torch.zeros_like(gap)
-        # monotonic mode
+        # monotonic and monotonic_transformer modes
         ctx = rest
         k_dec, floor_dec = self._hlr_power_law_decay(k, floor, n_pos, n_neg, gap, ctx_mod=self.hlr_ctx(ctx))
         c_rate = F.softplus(self.ctx_rate(ctx))
@@ -252,7 +322,50 @@ class LearnerGRU(nn.Module):
             n_neg_new,
         )
 
+    @staticmethod
+    def _append_history(state, step_token, elapsed_days):
+        prev = getattr(state, "_history", None)
+        tok_step = step_token.unsqueeze(1)
+        gap_step = elapsed_days.unsqueeze(1)
+        if prev is None:
+            hist_tokens, hist_gaps = tok_step, gap_step
+        else:
+            hist_tokens = torch.cat((prev[0], tok_step), dim=1)
+            hist_gaps = torch.cat((prev[1], gap_step), dim=1)
+        x = torch.cat((hist_tokens, torch.log1p(hist_gaps.unsqueeze(-1))), dim=-1)
+        return hist_tokens, hist_gaps, x
+
+    def _update_monotonic_ready(self, ready, clean, ctx_new):
+        m = self.skill_channels
+        k = ready[..., :m]
+        floor = ready[..., m:2 * m]
+        n_pos = ready[..., 2 * m:2 * m + 1]
+        n_neg = ready[..., 2 * m + 1:2 * m + 2]
+        ctx = ready[..., 2 * m + 2:]
+        gate_input = torch.cat((clean, ctx, _logit(k), _logit(floor)), dim=-1)
+        k_new, floor_new, n_pos_new, n_neg_new = self._update_skill(
+            k, floor, n_pos, n_neg, clean, self.gain_gate(gate_input), self.drop_gate(gate_input),
+        )
+        return torch.cat((k_new, floor_new, n_pos_new, n_neg_new, ctx_new), dim=-1)
+
+    def _step_monotonic_with_ctx(self, state, clean, elapsed_days, ctx_new):
+        ready, _ = self._at_time(state, elapsed_days)
+        return self._update_monotonic_ready(ready, clean, ctx_new)
+
     def observe(self, state, token, elapsed_days):
+        if self.mode == "time_aware_transformer":
+            hist_tokens, hist_gaps, x = self._append_history(state, token, elapsed_days)
+            out = self.attn(x, hist_gaps)[:, -1, :]
+            out._history = (hist_tokens, hist_gaps)
+            return out
+        if self.mode == "monotonic_transformer":
+            clean = self._clean_token(token)
+            hist_tokens, hist_gaps, x = self._append_history(state, clean, elapsed_days)
+            ctx_new = self.ctx_attn(x, hist_gaps)[:, -1, :]
+            out = self._step_monotonic_with_ctx(state, clean, elapsed_days, ctx_new)
+            out._history = (hist_tokens, hist_gaps)
+            return out
+
         ready, time_feature = self._at_time(state, elapsed_days)
         if self.mode in {"time_input", "time_decay"}:
             return self.cell(torch.cat((token, time_feature), dim=-1), ready)
@@ -271,16 +384,12 @@ class LearnerGRU(nn.Module):
             return torch.cat((k_new, floor_new, n_pos_new, n_neg_new, rest), dim=-1)
         # monotonic mode
         ctx = rest
-        gate_input = torch.cat((clean, ctx, _logit(k), _logit(floor)), dim=-1)
-        k_new, floor_new, n_pos_new, n_neg_new = self._update_skill(
-            k, floor, n_pos, n_neg, clean, self.gain_gate(gate_input), self.drop_gate(gate_input),
-        )
         ctx_new = self.cell(torch.cat((clean, time_feature), dim=-1), ctx)
-        return torch.cat((k_new, floor_new, n_pos_new, n_neg_new, ctx_new), dim=-1)
+        return self._update_monotonic_ready(ready, clean, ctx_new)
 
     def predict_logit(self, state, task, elapsed_days):
         ready, time_feature = self._at_time(state, elapsed_days)
-        if self.mode in {"time_input", "time_decay"}:
+        if self.mode in {"time_input", "time_decay", "time_aware_transformer"}:
             return self.head(torch.cat((ready, task, time_feature), dim=-1)).squeeze(-1)
         m = self.skill_channels
         k = ready[..., :m]
@@ -288,12 +397,28 @@ class LearnerGRU(nn.Module):
 
     def forward(self, tokens, gaps, positions, tasks, query_gaps):
         """Gather the state at each query's exact evidence prefix."""
-        state = self.initial_state(tokens.shape[0])
-        states = [state]
-        for token, gap in zip(tokens.unbind(dim=1), gaps.unbind(dim=1)):
-            state = self.observe(state, token, gap)
-            states.append(state)
-        trajectory = torch.stack(states, dim=1)
+        if self.mode == "time_aware_transformer":
+            x = torch.cat((tokens, torch.log1p(gaps.unsqueeze(-1))), dim=-1)
+            encoded = self.attn(x, gaps)
+            init = self.initial_state(tokens.shape[0]).unsqueeze(1)
+            trajectory = torch.cat((init, encoded), dim=1)
+        elif self.mode == "monotonic_transformer":
+            clean_all = self._clean_token(tokens)
+            x = torch.cat((clean_all, torch.log1p(gaps.unsqueeze(-1))), dim=-1)
+            ctx_seq = self.ctx_attn(x, gaps)
+            state = self.initial_state(tokens.shape[0])
+            states = [state]
+            for step_idx, (clean_t, gap_t) in enumerate(zip(clean_all.unbind(dim=1), gaps.unbind(dim=1))):
+                state = self._step_monotonic_with_ctx(state, clean_t, gap_t, ctx_seq[:, step_idx])
+                states.append(state)
+            trajectory = torch.stack(states, dim=1)
+        else:
+            state = self.initial_state(tokens.shape[0])
+            states = [state]
+            for token, gap in zip(tokens.unbind(dim=1), gaps.unbind(dim=1)):
+                state = self.observe(state, token, gap)
+                states.append(state)
+            trajectory = torch.stack(states, dim=1)
         indices = positions.unsqueeze(-1).expand(-1, -1, self.hidden_size)
         query_states = torch.gather(trajectory, dim=1, index=indices)
         return self.predict_logit(query_states, tasks, query_gaps)

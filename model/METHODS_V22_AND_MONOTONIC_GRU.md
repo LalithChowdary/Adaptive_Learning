@@ -119,6 +119,19 @@ All 7 models were trained and evaluated on `v2.2` ([`REPORT.md`](runs/v2.2-mps-m
 | `history_logistic` | `0.57423` | `0.57794` | `0.55282` | `0.57134` | `0.57586` |
 | `task_logistic` | `0.60948` | `0.60885` | `0.59806` | `0.60681` | `0.60749` |
 
+### 5.3 Extended 9-Model Transformer vs. GRU Comparison (`3/model/runs/v2.2-mps-transformer-comparison/`)
+
+To test whether replacing recurrence with causal self-attention improves accuracy on per-skill structured histories, two 32-dim Transformer variants were trained on `mps:0` across the same 3 seeds (`20261120`–`20261122`) and evaluated alongside the 7 models above ([`REPORT.md`](runs/v2.2-mps-transformer-comparison/REPORT.md) · [`EVALUATION_METRICS_EXPLAINED.md`](EVALUATION_METRICS_EXPLAINED.md)):
+
+| Model | Params | Validation Selection Log Loss | Behavioral Gate | `main_test` Ordinary | `main_test` Delayed Mean | `power_law_test` Delayed Mean | `long_gap_test` 30d Delayed |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| **`monotonic_gru` (Selected)** | **10,223** | **`0.55175 ± 0.00025`** | **Pass (6.0 / 6)** | **`0.56772 ± 0.00009`** | `0.54517 ± 0.00027` | `0.56839 ± 0.00018` | **`0.57386 ± 0.00040`** |
+| `monotonic_transformer` | 10,208 | `0.55209 ± 0.00020` | Pass (6.0 / 6) | `0.56800 ± 0.00016` | `0.54488 ± 0.00031` | `0.56869 ± 0.00015` | `0.57408 ± 0.00069` |
+| `time_aware_transformer` | 11,845 | `0.55374 ± 0.00082` | Pass (6.0 / 6) | `0.56966 ± 0.00038` | `0.54523 ± 0.00139` | `0.56679 ± 0.00100` | `0.57612 ± 0.00108` |
+
+- **`monotonic_gru` remains the winner:** It beat unconstrained `time_aware_transformer` on validation selection (`0.55175` vs. `0.55374`) and significantly outperformed it on `main_test` Ordinary (`Δ = -0.00194`, 95% CI `[-0.00322, -0.00048]`) and `power_law_test` Ordinary (`Δ = -0.00174`, 95% CI `[-0.00324, -0.00023]`), while retaining an $O(1)$ Markov state vector instead of $O(L)$ attention replay.
+- **Grey-box structure drives the gain:** Adding the HLR + FSRS Power-Law + Consolidated Floor + 3PL IRT structure to causal attention (`monotonic_transformer`) cut validation selection loss from `0.55374` to `0.55209`, though `monotonic_gru` still held a slight edge on overall validation selection and Ordinary practice (`Δ = +0.00028` favoring `monotonic_gru`).
+
 ---
 
 ## 6. Verification on Your Real Dashboard Profile (`3/dashboard/data/sessions.sqlite3`)

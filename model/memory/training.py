@@ -123,9 +123,9 @@ def fit_recurrent(
             loss_sum = (per_query * batch.valid).sum()
             (loss_sum / batch.count).backward()
             if verified_gradient is None:
-                gradient = model.cell.weight_hh.grad if hasattr(model, "cell") else model.gain_gate.weight.grad
+                gradient = next((p.grad for p in model.parameters() if p.grad is not None), None)
                 if gradient is None or gradient.device.type != device.type or not gradient.isfinite().all().item():
-                    raise RuntimeError("Recurrent backward pass did not produce finite gradients on the requested device")
+                    raise RuntimeError("Sequence model backward pass did not produce finite gradients on the requested device")
                 verified_gradient = str(gradient.device)
             torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0, foreach=False)
             optimizer.step()

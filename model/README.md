@@ -4,18 +4,19 @@ This experiment compares seven ways to predict full success on a new question's 
 
 | Location | Contents |
 |---|---|
-| [run_v22.py](run_v22.py) | v2.2 7-model training, behavioral sanity gate, multi-seed selection, and held-out evaluation |
+| [run_v22.py](run_v22.py) | v2.2 9-model training/reuse, behavioral sanity gate, multi-seed selection, and held-out evaluation |
 | [run_v21.py](run_v21.py) | Historical v2.1 training, multi-seed model selection, and held-out evaluation |
 | [run.py](run.py) | Historical v2.0 training entry point and shared run utilities |
-| [memory/](memory/) | Shared causal encoding, estimators (`time_input`, `time_decay`, `kt_decay`, `monotonic`), behavioral suite, batched training, and metrics |
+| [memory/](memory/) | Shared causal encoding, estimators (`time_input`, `time_decay`, `time_aware_transformer`, `kt_decay`, `monotonic`, `monotonic_transformer`), behavioral suite, batched training, and metrics |
 | [models/](models/) | A design note for each baseline model |
+| [EVALUATION_METRICS_EXPLAINED.md](EVALUATION_METRICS_EXPLAINED.md) | Plain-English + mathematical guide to every comparison metric and the 9-model Transformer vs. GRU benchmark |
 | [METHODS_V22_AND_MONOTONIC_GRU.md](METHODS_V22_AND_MONOTONIC_GRU.md) | Complete v2.2 dataset & Monotonic Grey-Box GRU mathematical specification (Duolingo HLR + Power-Law + Consolidated Floor) |
 | [METHODS_V21.md](METHODS_V21.md) | Historical v2.1 fitting, split, selection, and evaluation protocol |
 | [METHODS.md](METHODS.md) | Shared feature definitions and original v2.0 protocol |
 | [tests/](tests/) | Causality, timing, replay, behavioral sanity, and gradient regression tests |
 | [runs/](runs/) | Separate run directories for checkpoints, metrics, and predictions |
 
-The verified **v2.2** run compared seven models (including `kt_decay_gru` and the bounded `monotonic_gru` with Duolingo HLR + Power-Law + Consolidated Permastore Floor) and selected the **Monotonic Grey-Box GRU (`monotonic_gru`)**, which passed all **6/6 behavioral sanity checks** across all seeds and achieved the lowest combined validation log loss (`0.55175 ± 0.00025`, beating `time_input_gru` at `0.55177 ± 0.00022`, `time_decay_gru` at `0.55177 ± 0.00022` which failed the forgetting check at `4.7/6`, `kt_decay_gru` at `0.55471 ± 0.00077`, and all tabular baselines). The selected checkpoint is [seed 20261122](runs/v2.2-mps-main/monotonic_gru/seed_20261122/model.pt). [v2.2 Technical Specification](METHODS_V22_AND_MONOTONIC_GRU.md) · [v2.2 Comparison report](runs/v2.2-mps-main/REPORT.md) · [v2.2 Full metrics](runs/v2.2-mps-main/run.json)
+The verified **v2.2** 9-model Transformer vs. GRU comparison (`3/model/runs/v2.2-mps-transformer-comparison/`) confirmed **`monotonic_gru`** as the overall winner (`0.55175 ± 0.00025` validation selection log loss, **6.0/6 behavioral checks**), beating both `monotonic_transformer` (`0.55209 ± 0.00020`, 6.0/6) and the unconstrained `time_aware_transformer` baseline (`0.55374 ± 0.00082`, 6.0/6), as well as `time_input_gru`, `time_decay_gru` (failed forgetting check at 4.7/6), `kt_decay_gru`, and all tabular baselines. The selected checkpoint remains [seed 20261122](runs/v2.2-mps-main/monotonic_gru/seed_20261122/model.pt). [Metrics & 9-model guide](EVALUATION_METRICS_EXPLAINED.md) · [v2.2 Technical Specification](METHODS_V22_AND_MONOTONIC_GRU.md) · [9-Model Report](runs/v2.2-mps-transformer-comparison/REPORT.md) · [v2.2 Full metrics](runs/v2.2-mps-transformer-comparison/run.json)
 
 The preserved v2.1 run selected the **time-decayed GRU** on the combined validation score ([seed 20261111](runs/v2.1-mps-main/time_decay_gru/seed_20261111/model.pt)). [v2.1 Comparison report](runs/v2.1-mps-main/REPORT.md) · [v2.1 Full metrics](runs/v2.1-mps-main/run.json) · [v2.1 Verification](runs/v2.1-mps-main/VERIFICATION.md)
 
