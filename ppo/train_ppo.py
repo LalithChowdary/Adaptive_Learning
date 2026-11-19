@@ -111,10 +111,18 @@ def train_rl_policy(
 
     best_val = -1.0
     best_weights = {k: v.detach().clone() for k, v in model.state_dict().items()}
+    best_any_val = -1.0
+    best_any_weights = {k: v.detach().clone() for k, v in model.state_dict().items()}
     curve = []
     started = time.monotonic()
 
     for upd in range(1, updates + 1):
+        frac = (upd - 1) / max(1, updates - 1)
+        cur_lr = lr * (1.0 - 0.85 * frac)
+        cur_ent = 0.020 - 0.017 * frac
+        for group in optimizer.param_groups:
+            group["lr"] = cur_lr
+
         obs_buf, mask_buf, act_buf, lp_buf, rew_buf, val_buf, done_buf = [], [], [], [], [], [], []
         ep_delayed = []
         for _ in range(episodes_per_update):
@@ -160,38 +168,85 @@ def train_rl_policy(
             np.asarray(lp_buf, dtype=np.float32),
             returns,
             advantages,
+            ent_coef=cur_ent,
             rng=rng,
         )
-        if upd == 1 or upd % max(1, updates // 6) == 0 or upd == updates:
+        if upd == 1 or upd % max(1, updates // 8) == 0 or upd == updates:
             val_metrics = evaluate_policy(env, model, val_learners, rng_seed=seed)
             val_score = val_metrics["delayed_expected_mean"]
-            if val_score > best_val:
+            sh = val_metrics["action_shares"]
+            if val_score > best_any_val:
+                best_any_val = val_score
+                best_any_weights = {k: v.detach().clone() for k, v in model.state_dict().items()}
+            healthy = True
+            if not myopic and updates >= 20:
+                healthy = sh["request_self_explanation"] <= 0.32 and sh["advance_next_topic"] >= 0.05
+            if healthy and val_score > best_val:
                 best_val = val_score
                 best_weights = {k: v.detach().clone() for k, v in model.state_dict().items()}
             curve.append({
                 "update": upd,
+                "lr": cur_lr,
+                "ent_coef": cur_ent,
                 "train_expected_delayed": float(np.mean(ep_delayed)),
                 "val_expected_delayed": val_score,
                 "val_floor": val_metrics["latent_mean_floor"],
+                "healthy_actions": healthy,
                 **stats,
             })
             print(
                 f"  [{mode} seed={seed}] upd {upd:3d}/{updates}: "
                 f"val_delayed={val_score*100:.2f}% val_floor={val_metrics['latent_mean_floor']:.3f} "
+                f"se={sh['request_self_explanation']*100:.1f}% adv={sh['advance_next_topic']*100:.1f}% "
                 f"ent={stats['entropy']:.3f}",
                 flush=True,
             )
 
-    model.load_state_dict(best_weights)
+    chosen_weights = best_weights if best_val >= 0.0 else best_any_weights
+    model.load_state_dict(chosen_weights)
     model.eval()
     return model, {
         "mode": mode,
         "seed": seed,
         "updates": updates,
         "episodes_per_update": episodes_per_update,
-        "best_val_expected_delayed": best_val,
+        "best_val_expected_delayed": best_val if best_val >= 0.0 else best_any_val,
         "elapsed_seconds": round(time.monotonic() - started, 2),
         "learning_curve": curve,
+    }
+
+
+def evaluate_ppo_behavioral_suite(rep, baseline_summary):
+    sh = rep["action_shares"]
+    # Action 6 (review_prerequisite) also administers a prerequisite question turn via _emit_question_turn.
+    q_share = (
+        sh["give_easier_question"]
+        + sh["give_same_difficulty_question"]
+        + sh["give_harder_question"]
+        + sh["review_prerequisite"]
+    )
+    checks = {
+        "question_turns_at_least_40pct": q_share >= 0.40,
+        "no_action_spam_over_32pct": (
+            sh["request_self_explanation"] <= 0.32
+            and sh["review_prerequisite"] <= 0.32
+            and (sh["explain_concept"] + sh["show_worked_example"]) <= 0.32
+        ),
+        "curriculum_topic_advancement": 0.045 <= sh["advance_next_topic"] <= 0.25,
+        "consolidated_floor_beats_heuristic": (
+            rep["latent_mean_floor"] > baseline_summary["threshold_heuristic"]["latent_mean_floor"]["mean"]
+        ),
+        "delayed_retention_beats_all_baselines": rep["delayed_expected_mean"] > max(
+            baseline_summary[b]["delayed_expected_mean"]["mean"]
+            for b in ("random_valid", "fixed_curriculum", "threshold_heuristic", "myopic_rl_bandit")
+        ),
+    }
+    return {
+        "checks_passed": int(sum(checks.values())),
+        "checks_total": len(checks),
+        "all_passed": all(checks.values()),
+        "question_turns_share": float(q_share),
+        "checks": checks,
     }
 
 
@@ -246,6 +301,22 @@ def write_report(output_dir, run):
         for name, res in run["evaluation"][cohort]["summary"].items():
             shares = [f"{res['action_shares'][a]*100:.1f}%" for a in ACTIONS]
             lines.append(f"| {name} | " + " | ".join(shares) + " |")
+        lines.extend([
+            "",
+            "### 5-Check PPO Behavioral Sanity Suite (`delayed_retention_ppo`)",
+            "",
+            "| Seed | Checks Passed | Question Turns (`>=40%`) | No Action Spam (`<=32%`) | Topic Advance (`4.5%-25%`) | Floor > Heuristic | Beats All Baselines |",
+            "|---|---:|---:|---:|---:|---:|---:|",
+        ])
+        for seed, b in zip(run["seeds"], run["evaluation"][cohort]["behavioral_by_seed"]):
+            c = b["checks"]
+            yn = lambda ok: "Pass" if ok else "Fail"
+            lines.append(
+                f"| `{seed}` | {b['checks_passed']} / {b['checks_total']} | "
+                f"{yn(c['question_turns_at_least_40pct'])} ({b['question_turns_share']*100:.1f}%) | "
+                f"{yn(c['no_action_spam_over_32pct'])} | {yn(c['curriculum_topic_advancement'])} | "
+                f"{yn(c['consolidated_floor_beats_heuristic'])} | {yn(c['delayed_retention_beats_all_baselines'])} |"
+            )
         lines.append("")
 
     (output_dir / "REPORT.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -268,8 +339,8 @@ def main():
         cohorts = (("main_test", "exponential", False),)
     else:
         seeds = SEEDS
-        updates = args.updates or 90
-        ep_per_upd = args.episodes_per_update or 16
+        updates = args.updates or 100
+        ep_per_upd = args.episodes_per_update or 24
         val_learners = list(range(VAL_SEED_START, VAL_SEED_START + 50))
         test_learners = list(range(TEST_SEED_START, TEST_SEED_START + 200))
         cohorts = (
@@ -356,10 +427,16 @@ def main():
             ]
             for pname, reps in by_seed.items()
         }
+        behavioral_by_seed = [
+            evaluate_ppo_behavioral_suite(rep, summary)
+            for rep in by_seed["delayed_retention_ppo"]
+        ]
         evaluation[cohort_name] = {
             "summary": summary,
             "by_seed": clean_by_seed,
             "paired_intervals": paired,
+            "behavioral_by_seed": behavioral_by_seed,
+            "all_seeds_passed_behavioral": all(b["all_passed"] for b in behavioral_by_seed),
         }
 
     run = {

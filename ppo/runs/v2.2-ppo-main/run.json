@@ -6,10 +6,10 @@
     20261121,
     20261122
   ],
-  "updates": 90,
-  "episodes_per_update": 16,
+  "updates": 100,
+  "episodes_per_update": 24,
   "test_learners": 200,
-  "elapsed_seconds": 92.6,
+  "elapsed_seconds": 95.56,
   "training": {
     "myopic_rl_bandit": [
       {
@@ -51,54 +51,54 @@
       "summary": {
         "random_valid": {
           "day_1": {
-            "mean": 0.6433333333333334,
+            "mean": 0.6522222222222223,
             "sd": null
           },
           "day_7": {
-            "mean": 0.6180555555555556,
+            "mean": 0.6283333333333333,
             "sd": null
           },
           "day_30": {
-            "mean": 0.5472222222222222,
+            "mean": 0.5577777777777778,
             "sd": null
           },
           "delayed_mean": {
-            "mean": 0.6028703703703704,
+            "mean": 0.6127777777777778,
             "sd": null
           },
           "day_1_expected": {
-            "mean": 0.6421597422081439,
+            "mean": 0.6479233694415791,
             "sd": null
           },
           "day_7_expected": {
-            "mean": 0.614186913623615,
+            "mean": 0.6210076245914543,
             "sd": null
           },
           "day_30_expected": {
-            "mean": 0.560268737468667,
+            "mean": 0.5682353901548398,
             "sd": null
           },
           "delayed_expected_mean": {
-            "mean": 0.6055384644334754,
+            "mean": 0.6123887947292911,
             "sd": null
           },
           "latent_mean_floor": {
-            "mean": 0.38196903457080167,
+            "mean": 0.3856397202506783,
             "sd": null
           },
           "latent_mean_strength": {
-            "mean": 0.5215515688136114,
+            "mean": 0.5212967486076897,
             "sd": null
           },
           "action_shares": {
-            "give_easier_question": 0.10149793388429752,
-            "give_same_difficulty_question": 0.22107438016528927,
-            "give_harder_question": 0.18943698347107438,
-            "explain_concept": 0.11944731404958678,
-            "show_worked_example": 0.11918904958677685,
-            "request_self_explanation": 0.08716425619834711,
-            "review_prerequisite": 0.07450929752066116,
-            "advance_next_topic": 0.08768078512396695
+            "give_easier_question": 0.09714359238291302,
+            "give_same_difficulty_question": 0.2354606278950077,
+            "give_harder_question": 0.19209984559958826,
+            "explain_concept": 0.12339166237776635,
+            "show_worked_example": 0.1205609881626351,
+            "request_self_explanation": 0.0815748841996912,
+            "review_prerequisite": 0.058028821410190425,
+            "advance_next_topic": 0.09173957797220793
           }
         },
         "fixed_curriculum": {
@@ -207,131 +207,131 @@
         },
         "myopic_rl_bandit": {
           "day_1": {
-            "mean": 0.5924999999999999,
-            "sd": 0.00048112522432463515
+            "mean": 0.5901851851851853,
+            "sd": 0.00042431256434776875
           },
           "day_7": {
-            "mean": 0.5639814814814814,
-            "sd": 0.0011226255234242188
+            "mean": 0.5608333333333334,
+            "sd": 0.0002777777777777657
           },
           "day_30": {
-            "mean": 0.5021296296296297,
-            "sd": 0.002329582523223953
+            "mean": 0.49740740740740746,
+            "sd": 0.00032075014954976213
           },
           "delayed_mean": {
-            "mean": 0.5528703703703703,
-            "sd": 0.0012863374064305134
+            "mean": 0.5494753086419754,
+            "sd": 0.00021383343303318542
           },
           "day_1_expected": {
-            "mean": 0.5929843003203884,
-            "sd": 0.0005990399875557991
+            "mean": 0.5901203745748329,
+            "sd": 0.00012771125818452763
           },
           "day_7_expected": {
-            "mean": 0.5656455907743805,
-            "sd": 0.0007996967690728477
+            "mean": 0.5627008115359557,
+            "sd": 7.965013002189046e-05
           },
           "day_30_expected": {
-            "mean": 0.5155424060027034,
-            "sd": 0.0013146666423194489
+            "mean": 0.5124710796311742,
+            "sd": 0.00014084123812314615
           },
           "delayed_expected_mean": {
-            "mean": 0.5580574323658241,
-            "sd": 0.0009043401132360123
+            "mean": 0.5550974219139876,
+            "sd": 7.252304352707344e-05
           },
           "latent_mean_floor": {
-            "mean": 0.3698809627587379,
-            "sd": 0.0026060778004334292
+            "mean": 0.36089574714242517,
+            "sd": 0.00011179790794779102
           },
           "latent_mean_strength": {
-            "mean": 0.48359939514646394,
-            "sd": 0.001669707890499031
+            "mean": 0.47515910512304416,
+            "sd": 0.00021755581434304322
           },
           "action_shares": {
             "give_easier_question": 0.0,
-            "give_same_difficulty_question": 0.3592483553972962,
+            "give_same_difficulty_question": 0.6932810456204974,
             "give_harder_question": 0.0,
             "explain_concept": 0.0,
             "show_worked_example": 0.0,
-            "request_self_explanation": 0.6407516446027038,
+            "request_self_explanation": 0.3067189543795026,
             "review_prerequisite": 0.0,
             "advance_next_topic": 0.0
           }
         },
         "delayed_retention_ppo": {
           "day_1": {
-            "mean": 0.663611111111111,
-            "sd": 0.018333333333333368
+            "mean": 0.6604629629629629,
+            "sd": 0.003047126420722995
           },
           "day_7": {
-            "mean": 0.6442592592592593,
-            "sd": 0.017240879977159927
+            "mean": 0.6520370370370371,
+            "sd": 0.007506855577299802
           },
           "day_30": {
-            "mean": 0.5944444444444444,
-            "sd": 0.019616304002437555
+            "mean": 0.6169444444444444,
+            "sd": 0.014925225146677386
           },
           "delayed_mean": {
-            "mean": 0.634104938271605,
-            "sd": 0.018261487856383773
+            "mean": 0.6431481481481481,
+            "sd": 0.007789343252980718
           },
           "day_1_expected": {
-            "mean": 0.6601900356770315,
-            "sd": 0.017195365922128343
+            "mean": 0.6627968614169497,
+            "sd": 0.0032543104514865455
           },
           "day_7_expected": {
-            "mean": 0.6410223564539697,
-            "sd": 0.017540584362929584
+            "mean": 0.6496546486053482,
+            "sd": 0.006197741051245241
           },
           "day_30_expected": {
-            "mean": 0.6048005714492396,
-            "sd": 0.018237853154982553
+            "mean": 0.6260753216849476,
+            "sd": 0.01185201297669737
           },
           "delayed_expected_mean": {
-            "mean": 0.6353376545267468,
-            "sd": 0.017383336341241194
+            "mean": 0.6461756105690819,
+            "sd": 0.007090945213849519
           },
           "latent_mean_floor": {
-            "mean": 0.4387656462715132,
-            "sd": 0.016742093017335088
+            "mean": 0.465498218098313,
+            "sd": 0.01496412669687488
           },
           "latent_mean_strength": {
-            "mean": 0.5399819661386681,
-            "sd": 0.01504592562034105
+            "mean": 0.5262228623207641,
+            "sd": 0.002288336609575354
           },
           "action_shares": {
-            "give_easier_question": 0.05096483234896124,
-            "give_same_difficulty_question": 0.05147082178480145,
-            "give_harder_question": 0.11425459362785272,
-            "explain_concept": 0.024230688846818296,
-            "show_worked_example": 0.014424136570223086,
-            "request_self_explanation": 0.4779636427426131,
-            "review_prerequisite": 0.20561463645671074,
-            "advance_next_topic": 0.06107664762201929
+            "give_easier_question": 0.08711917231202758,
+            "give_same_difficulty_question": 0.09359236903835588,
+            "give_harder_question": 0.21593672915379744,
+            "explain_concept": 0.04662155988971963,
+            "show_worked_example": 0.1357331384602158,
+            "request_self_explanation": 0.3062765078198493,
+            "review_prerequisite": 0.046188326055037816,
+            "advance_next_topic": 0.06853219727099658
           }
         }
       },
       "by_seed": {
         "random_valid": [
           {
-            "day_1": 0.6433333333333334,
-            "day_7": 0.6180555555555556,
-            "day_30": 0.5472222222222222,
-            "delayed_mean": 0.6028703703703704,
-            "day_1_expected": 0.6421597422081439,
-            "day_7_expected": 0.614186913623615,
-            "day_30_expected": 0.560268737468667,
-            "delayed_expected_mean": 0.6055384644334754,
-            "latent_mean_floor": 0.38196903457080167,
-            "latent_mean_strength": 0.5215515688136114,
+            "day_1": 0.6522222222222223,
+            "day_7": 0.6283333333333333,
+            "day_30": 0.5577777777777778,
+            "delayed_mean": 0.6127777777777778,
+            "day_1_expected": 0.6479233694415791,
+            "day_7_expected": 0.6210076245914543,
+            "day_30_expected": 0.5682353901548398,
+            "delayed_expected_mean": 0.6123887947292911,
+            "latent_mean_floor": 0.3856397202506783,
+            "latent_mean_strength": 0.5212967486076897,
             "action_shares": {
-              "give_easier_question": 0.10149793388429752,
-              "give_same_difficulty_question": 0.22107438016528927,
-              "give_harder_question": 0.18943698347107438,
-              "explain_concept": 0.11944731404958678,
-              "show_worked_example": 0.11918904958677685,
-              "request_self_explanation": 0.08716425619834711,
-              "review_prerequisite": 0.07450929752066116,
-              "advance_next_topic": 0.08768078512396695
+              "give_easier_question": 0.09714359238291302,
+              "give_same_difficulty_question": 0.2354606278950077,
+              "give_harder_question": 0.19209984559958826,
+              "explain_concept": 0.12339166237776635,
+              "show_worked_example": 0.1205609881626351,
+              "request_self_explanation": 0.0815748841996912,
+              "review_prerequisite": 0.058028821410190425,
+              "advance_next_topic": 0.09173957797220793
             }
           }
         ],
@@ -385,67 +385,67 @@
         ],
         "myopic_rl_bandit": [
           {
-            "day_1": 0.5927777777777777,
-            "day_7": 0.565,
-            "day_30": 0.5033333333333334,
-            "delayed_mean": 0.5537037037037037,
-            "day_1_expected": 0.593281580328236,
-            "day_7_expected": 0.5660585450351775,
-            "day_30_expected": 0.5162514716192881,
-            "delayed_expected_mean": 0.5585305323275672,
-            "latent_mean_floor": 0.3713146463100995,
-            "latent_mean_strength": 0.4845016555022717,
+            "day_1": 0.5897222222222223,
+            "day_7": 0.5611111111111111,
+            "day_30": 0.4972222222222223,
+            "delayed_mean": 0.5493518518518519,
+            "day_1_expected": 0.5902678428063579,
+            "day_7_expected": 0.5627677089311962,
+            "day_30_expected": 0.5123973612221856,
+            "delayed_expected_mean": 0.5551443043199132,
+            "latent_mean_floor": 0.36078689713915474,
+            "latent_mean_strength": 0.4754068917613115,
             "action_shares": {
               "give_easier_question": 0.0,
-              "give_same_difficulty_question": 0.2657122405153901,
+              "give_same_difficulty_question": 0.7175378163846039,
               "give_harder_question": 0.0,
               "explain_concept": 0.0,
               "show_worked_example": 0.0,
-              "request_self_explanation": 0.7342877594846099,
+              "request_self_explanation": 0.28246218361539616,
               "review_prerequisite": 0.0,
               "advance_next_topic": 0.0
             }
           },
           {
-            "day_1": 0.5927777777777777,
-            "day_7": 0.5641666666666666,
-            "day_30": 0.5036111111111111,
-            "delayed_mean": 0.5535185185185185,
-            "day_1_expected": 0.5933765552733569,
-            "day_7_expected": 0.5661543873722376,
-            "day_30_expected": 0.5163503136634074,
-            "delayed_expected_mean": 0.5586270854363339,
-            "latent_mean_floor": 0.3714554208560175,
-            "latent_mean_strength": 0.4846238560797247,
+            "day_1": 0.5905555555555556,
+            "day_7": 0.5608333333333334,
+            "day_30": 0.49777777777777776,
+            "delayed_mean": 0.5497222222222222,
+            "day_1_expected": 0.5900467178234604,
+            "day_7_expected": 0.5627220226690618,
+            "day_30_expected": 0.5126334794724687,
+            "delayed_expected_mean": 0.5551340733216636,
+            "latent_mean_floor": 0.3610102764684682,
+            "latent_mean_strength": 0.47499940860884926,
             "action_shares": {
               "give_easier_question": 0.0,
-              "give_same_difficulty_question": 0.24732867929904545,
+              "give_same_difficulty_question": 0.6736513597860009,
               "give_harder_question": 0.0,
               "explain_concept": 0.0,
               "show_worked_example": 0.0,
-              "request_self_explanation": 0.7526713207009545,
+              "request_self_explanation": 0.3263486402139991,
               "review_prerequisite": 0.0,
               "advance_next_topic": 0.0
             }
           },
           {
-            "day_1": 0.5919444444444445,
-            "day_7": 0.5627777777777778,
-            "day_30": 0.4994444444444444,
-            "delayed_mean": 0.5513888888888889,
-            "day_1_expected": 0.5922947653595724,
-            "day_7_expected": 0.5647238399157263,
-            "day_30_expected": 0.5140254327254147,
-            "delayed_expected_mean": 0.5570146793335711,
-            "latent_mean_floor": 0.3668728211100967,
-            "latent_mean_strength": 0.4816726738573955,
+            "day_1": 0.5902777777777778,
+            "day_7": 0.5605555555555556,
+            "day_30": 0.49722222222222223,
+            "delayed_mean": 0.5493518518518519,
+            "day_1_expected": 0.5900465630946805,
+            "day_7_expected": 0.5626127030076091,
+            "day_30_expected": 0.5123823981988683,
+            "delayed_expected_mean": 0.5550138881003859,
+            "latent_mean_floor": 0.36089006781965255,
+            "latent_mean_strength": 0.47507101499897175,
             "action_shares": {
               "give_easier_question": 0.0,
-              "give_same_difficulty_question": 0.5647041463774531,
+              "give_same_difficulty_question": 0.6886539606908875,
               "give_harder_question": 0.0,
               "explain_concept": 0.0,
               "show_worked_example": 0.0,
-              "request_self_explanation": 0.43529585362254686,
+              "request_self_explanation": 0.3113460393091126,
               "review_prerequisite": 0.0,
               "advance_next_topic": 0.0
             }
@@ -453,69 +453,69 @@
         ],
         "delayed_retention_ppo": [
           {
-            "day_1": 0.6636111111111112,
-            "day_7": 0.6433333333333334,
-            "day_30": 0.5883333333333334,
-            "delayed_mean": 0.6317592592592592,
-            "day_1_expected": 0.6625634808055618,
-            "day_7_expected": 0.6411764888802927,
-            "day_30_expected": 0.5986533240414453,
-            "delayed_expected_mean": 0.6341310979090998,
-            "latent_mean_floor": 0.42145081732156087,
-            "latent_mean_strength": 0.5441678489126134,
+            "day_1": 0.6594444444444444,
+            "day_7": 0.6597222222222223,
+            "day_30": 0.6250000000000001,
+            "delayed_mean": 0.6480555555555556,
+            "day_1_expected": 0.6648353994449923,
+            "day_7_expected": 0.6528219482470338,
+            "day_30_expected": 0.6316211877094843,
+            "delayed_expected_mean": 0.6497595118005034,
+            "latent_mean_floor": 0.4721648559024702,
+            "latent_mean_strength": 0.5269433166435501,
             "action_shares": {
-              "give_easier_question": 0.09413602158171235,
-              "give_same_difficulty_question": 0.0002839698991906858,
-              "give_harder_question": 0.20431634246769842,
-              "explain_concept": 0.005963367883004401,
-              "show_worked_example": 0.021013772540110748,
-              "request_self_explanation": 0.23725685077381797,
-              "review_prerequisite": 0.3790998154195655,
-              "advance_next_topic": 0.0579298594348999
-            }
-          },
-          {
-            "day_1": 0.6452777777777777,
-            "day_7": 0.6275,
-            "day_30": 0.5786111111111112,
-            "delayed_mean": 0.6171296296296297,
-            "day_1_expected": 0.6419312400733758,
-            "day_7_expected": 0.6234052137817554,
-            "day_30_expected": 0.5904306347458336,
-            "delayed_expected_mean": 0.6185890295336549,
-            "latent_mean_floor": 0.4399769072141936,
-            "latent_mean_strength": 0.5232863309308649,
-            "action_shares": {
-              "give_easier_question": 0.013558420842748903,
-              "give_same_difficulty_question": 0.02658513890735079,
-              "give_harder_question": 0.06074704240329656,
-              "explain_concept": 0.06672869865745049,
-              "show_worked_example": 0.0,
-              "request_self_explanation": 0.7902432540210023,
-              "review_prerequisite": 0.0,
-              "advance_next_topic": 0.042137445168151
-            }
-          },
-          {
-            "day_1": 0.6819444444444445,
-            "day_7": 0.6619444444444446,
-            "day_30": 0.6163888888888889,
-            "delayed_mean": 0.653425925925926,
-            "day_1_expected": 0.6760753861521568,
-            "day_7_expected": 0.6584853666998609,
-            "day_30_expected": 0.6253177555604398,
-            "delayed_expected_mean": 0.6532928361374859,
-            "latent_mean_floor": 0.4548692142787851,
-            "latent_mean_strength": 0.5524917185725262,
-            "action_shares": {
-              "give_easier_question": 0.045200054622422506,
-              "give_same_difficulty_question": 0.1275433565478629,
-              "give_harder_question": 0.07770039601256316,
+              "give_easier_question": 0.06377079482439926,
+              "give_same_difficulty_question": 0.0625825191444415,
+              "give_harder_question": 0.2641932928439398,
               "explain_concept": 0.0,
-              "show_worked_example": 0.022258637170558513,
-              "request_self_explanation": 0.40639082343301924,
-              "review_prerequisite": 0.2377440939505667,
-              "advance_next_topic": 0.08316263826300696
+              "show_worked_example": 0.18008978082915236,
+              "request_self_explanation": 0.3090837074201215,
+              "review_prerequisite": 0.04436229205175601,
+              "advance_next_topic": 0.07591761288618959
+            }
+          },
+          {
+            "day_1": 0.6638888888888889,
+            "day_7": 0.6516666666666667,
+            "day_30": 0.626111111111111,
+            "delayed_mean": 0.6472222222222221,
+            "day_1_expected": 0.6645114191249105,
+            "day_7_expected": 0.6536287099926489,
+            "day_30_expected": 0.6341376431287695,
+            "delayed_expected_mean": 0.6507592574154429,
+            "latent_mean_floor": 0.47597040690479986,
+            "latent_mean_strength": 0.5280642694649058,
+            "action_shares": {
+              "give_easier_question": 0.11692227028444095,
+              "give_same_difficulty_question": 0.02005505308690523,
+              "give_harder_question": 0.2527198846506751,
+              "explain_concept": 0.13959889893826188,
+              "show_worked_example": 0.0,
+              "request_self_explanation": 0.3140647529165028,
+              "review_prerequisite": 0.07812295189408834,
+              "advance_next_topic": 0.0785161882291257
+            }
+          },
+          {
+            "day_1": 0.6580555555555556,
+            "day_7": 0.6447222222222222,
+            "day_30": 0.5997222222222223,
+            "delayed_mean": 0.6341666666666668,
+            "day_1_expected": 0.6590437656809465,
+            "day_7_expected": 0.6425132875763618,
+            "day_30_expected": 0.6124671342165893,
+            "delayed_expected_mean": 0.6380080624912993,
+            "latent_mean_floor": 0.44835939148766896,
+            "latent_mean_strength": 0.5236610008538365,
+            "action_shares": {
+              "give_easier_question": 0.08066445182724252,
+              "give_same_difficulty_question": 0.19813953488372094,
+              "give_harder_question": 0.13089700996677742,
+              "explain_concept": 0.00026578073089701,
+              "show_worked_example": 0.22710963455149502,
+              "request_self_explanation": 0.2956810631229236,
+              "review_prerequisite": 0.016079734219269105,
+              "advance_next_topic": 0.05116279069767442
             }
           }
         ]
@@ -523,106 +523,148 @@
       "paired_intervals": {
         "delayed_retention_ppo minus random_valid": {
           "expected_delayed": {
-            "delta": 0.029799190093271578,
-            "lower_95": 0.023717645861305137,
-            "upper_95": 0.03504392665921591
+            "delta": 0.03378681583979079,
+            "lower_95": 0.02862538382721265,
+            "upper_95": 0.03928229266448457
           },
           "observed_delayed": {
-            "delta": 0.031234567901234567,
-            "lower_95": 0.02351697530864197,
-            "upper_95": 0.038272376543209884
+            "delta": 0.03037037037037037,
+            "lower_95": 0.023703703703703703,
+            "upper_95": 0.03728395061728395
           }
         },
         "delayed_retention_ppo minus fixed_curriculum": {
           "expected_delayed": {
-            "delta": 0.04918820644833021,
-            "lower_95": 0.04304394243304517,
-            "upper_95": 0.05594753587252058
+            "delta": 0.06002616249066518,
+            "lower_95": 0.052944820285169496,
+            "upper_95": 0.06707935196088534
           },
           "observed_delayed": {
-            "delta": 0.04753086419753086,
-            "lower_95": 0.03842515432098766,
-            "upper_95": 0.0567608024691358
+            "delta": 0.056574074074074075,
+            "lower_95": 0.04746604938271606,
+            "upper_95": 0.0658966049382716
           }
         },
         "delayed_retention_ppo minus threshold_heuristic": {
           "expected_delayed": {
-            "delta": 0.01843040434130749,
-            "lower_95": 0.013798010946534526,
-            "upper_95": 0.023033807541790494
+            "delta": 0.029268360383642465,
+            "lower_95": 0.02450875488103885,
+            "upper_95": 0.03396430898731568
           },
           "observed_delayed": {
-            "delta": 0.020216049382716053,
-            "lower_95": 0.014438271604938272,
-            "upper_95": 0.026607253086419758
+            "delta": 0.029259259259259266,
+            "lower_95": 0.023084104938271604,
+            "upper_95": 0.0350925925925926
           }
         },
         "delayed_retention_ppo minus myopic_rl_bandit": {
           "expected_delayed": {
-            "delta": 0.07728022216092283,
-            "lower_95": 0.07101266388777776,
-            "upper_95": 0.08311873015772694
+            "delta": 0.09107818865509429,
+            "lower_95": 0.08557691611597187,
+            "upper_95": 0.09703074396743731
           },
           "observed_delayed": {
-            "delta": 0.08123456790123457,
-            "lower_95": 0.07358024691358024,
-            "upper_95": 0.08910648148148148
+            "delta": 0.09367283950617285,
+            "lower_95": 0.08626543209876544,
+            "upper_95": 0.10129706790123458
           }
         }
-      }
+      },
+      "behavioral_by_seed": [
+        {
+          "checks_passed": 5,
+          "checks_total": 5,
+          "all_passed": true,
+          "question_turns_share": 0.43490889886453654,
+          "checks": {
+            "question_turns_at_least_40pct": true,
+            "no_action_spam_over_32pct": true,
+            "curriculum_topic_advancement": true,
+            "consolidated_floor_beats_heuristic": true,
+            "delayed_retention_beats_all_baselines": true
+          }
+        },
+        {
+          "checks_passed": 5,
+          "checks_total": 5,
+          "all_passed": true,
+          "question_turns_share": 0.4678201599161096,
+          "checks": {
+            "question_turns_at_least_40pct": true,
+            "no_action_spam_over_32pct": true,
+            "curriculum_topic_advancement": true,
+            "consolidated_floor_beats_heuristic": true,
+            "delayed_retention_beats_all_baselines": true
+          }
+        },
+        {
+          "checks_passed": 5,
+          "checks_total": 5,
+          "all_passed": true,
+          "question_turns_share": 0.42578073089700996,
+          "checks": {
+            "question_turns_at_least_40pct": true,
+            "no_action_spam_over_32pct": true,
+            "curriculum_topic_advancement": true,
+            "consolidated_floor_beats_heuristic": true,
+            "delayed_retention_beats_all_baselines": true
+          }
+        }
+      ],
+      "all_seeds_passed_behavioral": true
     },
     "power_law_test": {
       "summary": {
         "random_valid": {
           "day_1": {
-            "mean": 0.6363888888888889,
+            "mean": 0.6447222222222223,
             "sd": null
           },
           "day_7": {
-            "mean": 0.6147222222222222,
+            "mean": 0.6222222222222221,
             "sd": null
           },
           "day_30": {
-            "mean": 0.5575,
+            "mean": 0.5719444444444445,
             "sd": null
           },
           "delayed_mean": {
-            "mean": 0.6028703703703704,
+            "mean": 0.6129629629629629,
             "sd": null
           },
           "day_1_expected": {
-            "mean": 0.6359512328705003,
+            "mean": 0.6414538467137624,
             "sd": null
           },
           "day_7_expected": {
-            "mean": 0.6098851029750724,
+            "mean": 0.616248502857652,
             "sd": null
           },
           "day_30_expected": {
-            "mean": 0.5688496185548749,
+            "mean": 0.5761034261520929,
             "sd": null
           },
           "delayed_expected_mean": {
-            "mean": 0.6048953181334825,
+            "mean": 0.6112685919078358,
             "sd": null
           },
           "latent_mean_floor": {
-            "mean": 0.38104071124907113,
+            "mean": 0.38478355341399123,
             "sd": null
           },
           "latent_mean_strength": {
-            "mean": 0.5151256140893229,
+            "mean": 0.5147800936489076,
             "sd": null
           },
           "action_shares": {
-            "give_easier_question": 0.10111053719008264,
-            "give_same_difficulty_question": 0.22146177685950413,
-            "give_harder_question": 0.18930785123966942,
-            "explain_concept": 0.11931818181818182,
-            "show_worked_example": 0.11918904958677685,
-            "request_self_explanation": 0.08729338842975207,
-            "review_prerequisite": 0.07450929752066116,
-            "advance_next_topic": 0.0878099173553719
+            "give_easier_question": 0.09714359238291302,
+            "give_same_difficulty_question": 0.23558929490478642,
+            "give_harder_question": 0.19197117858980958,
+            "explain_concept": 0.12326299536798765,
+            "show_worked_example": 0.1205609881626351,
+            "request_self_explanation": 0.0814462171899125,
+            "review_prerequisite": 0.058414822439526504,
+            "advance_next_topic": 0.09161091096242924
           }
         },
         "fixed_curriculum": {
@@ -731,131 +773,131 @@
         },
         "myopic_rl_bandit": {
           "day_1": {
-            "mean": 0.586851851851852,
-            "sd": 0.0006415002990996203
+            "mean": 0.5845370370370371,
+            "sd": 0.0001603750747749211
           },
           "day_7": {
-            "mean": 0.5643518518518519,
-            "sd": 0.00115648111081453
+            "mean": 0.5612037037037038,
+            "sd": 0.0004243125643477203
           },
           "day_30": {
-            "mean": 0.5170370370370371,
-            "sd": 0.002245251046848511
+            "mean": 0.5118518518518519,
+            "sd": 0.0003207501495497781
           },
           "delayed_mean": {
-            "mean": 0.5560802469135803,
-            "sd": 0.0013396626181611602
+            "mean": 0.552530864197531,
+            "sd": 0.00019274685180240242
           },
           "day_1_expected": {
-            "mean": 0.5885800393783582,
-            "sd": 0.0006974532398977853
+            "mean": 0.5855911202002205,
+            "sd": 9.135969996869159e-05
           },
           "day_7_expected": {
-            "mean": 0.5656020146146102,
-            "sd": 0.000919614816371639
+            "mean": 0.5625272904773541,
+            "sd": 5.2181457779413695e-05
           },
           "day_30_expected": {
-            "mean": 0.5277849074614425,
-            "sd": 0.0013392176031797737
+            "mean": 0.5245832180797808,
+            "sd": 0.0001122395423361701
           },
           "delayed_expected_mean": {
-            "mean": 0.560655653818137,
-            "sd": 0.0009852424130448953
+            "mean": 0.5575672095857852,
+            "sd": 4.541006161370488e-05
           },
           "latent_mean_floor": {
-            "mean": 0.3696675607465767,
-            "sd": 0.0027846535219497666
+            "mean": 0.36043777512270686,
+            "sd": 0.00016890563774116346
           },
           "latent_mean_strength": {
-            "mean": 0.4787277550228062,
-            "sd": 0.0018771416325766013
+            "mean": 0.4700550018205008,
+            "sd": 0.00013159535451797704
           },
           "action_shares": {
             "give_easier_question": 0.0,
-            "give_same_difficulty_question": 0.36010947609912086,
+            "give_same_difficulty_question": 0.6941615401343322,
             "give_harder_question": 0.0,
             "explain_concept": 0.0,
             "show_worked_example": 0.0,
-            "request_self_explanation": 0.6398905239008791,
+            "request_self_explanation": 0.30583845986566793,
             "review_prerequisite": 0.0,
             "advance_next_topic": 0.0
           }
         },
         "delayed_retention_ppo": {
           "day_1": {
-            "mean": 0.6592592592592592,
-            "sd": 0.018058404333666612
+            "mean": 0.6573148148148148,
+            "sd": 0.003791776894341321
           },
           "day_7": {
-            "mean": 0.6415740740740742,
-            "sd": 0.01729673248716391
+            "mean": 0.6484259259259259,
+            "sd": 0.006113215126016334
           },
           "day_30": {
-            "mean": 0.6012037037037038,
-            "sd": 0.01815641346175613
+            "mean": 0.62,
+            "sd": 0.011550346047939926
           },
           "delayed_mean": {
-            "mean": 0.6340123456790124,
-            "sd": 0.017783885267769667
+            "mean": 0.6419135802469135,
+            "sd": 0.0066294830661777805
           },
           "day_1_expected": {
-            "mean": 0.6553544783258571,
-            "sd": 0.017152767468519153
+            "mean": 0.6588184428997899,
+            "sd": 0.0031314754243121357
           },
           "day_7_expected": {
-            "mean": 0.6379503376689492,
-            "sd": 0.016881807501331777
+            "mean": 0.647246321419101,
+            "sd": 0.00540834467224567
           },
           "day_30_expected": {
-            "mean": 0.6102235950424583,
-            "sd": 0.017449794038805293
+            "mean": 0.6291391676946438,
+            "sd": 0.009505039578483886
           },
           "delayed_expected_mean": {
-            "mean": 0.6345094703457548,
-            "sd": 0.016946425900666594
+            "mean": 0.6450679773378449,
+            "sd": 0.006008664868635773
           },
           "latent_mean_floor": {
-            "mean": 0.43734229004906106,
-            "sd": 0.01711182232657374
+            "mean": 0.46330186622400577,
+            "sd": 0.014238789079443103
           },
           "latent_mean_strength": {
-            "mean": 0.5348492156143149,
-            "sd": 0.015081094298570878
+            "mean": 0.5217156087760951,
+            "sd": 0.00218417393807994
           },
           "action_shares": {
-            "give_easier_question": 0.05188549362093512,
-            "give_same_difficulty_question": 0.05159694359107441,
-            "give_harder_question": 0.11413304913347933,
-            "explain_concept": 0.02402245600091305,
-            "show_worked_example": 0.014340440977076761,
-            "request_self_explanation": 0.4773326538628962,
-            "review_prerequisite": 0.20620284517801887,
-            "advance_next_topic": 0.060486117635606275
+            "give_easier_question": 0.08695746457056296,
+            "give_same_difficulty_question": 0.09417547844753694,
+            "give_harder_question": 0.2156562813651581,
+            "explain_concept": 0.04668358743061629,
+            "show_worked_example": 0.13635491619337373,
+            "request_self_explanation": 0.30569991101281374,
+            "review_prerequisite": 0.0462377995636327,
+            "advance_next_topic": 0.06823456141630561
           }
         }
       },
       "by_seed": {
         "random_valid": [
           {
-            "day_1": 0.6363888888888889,
-            "day_7": 0.6147222222222222,
-            "day_30": 0.5575,
-            "delayed_mean": 0.6028703703703704,
-            "day_1_expected": 0.6359512328705003,
-            "day_7_expected": 0.6098851029750724,
-            "day_30_expected": 0.5688496185548749,
-            "delayed_expected_mean": 0.6048953181334825,
-            "latent_mean_floor": 0.38104071124907113,
-            "latent_mean_strength": 0.5151256140893229,
+            "day_1": 0.6447222222222223,
+            "day_7": 0.6222222222222221,
+            "day_30": 0.5719444444444445,
+            "delayed_mean": 0.6129629629629629,
+            "day_1_expected": 0.6414538467137624,
+            "day_7_expected": 0.616248502857652,
+            "day_30_expected": 0.5761034261520929,
+            "delayed_expected_mean": 0.6112685919078358,
+            "latent_mean_floor": 0.38478355341399123,
+            "latent_mean_strength": 0.5147800936489076,
             "action_shares": {
-              "give_easier_question": 0.10111053719008264,
-              "give_same_difficulty_question": 0.22146177685950413,
-              "give_harder_question": 0.18930785123966942,
-              "explain_concept": 0.11931818181818182,
-              "show_worked_example": 0.11918904958677685,
-              "request_self_explanation": 0.08729338842975207,
-              "review_prerequisite": 0.07450929752066116,
-              "advance_next_topic": 0.0878099173553719
+              "give_easier_question": 0.09714359238291302,
+              "give_same_difficulty_question": 0.23558929490478642,
+              "give_harder_question": 0.19197117858980958,
+              "explain_concept": 0.12326299536798765,
+              "show_worked_example": 0.1205609881626351,
+              "request_self_explanation": 0.0814462171899125,
+              "review_prerequisite": 0.058414822439526504,
+              "advance_next_topic": 0.09161091096242924
             }
           }
         ],
@@ -909,67 +951,67 @@
         ],
         "myopic_rl_bandit": [
           {
-            "day_1": 0.5872222222222223,
-            "day_7": 0.5652777777777778,
-            "day_30": 0.5183333333333333,
-            "delayed_mean": 0.5569444444444445,
-            "day_1_expected": 0.5889076451980111,
-            "day_7_expected": 0.5660577974352425,
-            "day_30_expected": 0.5284818548592821,
-            "delayed_expected_mean": 0.5611490991641785,
-            "latent_mean_floor": 0.3711814408347143,
-            "latent_mean_strength": 0.47972683365203095,
+            "day_1": 0.5844444444444444,
+            "day_7": 0.5616666666666666,
+            "day_30": 0.5116666666666667,
+            "delayed_mean": 0.5525925925925926,
+            "day_1_expected": 0.585696552617184,
+            "day_7_expected": 0.5625568106288128,
+            "day_30_expected": 0.5245002096251992,
+            "delayed_expected_mean": 0.5575845242903986,
+            "latent_mean_floor": 0.36024804657927617,
+            "latent_mean_strength": 0.4701994445253473,
             "action_shares": {
               "give_easier_question": 0.0,
-              "give_same_difficulty_question": 0.26599856836077307,
+              "give_same_difficulty_question": 0.7183942480527262,
               "give_harder_question": 0.0,
               "explain_concept": 0.0,
               "show_worked_example": 0.0,
-              "request_self_explanation": 0.7340014316392269,
+              "request_self_explanation": 0.28160575194727383,
               "review_prerequisite": 0.0,
               "advance_next_topic": 0.0
             }
           },
           {
-            "day_1": 0.5872222222222223,
-            "day_7": 0.5647222222222222,
-            "day_30": 0.5183333333333333,
-            "delayed_mean": 0.5567592592592593,
-            "day_1_expected": 0.5890533760466786,
-            "day_7_expected": 0.5662047181271069,
-            "day_30_expected": 0.5286319261431549,
-            "delayed_expected_mean": 0.5612966734389802,
-            "latent_mean_floor": 0.37136732999470395,
-            "latent_mean_strength": 0.47989406147783215,
+            "day_1": 0.5847222222222223,
+            "day_7": 0.5611111111111111,
+            "day_30": 0.5122222222222222,
+            "delayed_mean": 0.5526851851851853,
+            "day_1_expected": 0.5855353057876939,
+            "day_7_expected": 0.5625580202359768,
+            "day_30_expected": 0.5247109192456183,
+            "delayed_expected_mean": 0.557601415089763,
+            "latent_mean_floor": 0.36057177281129965,
+            "latent_mean_strength": 0.46994192014388425,
             "action_shares": {
               "give_easier_question": 0.0,
-              "give_same_difficulty_question": 0.24732867929904545,
+              "give_same_difficulty_question": 0.6745430227374053,
               "give_harder_question": 0.0,
               "explain_concept": 0.0,
               "show_worked_example": 0.0,
-              "request_self_explanation": 0.7526713207009545,
+              "request_self_explanation": 0.32545697726259476,
               "review_prerequisite": 0.0,
               "advance_next_topic": 0.0
             }
           },
           {
-            "day_1": 0.5861111111111111,
-            "day_7": 0.5630555555555555,
-            "day_30": 0.5144444444444445,
-            "delayed_mean": 0.554537037037037,
-            "day_1_expected": 0.587779096890385,
-            "day_7_expected": 0.5645435282814811,
-            "day_30_expected": 0.5262409413818903,
-            "delayed_expected_mean": 0.5595211888512521,
-            "latent_mean_floor": 0.3664539114103118,
-            "latent_mean_strength": 0.4765623699385554,
+            "day_1": 0.5844444444444444,
+            "day_7": 0.5608333333333334,
+            "day_30": 0.5116666666666667,
+            "delayed_mean": 0.5523148148148149,
+            "day_1_expected": 0.5855415021957838,
+            "day_7_expected": 0.5624670405672727,
+            "day_30_expected": 0.5245385253685252,
+            "delayed_expected_mean": 0.5575156893771939,
+            "latent_mean_floor": 0.3604935059775447,
+            "latent_mean_strength": 0.47002364079227077,
             "action_shares": {
               "give_easier_question": 0.0,
-              "give_same_difficulty_question": 0.5670011806375442,
+              "give_same_difficulty_question": 0.6895473496128648,
               "give_harder_question": 0.0,
               "explain_concept": 0.0,
               "show_worked_example": 0.0,
-              "request_self_explanation": 0.4329988193624557,
+              "request_self_explanation": 0.3104526503871352,
               "review_prerequisite": 0.0,
               "advance_next_topic": 0.0
             }
@@ -977,69 +1019,69 @@
         ],
         "delayed_retention_ppo": [
           {
-            "day_1": 0.6588888888888889,
-            "day_7": 0.6397222222222222,
-            "day_30": 0.5969444444444444,
-            "delayed_mean": 0.6318518518518518,
-            "day_1_expected": 0.6575914608788801,
-            "day_7_expected": 0.6378123112327473,
-            "day_30_expected": 0.6049444264325586,
-            "delayed_expected_mean": 0.6334493995147287,
-            "latent_mean_floor": 0.41996381784695247,
-            "latent_mean_strength": 0.5388258513648129,
+            "day_1": 0.6566666666666666,
+            "day_7": 0.6544444444444444,
+            "day_30": 0.6263888888888889,
+            "delayed_mean": 0.6458333333333335,
+            "day_1_expected": 0.6608402343344169,
+            "day_7_expected": 0.6502425925009906,
+            "day_30_expected": 0.6340782510082512,
+            "delayed_expected_mean": 0.6483870259478863,
+            "latent_mean_floor": 0.4699088173523282,
+            "latent_mean_strength": 0.5222570542094708,
             "action_shares": {
-              "give_easier_question": 0.09577945147079721,
-              "give_same_difficulty_question": 0.0002842120221685377,
-              "give_harder_question": 0.20534318601676851,
-              "explain_concept": 0.005826346454455024,
-              "show_worked_example": 0.020747477618303253,
-              "request_self_explanation": 0.233622282222538,
-              "review_prerequisite": 0.38070200369475626,
-              "advance_next_topic": 0.05769504050021316
-            }
-          },
-          {
-            "day_1": 0.6413888888888889,
-            "day_7": 0.6252777777777778,
-            "day_30": 0.5855555555555556,
-            "delayed_mean": 0.6174074074074074,
-            "day_1_expected": 0.637192971951594,
-            "day_7_expected": 0.6211379665824616,
-            "day_30_expected": 0.596022956780948,
-            "delayed_expected_mean": 0.618117965105001,
-            "latent_mean_floor": 0.4378886770617046,
-            "latent_mean_strength": 0.518178282804277,
-            "action_shares": {
-              "give_easier_question": 0.01409949454642192,
-              "give_same_difficulty_question": 0.026602819898909284,
-              "give_harder_question": 0.060122372971534985,
-              "explain_concept": 0.06624102154828412,
-              "show_worked_example": 0.0,
-              "request_self_explanation": 0.7914338919925512,
-              "review_prerequisite": 0.0,
-              "advance_next_topic": 0.041500399042298484
-            }
-          },
-          {
-            "day_1": 0.6775,
-            "day_7": 0.6597222222222223,
-            "day_30": 0.6211111111111112,
-            "delayed_mean": 0.6527777777777779,
-            "day_1_expected": 0.6712790021470973,
-            "day_7_expected": 0.6549007351916384,
-            "day_30_expected": 0.6297034019138682,
-            "delayed_expected_mean": 0.6519610464175346,
-            "latent_mean_floor": 0.4541743752385261,
-            "latent_mean_strength": 0.5475435126738546,
-            "action_shares": {
-              "give_easier_question": 0.04577753484558623,
-              "give_same_difficulty_question": 0.1279037988521454,
-              "give_harder_question": 0.07693358841213446,
+              "give_easier_question": 0.06402640264026403,
+              "give_same_difficulty_question": 0.06244224422442244,
+              "give_harder_question": 0.26495049504950496,
               "explain_concept": 0.0,
-              "show_worked_example": 0.02227384531292703,
-              "request_self_explanation": 0.4069417873735993,
-              "review_prerequisite": 0.23790653183930036,
-              "advance_next_topic": 0.08226291336430719
+              "show_worked_example": 0.18033003300330033,
+              "request_self_explanation": 0.3093069306930693,
+              "review_prerequisite": 0.043168316831683165,
+              "advance_next_topic": 0.07577557755775577
+            }
+          },
+          {
+            "day_1": 0.6613888888888888,
+            "day_7": 0.6486111111111111,
+            "day_30": 0.6269444444444444,
+            "delayed_mean": 0.6456481481481481,
+            "day_1_expected": 0.6604037767330405,
+            "day_7_expected": 0.650493389961932,
+            "day_30_expected": 0.6351578454862568,
+            "delayed_expected_mean": 0.6486850040604097,
+            "latent_mean_floor": 0.47303695891099223,
+            "latent_mean_strength": 0.5235781332142853,
+            "action_shares": {
+              "give_easier_question": 0.11696826645685812,
+              "give_same_difficulty_question": 0.020456333595594022,
+              "give_harder_question": 0.25190138998164174,
+              "explain_concept": 0.13978494623655913,
+              "show_worked_example": 0.0,
+              "request_self_explanation": 0.3134015211119853,
+              "review_prerequisite": 0.07959611854183057,
+              "advance_next_topic": 0.07789142407553108
+            }
+          },
+          {
+            "day_1": 0.6538888888888889,
+            "day_7": 0.6422222222222221,
+            "day_30": 0.6066666666666666,
+            "delayed_mean": 0.6342592592592592,
+            "day_1_expected": 0.6552113176319122,
+            "day_7_expected": 0.6410029817943804,
+            "day_30_expected": 0.6181814065894234,
+            "delayed_expected_mean": 0.6381319020052386,
+            "latent_mean_floor": 0.4469598224086968,
+            "latent_mean_strength": 0.5193116389045292,
+            "action_shares": {
+              "give_easier_question": 0.07987772461456671,
+              "give_same_difficulty_question": 0.19962785752259438,
+              "give_harder_question": 0.1301169590643275,
+              "explain_concept": 0.0002658160552897395,
+              "show_worked_example": 0.22873471557682085,
+              "request_self_explanation": 0.2943912812333865,
+              "review_prerequisite": 0.01594896331738437,
+              "advance_next_topic": 0.051036682615629984
             }
           }
         ]
@@ -1047,106 +1089,148 @@
       "paired_intervals": {
         "delayed_retention_ppo minus random_valid": {
           "expected_delayed": {
-            "delta": 0.029614152212272295,
-            "lower_95": 0.02359358563077721,
-            "upper_95": 0.03483137095871737
+            "delta": 0.03379938543000908,
+            "lower_95": 0.02873623592353777,
+            "upper_95": 0.03923086280458477
           },
           "observed_delayed": {
-            "delta": 0.03114197530864198,
-            "lower_95": 0.023640432098765422,
-            "upper_95": 0.0382716049382716
+            "delta": 0.028950617283950618,
+            "lower_95": 0.022623456790123463,
+            "upper_95": 0.03530864197530864
           }
         },
         "delayed_retention_ppo minus fixed_curriculum": {
           "expected_delayed": {
-            "delta": 0.04985886116004803,
-            "lower_95": 0.04381804779624535,
-            "upper_95": 0.05651089931989863
+            "delta": 0.060417368152138044,
+            "lower_95": 0.05375390772037041,
+            "upper_95": 0.06713120516960694
           },
           "observed_delayed": {
-            "delta": 0.04984567901234567,
-            "lower_95": 0.04117052469135801,
-            "upper_95": 0.0586736111111111
+            "delta": 0.05774691358024692,
+            "lower_95": 0.04891358024691359,
+            "upper_95": 0.06632793209876545
           }
         },
         "delayed_retention_ppo minus threshold_heuristic": {
           "expected_delayed": {
-            "delta": 0.017249267355277053,
-            "lower_95": 0.012926866409883503,
-            "upper_95": 0.02174723695833559
+            "delta": 0.027807774347367076,
+            "lower_95": 0.023599663879706603,
+            "upper_95": 0.03195059760728151
           },
           "observed_delayed": {
-            "delta": 0.018919753086419754,
-            "lower_95": 0.013117283950617295,
-            "upper_95": 0.02472376543209876
+            "delta": 0.026820987654320994,
+            "lower_95": 0.02092515432098766,
+            "upper_95": 0.03243827160493828
           }
         },
         "delayed_retention_ppo minus myopic_rl_bandit": {
           "expected_delayed": {
-            "delta": 0.07385381652761787,
-            "lower_95": 0.06778536656354184,
-            "upper_95": 0.0796418245399637
+            "delta": 0.08750076775205969,
+            "lower_95": 0.08235288710555205,
+            "upper_95": 0.09323389127785435
           },
           "observed_delayed": {
-            "delta": 0.0779320987654321,
-            "lower_95": 0.07064737654320988,
-            "upper_95": 0.08543209876543209
+            "delta": 0.08938271604938272,
+            "lower_95": 0.08166512345679013,
+            "upper_95": 0.09679243827160494
           }
         }
-      }
+      },
+      "behavioral_by_seed": [
+        {
+          "checks_passed": 5,
+          "checks_total": 5,
+          "all_passed": true,
+          "question_turns_share": 0.4345874587458746,
+          "checks": {
+            "question_turns_at_least_40pct": true,
+            "no_action_spam_over_32pct": true,
+            "curriculum_topic_advancement": true,
+            "consolidated_floor_beats_heuristic": true,
+            "delayed_retention_beats_all_baselines": true
+          }
+        },
+        {
+          "checks_passed": 5,
+          "checks_total": 5,
+          "all_passed": true,
+          "question_turns_share": 0.4689221085759244,
+          "checks": {
+            "question_turns_at_least_40pct": true,
+            "no_action_spam_over_32pct": true,
+            "curriculum_topic_advancement": true,
+            "consolidated_floor_beats_heuristic": true,
+            "delayed_retention_beats_all_baselines": true
+          }
+        },
+        {
+          "checks_passed": 5,
+          "checks_total": 5,
+          "all_passed": true,
+          "question_turns_share": 0.42557150451887293,
+          "checks": {
+            "question_turns_at_least_40pct": true,
+            "no_action_spam_over_32pct": true,
+            "curriculum_topic_advancement": true,
+            "consolidated_floor_beats_heuristic": true,
+            "delayed_retention_beats_all_baselines": true
+          }
+        }
+      ],
+      "all_seeds_passed_behavioral": true
     },
     "long_gap_test": {
       "summary": {
         "random_valid": {
           "day_1": {
-            "mean": 0.6063888888888889,
+            "mean": 0.613888888888889,
             "sd": null
           },
           "day_7": {
-            "mean": 0.5913888888888889,
+            "mean": 0.5955555555555556,
             "sd": null
           },
           "day_30": {
-            "mean": 0.5386111111111112,
+            "mean": 0.545,
             "sd": null
           },
           "delayed_mean": {
-            "mean": 0.5787962962962964,
+            "mean": 0.5848148148148148,
             "sd": null
           },
           "day_1_expected": {
-            "mean": 0.6100635271640228,
+            "mean": 0.6134929074743688,
             "sd": null
           },
           "day_7_expected": {
-            "mean": 0.5901175951010429,
+            "mean": 0.5936043410695641,
             "sd": null
           },
           "day_30_expected": {
-            "mean": 0.549627108990679,
+            "mean": 0.5522916851270881,
             "sd": null
           },
           "delayed_expected_mean": {
-            "mean": 0.5832694104185815,
+            "mean": 0.5864629778903404,
             "sd": null
           },
           "latent_mean_floor": {
-            "mean": 0.37778153003779563,
+            "mean": 0.3765890080697143,
             "sd": null
           },
           "latent_mean_strength": {
-            "mean": 0.48506432692655466,
+            "mean": 0.48265887791688683,
             "sd": null
           },
           "action_shares": {
-            "give_easier_question": 0.1014586291467665,
-            "give_same_difficulty_question": 0.2196979475926165,
-            "give_harder_question": 0.19091261133341939,
-            "explain_concept": 0.11940105847424809,
-            "show_worked_example": 0.11836840067122757,
-            "request_self_explanation": 0.08880857105976507,
-            "review_prerequisite": 0.07357686846521234,
-            "advance_next_topic": 0.08777591325674454
+            "give_easier_question": 0.0981175863847344,
+            "give_same_difficulty_question": 0.23401237751418258,
+            "give_harder_question": 0.19365652398143374,
+            "explain_concept": 0.12158329035585354,
+            "show_worked_example": 0.12145435791645177,
+            "request_self_explanation": 0.08019597730789066,
+            "review_prerequisite": 0.06059824651882414,
+            "advance_next_topic": 0.09038164002062919
           }
         },
         "fixed_curriculum": {
@@ -1255,131 +1339,131 @@
         },
         "myopic_rl_bandit": {
           "day_1": {
-            "mean": 0.5556481481481481,
-            "sd": 0.000578240555407225
+            "mean": 0.5531481481481482,
+            "sd": 0.0006415002990995562
           },
           "day_7": {
-            "mean": 0.5369444444444444,
-            "sd": 0.0016896562584161807
+            "mean": 0.5337962962962962,
+            "sd": 0.000578240555407225
           },
           "day_30": {
-            "mean": 0.49314814814814817,
-            "sd": 0.002489690677731241
+            "mean": 0.4873148148148149,
+            "sd": 0.0010516496936667156
           },
           "delayed_mean": {
-            "mean": 0.5285802469135802,
-            "sd": 0.001583125753485465
+            "mean": 0.524753086419753,
+            "sd": 0.0006949586573579364
           },
           "day_1_expected": {
-            "mean": 0.5596587845684882,
-            "sd": 0.0010351462963745092
+            "mean": 0.556586386343898,
+            "sd": 5.629911406160855e-05
           },
           "day_7_expected": {
-            "mean": 0.5420300749792877,
-            "sd": 0.0012603812404202064
+            "mean": 0.5388553888372791,
+            "sd": 0.0001457731406828138
           },
           "day_30_expected": {
-            "mean": 0.5068773039091873,
-            "sd": 0.0017979716468403007
+            "mean": 0.5034769044366207,
+            "sd": 0.0003991580236855003
           },
           "delayed_expected_mean": {
-            "mean": 0.536188721152321,
-            "sd": 0.0013644972463150982
+            "mean": 0.5329728932059327,
+            "sd": 0.00019528407228941593
           },
           "latent_mean_floor": {
-            "mean": 0.36846430528914825,
-            "sd": 0.0037146829412632912
+            "mean": 0.35890760654337867,
+            "sd": 0.000603627701226523
           },
           "latent_mean_strength": {
-            "mean": 0.44923704338684295,
-            "sd": 0.0027511723133348855
+            "mean": 0.4404329084674828,
+            "sd": 0.00015510781456559868
           },
           "action_shares": {
             "give_easier_question": 0.0,
-            "give_same_difficulty_question": 0.37774599037859885,
+            "give_same_difficulty_question": 0.7025819216158293,
             "give_harder_question": 0.0,
             "explain_concept": 0.0,
             "show_worked_example": 0.0,
-            "request_self_explanation": 0.6222540096214012,
+            "request_self_explanation": 0.2974180783841707,
             "review_prerequisite": 0.0,
             "advance_next_topic": 0.0
           }
         },
         "delayed_retention_ppo": {
           "day_1": {
-            "mean": 0.6303703703703704,
-            "sd": 0.023307415058470518
+            "mean": 0.6336111111111111,
+            "sd": 0.0038888888888889495
           },
           "day_7": {
-            "mean": 0.6172222222222222,
-            "sd": 0.02323557563970902
+            "mean": 0.627962962962963,
+            "sd": 0.0064390143150791
           },
           "day_30": {
-            "mean": 0.5787962962962964,
-            "sd": 0.02488295646891156
+            "mean": 0.6,
+            "sd": 0.010588399195858897
           },
           "delayed_mean": {
-            "mean": 0.6087962962962963,
-            "sd": 0.023767997296222646
+            "mean": 0.6205246913580248,
+            "sd": 0.006314199311084562
           },
           "day_1_expected": {
-            "mean": 0.6294613861059709,
-            "sd": 0.023534968630422776
+            "mean": 0.6379731861279079,
+            "sd": 0.004197015542223142
           },
           "day_7_expected": {
-            "mean": 0.6157708974260346,
-            "sd": 0.02398869135982392
+            "mean": 0.62872104288791,
+            "sd": 0.00599345003933389
           },
           "day_30_expected": {
-            "mean": 0.5881887968507108,
-            "sd": 0.024456326159055804
+            "mean": 0.6110439060334499,
+            "sd": 0.009772372962929413
           },
           "delayed_expected_mean": {
-            "mean": 0.6111403601275721,
-            "sd": 0.023873177689607807
+            "mean": 0.6259127116830893,
+            "sd": 0.006630047330906432
           },
           "latent_mean_floor": {
-            "mean": 0.4277822197853762,
-            "sd": 0.017258100386390106
+            "mean": 0.45232693646819083,
+            "sd": 0.011366535541506581
           },
           "latent_mean_strength": {
-            "mean": 0.5062231192800973,
-            "sd": 0.01948417444365707
+            "mean": 0.4986132757116572,
+            "sd": 0.00373106717593482
           },
           "action_shares": {
-            "give_easier_question": 0.05159382760342146,
-            "give_same_difficulty_question": 0.052958759436412095,
-            "give_harder_question": 0.10946389002030883,
-            "explain_concept": 0.02074288965305972,
-            "show_worked_example": 0.013646632892579738,
-            "request_self_explanation": 0.4940472902028475,
-            "review_prerequisite": 0.20220858110682038,
-            "advance_next_topic": 0.055338129084550235
+            "give_easier_question": 0.08843502930877027,
+            "give_same_difficulty_question": 0.0967620815292493,
+            "give_harder_question": 0.21236767931997716,
+            "explain_concept": 0.04821544690263296,
+            "show_worked_example": 0.13914213649985252,
+            "request_self_explanation": 0.302939574622273,
+            "review_prerequisite": 0.047633873746590845,
+            "advance_next_topic": 0.06450417807065391
           }
         }
       },
       "by_seed": {
         "random_valid": [
           {
-            "day_1": 0.6063888888888889,
-            "day_7": 0.5913888888888889,
-            "day_30": 0.5386111111111112,
-            "delayed_mean": 0.5787962962962964,
-            "day_1_expected": 0.6100635271640228,
-            "day_7_expected": 0.5901175951010429,
-            "day_30_expected": 0.549627108990679,
-            "delayed_expected_mean": 0.5832694104185815,
-            "latent_mean_floor": 0.37778153003779563,
-            "latent_mean_strength": 0.48506432692655466,
+            "day_1": 0.613888888888889,
+            "day_7": 0.5955555555555556,
+            "day_30": 0.545,
+            "delayed_mean": 0.5848148148148148,
+            "day_1_expected": 0.6134929074743688,
+            "day_7_expected": 0.5936043410695641,
+            "day_30_expected": 0.5522916851270881,
+            "delayed_expected_mean": 0.5864629778903404,
+            "latent_mean_floor": 0.3765890080697143,
+            "latent_mean_strength": 0.48265887791688683,
             "action_shares": {
-              "give_easier_question": 0.1014586291467665,
-              "give_same_difficulty_question": 0.2196979475926165,
-              "give_harder_question": 0.19091261133341939,
-              "explain_concept": 0.11940105847424809,
-              "show_worked_example": 0.11836840067122757,
-              "request_self_explanation": 0.08880857105976507,
-              "review_prerequisite": 0.07357686846521234,
-              "advance_next_topic": 0.08777591325674454
+              "give_easier_question": 0.0981175863847344,
+              "give_same_difficulty_question": 0.23401237751418258,
+              "give_harder_question": 0.19365652398143374,
+              "explain_concept": 0.12158329035585354,
+              "show_worked_example": 0.12145435791645177,
+              "request_self_explanation": 0.08019597730789066,
+              "review_prerequisite": 0.06059824651882414,
+              "advance_next_topic": 0.09038164002062919
             }
           }
         ],
@@ -1433,67 +1517,67 @@
         ],
         "myopic_rl_bandit": [
           {
-            "day_1": 0.5561111111111111,
-            "day_7": 0.5380555555555556,
-            "day_30": 0.4947222222222223,
-            "delayed_mean": 0.5296296296296297,
-            "day_1_expected": 0.5602416067754451,
-            "day_7_expected": 0.5427424591168643,
-            "day_30_expected": 0.5078980771093042,
-            "delayed_expected_mean": 0.5369607143338712,
-            "latent_mean_floor": 0.37057488503714486,
-            "latent_mean_strength": 0.4508005470405715,
+            "day_1": 0.5527777777777778,
+            "day_7": 0.5333333333333333,
+            "day_30": 0.48611111111111116,
+            "delayed_mean": 0.524074074074074,
+            "day_1_expected": 0.5565352060376189,
+            "day_7_expected": 0.5386871632223255,
+            "day_30_expected": 0.5030204853962742,
+            "delayed_expected_mean": 0.5327476182187395,
+            "latent_mean_floor": 0.3582197854666395,
+            "latent_mean_strength": 0.44025397224874996,
             "action_shares": {
               "give_easier_question": 0.0,
-              "give_same_difficulty_question": 0.2733390607101947,
+              "give_same_difficulty_question": 0.7277636118194091,
               "give_harder_question": 0.0,
               "explain_concept": 0.0,
               "show_worked_example": 0.0,
-              "request_self_explanation": 0.7266609392898052,
+              "request_self_explanation": 0.272236388180591,
               "review_prerequisite": 0.0,
               "advance_next_topic": 0.0
             }
           },
           {
-            "day_1": 0.5558333333333333,
-            "day_7": 0.5377777777777778,
-            "day_30": 0.4944444444444444,
-            "delayed_mean": 0.5293518518518519,
-            "day_1_expected": 0.5602711248474188,
-            "day_7_expected": 0.542772947286048,
-            "day_30_expected": 0.5079325541119294,
-            "delayed_expected_mean": 0.5369922087484654,
-            "latent_mean_floor": 0.3706428922216504,
-            "latent_mean_strength": 0.45085019058524956,
+            "day_1": 0.5538888888888889,
+            "day_7": 0.5344444444444444,
+            "day_30": 0.4880555555555556,
+            "delayed_mean": 0.525462962962963,
+            "day_1_expected": 0.5565772630640327,
+            "day_7_expected": 0.5389444931775484,
+            "day_30_expected": 0.5037606870850071,
+            "delayed_expected_mean": 0.5330941477755293,
+            "latent_mean_floor": 0.35934920549704463,
+            "latent_mean_strength": 0.4405156828216626,
             "action_shares": {
               "give_easier_question": 0.0,
-              "give_same_difficulty_question": 0.2575908766928011,
+              "give_same_difficulty_question": 0.6808921933085502,
               "give_harder_question": 0.0,
               "explain_concept": 0.0,
               "show_worked_example": 0.0,
-              "request_self_explanation": 0.7424091233071989,
+              "request_self_explanation": 0.31910780669144984,
               "review_prerequisite": 0.0,
               "advance_next_topic": 0.0
             }
           },
           {
-            "day_1": 0.555,
-            "day_7": 0.535,
-            "day_30": 0.4902777777777778,
-            "delayed_mean": 0.5267592592592593,
-            "day_1_expected": 0.5584636220826007,
-            "day_7_expected": 0.5405748185349507,
-            "day_30_expected": 0.5048012805063281,
-            "delayed_expected_mean": 0.5346132403746264,
-            "latent_mean_floor": 0.3641751386086493,
-            "latent_mean_strength": 0.44606039253470775,
+            "day_1": 0.5527777777777778,
+            "day_7": 0.5336111111111111,
+            "day_30": 0.48777777777777787,
+            "delayed_mean": 0.5247222222222222,
+            "day_1_expected": 0.5566466899300427,
+            "day_7_expected": 0.5389345101119636,
+            "day_30_expected": 0.5036495408285808,
+            "delayed_expected_mean": 0.533076913623529,
+            "latent_mean_floor": 0.3591538286664516,
+            "latent_mean_strength": 0.440529070332036,
             "action_shares": {
               "give_easier_question": 0.0,
-              "give_same_difficulty_question": 0.6023080337328007,
+              "give_same_difficulty_question": 0.6990899597195286,
               "give_harder_question": 0.0,
               "explain_concept": 0.0,
               "show_worked_example": 0.0,
-              "request_self_explanation": 0.39769196626719927,
+              "request_self_explanation": 0.3009100402804714,
               "review_prerequisite": 0.0,
               "advance_next_topic": 0.0
             }
@@ -1501,69 +1585,69 @@
         ],
         "delayed_retention_ppo": [
           {
-            "day_1": 0.6352777777777778,
-            "day_7": 0.6205555555555555,
-            "day_30": 0.58,
-            "delayed_mean": 0.6119444444444444,
-            "day_1_expected": 0.6348803471727629,
-            "day_7_expected": 0.6194242825139231,
-            "day_30_expected": 0.5871464238767596,
-            "delayed_expected_mean": 0.6138170178544818,
-            "latent_mean_floor": 0.41656479865965623,
-            "latent_mean_strength": 0.5116698420260232,
+            "day_1": 0.6319444444444444,
+            "day_7": 0.6338888888888888,
+            "day_30": 0.6058333333333333,
+            "delayed_mean": 0.6238888888888889,
+            "day_1_expected": 0.6386447969195106,
+            "day_7_expected": 0.6304444400754713,
+            "day_30_expected": 0.6149831721223543,
+            "delayed_expected_mean": 0.6280241363724454,
+            "latent_mean_floor": 0.4565150367603884,
+            "latent_mean_strength": 0.49758712731300536,
             "action_shares": {
-              "give_easier_question": 0.09813150763086578,
-              "give_same_difficulty_question": 0.0002852660105548424,
-              "give_harder_question": 0.20539152759948653,
-              "explain_concept": 0.004278990158322636,
-              "show_worked_example": 0.019540721723006704,
-              "request_self_explanation": 0.24575666809299673,
-              "review_prerequisite": 0.37384110683212096,
-              "advance_next_topic": 0.052774211952645846
-            }
-          },
-          {
-            "day_1": 0.605,
-            "day_7": 0.5925,
-            "day_30": 0.5533333333333332,
-            "delayed_mean": 0.5836111111111112,
-            "day_1_expected": 0.6036895792772414,
-            "day_7_expected": 0.5901650775598655,
-            "day_30_expected": 0.5642703232922703,
-            "delayed_expected_mean": 0.5860416600431257,
-            "latent_mean_floor": 0.41912666989026276,
-            "latent_mean_strength": 0.48459518274005864,
-            "action_shares": {
-              "give_easier_question": 0.01110813704496788,
-              "give_same_difficulty_question": 0.02676659528907923,
-              "give_harder_question": 0.05125802997858672,
-              "explain_concept": 0.05794967880085653,
-              "show_worked_example": 0.0,
-              "request_self_explanation": 0.8173179871520343,
-              "review_prerequisite": 0.0,
-              "advance_next_topic": 0.03559957173447537
-            }
-          },
-          {
-            "day_1": 0.6508333333333333,
-            "day_7": 0.638611111111111,
-            "day_30": 0.6030555555555556,
-            "delayed_mean": 0.6308333333333332,
-            "day_1_expected": 0.6498142318679083,
-            "day_7_expected": 0.6377233322043154,
-            "day_30_expected": 0.6131496433831022,
-            "delayed_expected_mean": 0.6335624024851086,
-            "latent_mean_floor": 0.44765519080620975,
-            "latent_mean_strength": 0.5224043330742103,
-            "action_shares": {
-              "give_easier_question": 0.045541838134430725,
-              "give_same_difficulty_question": 0.1318244170096022,
-              "give_harder_question": 0.07174211248285323,
+              "give_easier_question": 0.06434989429175475,
+              "give_same_difficulty_question": 0.06738900634249471,
+              "give_harder_question": 0.25766384778012685,
               "explain_concept": 0.0,
-              "show_worked_example": 0.02139917695473251,
-              "request_self_explanation": 0.41906721536351166,
-              "review_prerequisite": 0.2327846364883402,
-              "advance_next_topic": 0.07764060356652949
+              "show_worked_example": 0.1838002114164905,
+              "request_self_explanation": 0.3074788583509514,
+              "review_prerequisite": 0.04756871035940803,
+              "advance_next_topic": 0.07174947145877378
+            }
+          },
+          {
+            "day_1": 0.6380555555555556,
+            "day_7": 0.6288888888888889,
+            "day_30": 0.606388888888889,
+            "delayed_mean": 0.6244444444444445,
+            "day_1_expected": 0.6417938989469246,
+            "day_7_expected": 0.6336639863997566,
+            "day_30_expected": 0.6182318332720206,
+            "delayed_expected_mean": 0.631229906206234,
+            "latent_mean_floor": 0.46100521161300323,
+            "latent_mean_strength": 0.502750039587169,
+            "action_shares": {
+              "give_easier_question": 0.12121610950250065,
+              "give_same_difficulty_question": 0.01855751513556199,
+              "give_harder_question": 0.2517767833640432,
+              "explain_concept": 0.1443801000263227,
+              "show_worked_example": 0.0,
+              "request_self_explanation": 0.31087128191629376,
+              "review_prerequisite": 0.07975783100816004,
+              "advance_next_topic": 0.07344037904711766
+            }
+          },
+          {
+            "day_1": 0.6308333333333332,
+            "day_7": 0.6211111111111112,
+            "day_30": 0.5877777777777777,
+            "delayed_mean": 0.6132407407407408,
+            "day_1_expected": 0.6334808625172884,
+            "day_7_expected": 0.6220547021885021,
+            "day_30_expected": 0.5999167127059747,
+            "delayed_expected_mean": 0.6184840924705884,
+            "latent_mean_floor": 0.439460561031181,
+            "latent_mean_strength": 0.49550266023479717,
+            "action_shares": {
+              "give_easier_question": 0.07973908413205538,
+              "give_same_difficulty_question": 0.20433972310969117,
+              "give_harder_question": 0.12766240681576144,
+              "explain_concept": 0.00026624068157614486,
+              "show_worked_example": 0.2336261980830671,
+              "request_self_explanation": 0.290468583599574,
+              "review_prerequisite": 0.015575079872204472,
+              "advance_next_topic": 0.04832268370607029
             }
           }
         ]
@@ -1571,53 +1655,95 @@
       "paired_intervals": {
         "delayed_retention_ppo minus random_valid": {
           "expected_delayed": {
-            "delta": 0.027870949708990546,
-            "lower_95": 0.0218976841940536,
-            "upper_95": 0.03328796877145287
+            "delta": 0.039449733792748895,
+            "lower_95": 0.033976330299802404,
+            "upper_95": 0.04420116660611628
           },
           "observed_delayed": {
-            "delta": 0.03,
-            "lower_95": 0.022128858024691365,
-            "upper_95": 0.0373179012345679
+            "delta": 0.035709876543209874,
+            "lower_95": 0.028547839506172835,
+            "upper_95": 0.04231481481481481
           }
         },
         "delayed_retention_ppo minus fixed_curriculum": {
           "expected_delayed": {
-            "delta": 0.0558724955170045,
-            "lower_95": 0.049122158759719835,
-            "upper_95": 0.06292663630014625
+            "delta": 0.07064484707252167,
+            "lower_95": 0.0637784516076597,
+            "upper_95": 0.07745006014662609
           },
           "observed_delayed": {
-            "delta": 0.056111111111111105,
-            "lower_95": 0.04731404320987655,
-            "upper_95": 0.06555787037037036
+            "delta": 0.06783950617283951,
+            "lower_95": 0.05851851851851852,
+            "upper_95": 0.07642515432098763
           }
         },
         "delayed_retention_ppo minus threshold_heuristic": {
           "expected_delayed": {
-            "delta": 0.01972612017774565,
-            "lower_95": 0.015444253417519647,
-            "upper_95": 0.024336889939132307
+            "delta": 0.03449847173326281,
+            "lower_95": 0.029702669251999058,
+            "upper_95": 0.03933428345399133
           },
           "observed_delayed": {
-            "delta": 0.02314814814814815,
-            "lower_95": 0.016573302469135808,
-            "upper_95": 0.029260802469135802
+            "delta": 0.03487654320987654,
+            "lower_95": 0.02888657407407407,
+            "upper_95": 0.040927469135802474
           }
         },
         "delayed_retention_ppo minus myopic_rl_bandit": {
           "expected_delayed": {
-            "delta": 0.07495163897525109,
-            "lower_95": 0.06904226833242752,
-            "upper_95": 0.0805412731530914
+            "delta": 0.09293981847715661,
+            "lower_95": 0.08716204633628905,
+            "upper_95": 0.09880055598169118
           },
           "observed_delayed": {
-            "delta": 0.08021604938271604,
-            "lower_95": 0.0725925925925926,
-            "upper_95": 0.0882723765432099
+            "delta": 0.09577160493827161,
+            "lower_95": 0.08756172839506174,
+            "upper_95": 0.10376851851851852
           }
         }
-      }
+      },
+      "behavioral_by_seed": [
+        {
+          "checks_passed": 5,
+          "checks_total": 5,
+          "all_passed": true,
+          "question_turns_share": 0.43697145877378435,
+          "checks": {
+            "question_turns_at_least_40pct": true,
+            "no_action_spam_over_32pct": true,
+            "curriculum_topic_advancement": true,
+            "consolidated_floor_beats_heuristic": true,
+            "delayed_retention_beats_all_baselines": true
+          }
+        },
+        {
+          "checks_passed": 5,
+          "checks_total": 5,
+          "all_passed": true,
+          "question_turns_share": 0.47130823901026586,
+          "checks": {
+            "question_turns_at_least_40pct": true,
+            "no_action_spam_over_32pct": true,
+            "curriculum_topic_advancement": true,
+            "consolidated_floor_beats_heuristic": true,
+            "delayed_retention_beats_all_baselines": true
+          }
+        },
+        {
+          "checks_passed": 5,
+          "checks_total": 5,
+          "all_passed": true,
+          "question_turns_share": 0.42731629392971243,
+          "checks": {
+            "question_turns_at_least_40pct": true,
+            "no_action_spam_over_32pct": true,
+            "curriculum_topic_advancement": true,
+            "consolidated_floor_beats_heuristic": true,
+            "delayed_retention_beats_all_baselines": true
+          }
+        }
+      ],
+      "all_seeds_passed_behavioral": true
     }
   }
 }

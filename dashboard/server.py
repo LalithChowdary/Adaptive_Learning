@@ -31,8 +31,9 @@ def serve(app,port):
             url=urlparse(self.path); q={k:v[0] for k,v in parse_qs(url.query).items()}
             try:
                 with lock:
-                    if url.path=='/api/state': return self.send(200,dict(app.bootstrap(q.get('learner')),token=token))
-                    if url.path=='/api/curve': return self.send(200,app.curve(q['learner'],q['skill'],q.get('task')))
+                    if url.path=='/api/state': return self.send(200,dict(app.bootstrap(q.get('learner'),q.get('skill'),q.get('difficulty')),token=token))
+                    if url.path=='/api/ppo': return self.send(200,app.ppo_state(q['learner'],q.get('skill'),q.get('difficulty')))
+                    if url.path=='/api/curve': return self.send(200,app.curve(q['learner'],q['skill'],q.get('task'),q.get('format')))
                     if url.path=='/api/export': return self.send(200,app.export(q['learner']))
                 files={'/':'index.html','/style.css':'style.css','/app.js':'app.js','/favicon.svg':'favicon.svg'}
                 if url.path not in files: return self.send(404,{'error':'Not found'})

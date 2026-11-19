@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adaptive Python Tutor — PPO + Monotonic GRU + LLM</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="/style.css?v=2" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="/favicon.svg" alt="Adaptive Python Tutor" width="32" height="32" />
+      <div>
+        <h1 class="brand-title">Adaptive Python Tutor</h1>
+        <div class="brand-sub">delayed_retention_ppo · monotonic_gru · Bounded LLM Realization</div>
+      </div>
+    </div>
+    <div class="topbar-controls">
+      <select id="profile-select" class="control-select" aria-label="Select learner profile"></select>
+      <input id="new-profile-name" class="answer-input" type="text" placeholder="New learner name..." aria-label="New learner name" />
+      <button id="create-profile-btn" class="btn btn-primary" type="button">Create Profile</button>
+      <button id="toggle-glass-box-btn" class="btn btn-lime" type="button">Glass-Box Inspector</button>
+    </div>
+  </header>
+
+  <main id="main-layout" class="layout">
+    <!-- Left Sidebar: Skill Prerequisite DAG -->
+    <aside class="card" aria-label="Skill Prerequisite DAG">
+      <h2 class="card-title">
+        <span>Skill Prerequisite DAG</span>
+        <span class="badge badge-lime">6 Skills</span>
+      </h2>
+      <div id="skill-dag-list" class="skill-dag-list"></div>
+    </aside>
+
+    <!-- Center Workspace: Path, Course Material, Question/Code & Curves -->
+    <section>
+      <div id="learning-path-card" class="card">
+        <h2 class="card-title">
+          <span id="path-title">Personalized Learning Path</span>
+          <span id="llm-status-badge" class="badge">LLM</span>
+        </h2>
+        <p id="path-summary" class="brand-sub">Select a learner profile and a Python skill to begin.</p>
+        <div id="path-steps" class="path-steps"></div>
+      </div>
+
+      <div id="course-material-card" class="card">
+        <h2 class="card-title">
+          <span>Course Material &amp; Subgoal Worked Example</span>
+          <span id="active-skill-badge" class="badge">Ready</span>
+        </h2>
+        <div id="course-material-body"></div>
+      </div>
+
+      <div id="workspace-card" class="card">
+        <h2 class="card-title">
+          <span id="workspace-title">Interactive Practice &amp; Assessment</span>
+          <span id="workspace-mode-badge" class="badge badge-amber">Idle</span>
+        </h2>
+        <div id="workspace-controls" class="topbar-controls">
+          <select id="question-source-select" class="control-select" aria-label="Question source">
+            <option value="v2.2">Source: v2.2 Bank (2,160 items)</option>
+            <option value="llm">Source: Fresh LLM Question</option>
+          </select>
+          <button id="ppo-next-btn" class="btn btn-primary" type="button">Next PPO Step</button>
+          <select id="manual-action-select" class="control-select" aria-label="Manual pedagogical override">
+            <option value="">Manual Override...</option>
+            <option value="0">0: Give Easier Question</option>
+            <option value="1">1: Give Same Difficulty</option>
+            <option value="2">2: Give Harder Question</option>
+            <option value="3">3: Explain Concept</option>
+            <option value="4">4: Show Worked Example</option>
+            <option value="5">5: Request Self-Explanation</option>
+            <option value="6">6: Review Prerequisite</option>
+            <option value="7">7: Advance Next Topic</option>
+          </select>
+          <button id="manual-step-btn" class="btn" type="button">Run Manual</button>
+        </div>
+        <div id="question-area"></div>
+        <div id="feedback-area"></div>
+      </div>
+
+      <div id="curve-card" class="card">
+        <h2 class="card-title">
+          <span>0–60 Day Retention Forecast (monotonic_gru)</span>
+          <span id="curve-status-badge" class="badge">Unassessed</span>
+        </h2>
+        <div id="curve-container" class="svg-curve-wrap"></div>
+      </div>
+    </section>
+
+    <!-- Right Panel: Toggleable Glass-Box Research Inspector -->
+    <aside id="glass-box-panel" class="card inspector-panel hidden" aria-label="Glass-Box Research Inspector">
+      <h2 class="card-title">
+        <span>Glass-Box Research Inspector</span>
+        <span class="badge badge-lime">Live</span>
+      </h2>
+      <div id="glass-box-body"></div>
+    </aside>
+  </main>
+
+  <script src="/app.js?v=4"></script>
+</body>
+</html>

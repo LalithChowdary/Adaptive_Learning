@@ -200,7 +200,81 @@ class AppTests(unittest.TestCase):
             with self.assertRaises(urllib.error.HTTPError) as e:urllib.request.urlopen(request)
             self.assertEqual(e.exception.code,403)
             request.add_header('X-Dashboard-Token',state['token'])
-            with urllib.request.urlopen(request) as r:self.assertIn('learner',json.load(r))
+            with urllib.request.urlopen(request) as r:learner_id=json.load(r)['learner']
+            with urllib.request.urlopen(f'{base}/api/ppo?learner={learner_id}&skill=range_boundaries') as r:
+                ppo_payload=json.load(r)
+                self.assertEqual(len(ppo_payload['observation_vector']),36)
+                self.assertEqual(len(ppo_payload['actions']),8)
         finally:server.shutdown();server.server_close();thread.join()
+    def test_ppo_state_observation_and_initial_mask(self):
+        ppo=self.app.ppo_state(self.learner,skill='range_boundaries',difficulty='easy')
+        self.assertEqual(ppo['obs_dim'],36)
+        self.assertEqual(len(ppo['observation_vector']),36)
+        self.assertTrue(all(0.0<=v<=1.0 for v in ppo['observation_vector']))
+        valid_ids=[a['id'] for a in ppo['actions'] if a['valid']]
+        self.assertEqual(valid_ids,[1,2,3,4])
+        self.assertAlmostEqual(sum(a['probability'] for a in ppo['actions']),1.0,places=5)
+        self.assertTrue(all(a['probability']==0.0 for a in ppo['actions'] if not a['valid']))
+        self.assertIn(ppo['recommended_action']['id'],valid_ids)
+    def test_ppo_step_lesson_gated_option_b_and_followup_question(self):
+        lesson=self.command('ppo_step',skill='range_boundaries',difficulty='easy',action_id=3)
+        self.assertEqual(lesson['kind'],'lesson')
+        self.assertEqual(lesson['ppo_action'],'explain_concept')
+        self.assertEqual(lesson['primed_mode'],'concept')
+        self.assertTrue(lesson['ppo']['state_summary']['awaiting_question'])
+        valid_after_lesson=[a['id'] for a in lesson['ppo']['actions'] if a['valid']]
+        self.assertEqual(valid_after_lesson,[1,2])
+        with self.assertRaises(ValueError):
+            self.command('ppo_step',skill='range_boundaries',difficulty='easy',action_id=3)
+        q=self.command('ppo_step',skill='range_boundaries',difficulty='easy',action_id=1)
+        self.assertIn('question',q)
+        self.assertEqual(q['ppo_action'],'give_same_difficulty_question')
+        ppo_during_q=self.app.ppo_state(self.learner,skill='range_boundaries',difficulty='easy')
+        self.assertFalse(ppo_during_q['state_summary']['awaiting_question'])
+    def test_ppo_self_explanation_unlocks_after_question_and_locks_after_use(self):
+        i=self.start();t=TASKS[i['task']]
+        self.command('submit',interaction=i['id'],answer=t['answer_key'])
+        self.command('finish',interaction=i['id'])
+        ppo_after_q=self.app.ppo_state(self.learner,skill='range_boundaries',difficulty='easy')
+        self.assertTrue(ppo_after_q['state_summary']['can_self_explain'])
+        self.assertTrue(ppo_after_q['actions'][5]['valid'])
+        se_q=self.command('ppo_step',skill='range_boundaries',difficulty='easy',format='single_choice',action_id=5)
+        self.assertEqual(se_q['ppo_action'],'request_self_explanation')
+        self.assertEqual(se_q['mode'],'assessment')
+        self.assertTrue(se_q.get('self_explanation_prompt'))
+        t_se=TASKS[se_q['task']]
+        self.command('submit',interaction=se_q['id'],answer=t_se['answer_key'])
+        self.command('finish',interaction=se_q['id'])
+        ppo_after_se=self.app.ppo_state(self.learner,skill='range_boundaries',difficulty='easy')
+        self.assertFalse(ppo_after_se['state_summary']['can_self_explain'])
+        self.assertFalse(ppo_after_se['actions'][5]['valid'])
+    def test_ppo_assisted_hint_sets_unverified_and_prereq_or_advance(self):
+        i=self.command('start',skill='loop_tracing',format='single_choice',difficulty='easy',mode='practice')
+        t=TASKS[i['task']]
+        self.command('hint',interaction=i['id'])
+        self.command('submit',interaction=i['id'],answer=t['answer_key'])
+        self.command('finish',interaction=i['id'])
+        ppo=self.app.ppo_state(self.learner,skill='loop_tracing',difficulty='easy')
+        self.assertTrue(ppo['state_summary']['unverified_assisted'])
+        self.assertGreater(ppo['state_summary']['last_leakage'],0.0)
+        self.assertTrue(ppo['actions'][6]['valid'])
+        self.assertTrue(ppo['actions'][7]['valid'])
+        verify_q=self.command('ppo_step',skill='loop_tracing',difficulty='easy',format='single_choice',action_id=1)
+        self.assertEqual(verify_q['mode'],'assessment')
+        self.command('submit',interaction=verify_q['id'],answer=TASKS[verify_q['task']]['answer_key'])
+        self.command('finish',interaction=verify_q['id'])
+        ppo_cleared=self.app.ppo_state(self.learner,skill='loop_tracing',difficulty='easy')
+        self.assertFalse(ppo_cleared['state_summary']['unverified_assisted'])
+    def test_curve_format_selector_and_difficulty_monotonicity(self):
+        c=self.app.curve(self.learner,'range_boundaries',fmt='single_choice')
+        self.assertEqual(c['format'],'single_choice')
+        self.assertIn('curves_by_difficulty',c)
+        self.assertIn('diagnostics',c)
+        for idx in range(len(c['points'])):
+            pe=c['curves_by_difficulty']['easy'][idx]['probability']
+            pm=c['curves_by_difficulty']['medium'][idx]['probability']
+            ph=c['curves_by_difficulty']['hard'][idx]['probability']
+            self.assertGreater(pe,pm)
+            self.assertGreater(pm,ph)
 
 if __name__=='__main__':unittest.main(verbosity=2)

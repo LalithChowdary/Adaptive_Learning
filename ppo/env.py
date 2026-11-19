@@ -239,6 +239,7 @@ class AdaptiveTutorEnv:
         self.last_hints = {}
         self.last_leakage = {}
         self.attempts_on_topic = {}
+        self.can_self_explain = {}
         self.visited_topics = set()
         self.used_tasks = set()
 
@@ -276,6 +277,7 @@ class AdaptiveTutorEnv:
         self.last_hints = {}
         self.last_leakage = {}
         self.attempts_on_topic = {}
+        self.can_self_explain = {s: False for s in SKILLS_ORDER}
         self.visited_topics = {SKILLS_ORDER[0]}
 
         for skill in SKILLS_ORDER:
@@ -341,6 +343,18 @@ class AdaptiveTutorEnv:
         for skill in SKILLS_ORDER:
             self._refresh_metrics(skill)
 
+    def _weak_prereqs_or_decayed(self, skill):
+        prereqs = [
+            p for p in PREREQUISITES[skill]
+            if self.metrics_cache[p]["p_30d"] < 0.56 or self.metrics_cache[p]["floor_b"] < 0.40
+        ]
+        if prereqs:
+            return prereqs
+        return [
+            s for s in self.visited_topics
+            if s != skill and (self.metrics_cache[s]["p_30d"] < 0.52 or self.metrics_cache[s]["floor_b"] < 0.36)
+        ]
+
     def valid_action_mask(self):
         mask = np.zeros(len(ACTIONS), dtype=bool)
         if self.done:
@@ -363,14 +377,11 @@ class AdaptiveTutorEnv:
             mask[3] = True
             mask[4] = True
         skill = self._current_skill()
-        if self.attempts_on_topic[skill] >= 1:
+        if self.can_self_explain[skill]:
             mask[5] = True
+        if self.attempts_on_topic[skill] >= 1:
             mask[7] = True
-        prereqs = PREREQUISITES[skill]
-        has_decayed_visited = any(
-            s != skill and self.metrics_cache[s]["p_30d"] < 0.58 for s in self.visited_topics
-        )
-        if prereqs or has_decayed_visited:
+        if self._weak_prereqs_or_decayed(skill):
             mask[6] = True
         return mask
 
@@ -589,6 +600,7 @@ class AdaptiveTutorEnv:
         }
 
         self.attempts_on_topic[skill] += 1
+        self.can_self_explain[skill] = True
         self.last_score[skill] = score
         self.last_hints[skill] = float(hints_used)
         self.last_leakage[skill] = float(max_leak)
@@ -691,14 +703,14 @@ class AdaptiveTutorEnv:
         before = self._latent_strength_at(skill, self.clock)
         cur_floor = min(before, st["floor"])
         if full:
-            after = _SIM.learned(before, self.params[skill]["learning_rate"], 0.48 * lr_scale)
+            after = _SIM.learned(before, self.params[skill]["learning_rate"], 0.18 * lr_scale)
             transient = max(0.0, after - cur_floor)
-            new_floor = min(after, cur_floor + 0.62 * transient + 0.08 * (1.0 - cur_floor))
+            new_floor = min(after, cur_floor + 0.72 * transient + 0.05 * (1.0 - cur_floor))
             n_right = st["n_right"] + 1.5
             n_wrong = st["n_wrong"]
             self.unverified_assisted[skill] = False
         else:
-            after = _SIM.learned(before, self.params[skill]["learning_rate"], 0.15 * score * lr_scale)
+            after = _SIM.learned(before, self.params[skill]["learning_rate"], 0.06 * score * lr_scale)
             new_floor = min(after, cur_floor + 0.20 * (after - before))
             n_right = st["n_right"]
             n_wrong = st["n_wrong"] + 0.6
@@ -711,6 +723,7 @@ class AdaptiveTutorEnv:
             "last_time": self.clock,
         }
         self.attempts_on_topic[skill] += 1
+        self.can_self_explain[skill] = False
         self.last_score[skill] = score
         self.last_hints[skill] = 0.0
         self.last_leakage[skill] = 0.0
@@ -727,6 +740,7 @@ class AdaptiveTutorEnv:
             raise ValueError(f"Invalid masked action {action} ({ACTIONS[action]})")
 
         prev_p30 = float(np.mean([self.metrics_cache[s]["p_30d"] for s in SKILLS_ORDER]))
+        prev_min_p30 = float(min(self.metrics_cache[s]["p_30d"] for s in SKILLS_ORDER))
         prev_floor = float(np.mean([self.metrics_cache[s]["floor_b"] for s in SKILLS_ORDER]))
         skill = self._current_skill()
         cleared_unverified = False
@@ -754,15 +768,12 @@ class AdaptiveTutorEnv:
             if was_unverified and not self.unverified_assisted[skill]:
                 cleared_unverified = True
         elif action == 6:
-            prereqs = PREREQUISITES[skill]
-            if prereqs:
-                target = min(prereqs, key=lambda p: self.metrics_cache[p]["p_30d"])
-            else:
-                target = min(self.visited_topics, key=lambda s: self.metrics_cache[s]["p_30d"])
+            candidates = self._weak_prereqs_or_decayed(skill)
+            target = min(candidates, key=lambda s: self.metrics_cache[s]["p_30d"])
             self.topic_idx = SKILLS_ORDER.index(target)
             self.visited_topics.add(target)
             self.difficulty_idx = 0 if self.metrics_cache[target]["p_med"] < 0.48 else 1
-            self.primed_mode = "concept"
+            self.primed_mode = None
             outcome = self._emit_question_turn(target, DIFFICULTIES[self.difficulty_idx], allow_help=True)
             immediate_score = outcome["first_attempt_score"]
         elif action == 7:
@@ -791,9 +802,11 @@ class AdaptiveTutorEnv:
             self._refresh_all_metrics()
 
         new_p30 = float(np.mean([self.metrics_cache[s]["p_30d"] for s in SKILLS_ORDER]))
+        new_min_p30 = float(min(self.metrics_cache[s]["p_30d"] for s in SKILLS_ORDER))
         new_floor = float(np.mean([self.metrics_cache[s]["floor_b"] for s in SKILLS_ORDER]))
         shaping_reward = (
             2.0 * (new_p30 - prev_p30)
+            + 1.5 * (new_min_p30 - prev_min_p30)
             + 1.5 * (new_floor - prev_floor)
             + (0.08 if cleared_unverified else 0.0)
             - (0.04 if premature_advance else 0.0)

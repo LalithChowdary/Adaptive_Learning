@@ -99,8 +99,9 @@ class PPOTests(unittest.TestCase):
         self.assertIn("day_30", delayed)
 
         floor_before_se = env.latent[skill]["floor"]
-        env.step(5)  # request_self_explanation
+        _, _, _, mask_after_se, _ = env.step(5)  # request_self_explanation
         self.assertGreaterEqual(env.latent[skill]["floor"], floor_before_se)
+        self.assertFalse(mask_after_se[5])
 
     def test_masked_actor_critic_never_selects_invalid_actions_and_updates(self):
         torch.manual_seed(0)

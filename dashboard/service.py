@@ -4,9 +4,10 @@ import math
 import random
 import time
 import uuid
-from catalogue import TASKS, SKILLS, FORMATS, features, public_task, hint, solution
+from catalogue import TASKS, SKILLS, FORMATS, LESSONS, features, public_task, hint, solution
 from grading import grade
 from memory_service import MemoryService
+from ppo_service import PPOTutorService
 from store import Store
 
 FEATURE_FIELDS=('event_type','gap_seconds','new_session','task','attempt_number','active_response_seconds','relative_response_time','hint_count','hint_type','answer_revealed','assistance','score','full_success','grading_status')
@@ -14,8 +15,13 @@ FEATURE_FIELDS=('event_type','gap_seconds','new_session','task','attempt_number'
 class Dashboard:
     def __init__(self,path,device='auto',max_hints=3,max_retries=2):
         if not 0<=max_hints<=3 or not 0<=max_retries<=10: raise ValueError('Hints: 0–3; retries: 0–10')
-        self.store=Store(path); self.memory=MemoryService(device); self.max_hints=max_hints; self.max_retries=max_retries
+        self.store=Store(path); self.memory=MemoryService(device); self.ppo=PPOTutorService(self.memory.device)
+        self.max_hints=max_hints; self.max_retries=max_retries
         self.references={s:[next(t for t in TASKS.values() if t['skill_id']==s and t['difficulty']=='medium' and t['task_type']==f and t['pool']=='assessment') for f in FORMATS] for s in SKILLS}
+        self.references_by_diff={
+            (s,f,d):next(t for t in TASKS.values() if t['skill_id']==s and t['task_type']==f and t['difficulty']==d and t['pool']=='assessment')
+            for s in SKILLS for f in FORMATS for d in ('easy','medium','hard')
+        }
 
     def profile(self,learner):
         row=self.store.db.execute('SELECT * FROM profiles WHERE id=?',(learner,)).fetchone()
@@ -38,8 +44,25 @@ class Dashboard:
         self.store.db.execute('INSERT INTO events(learner,skill,interaction,at,kind,payload) VALUES(?,?,?,?,?,?)',
                              (item['learner'],item['skill'],item['id'],now,kind,json.dumps(payload)))
 
+    def emit_instruction(self,learner,skill,now,ppo_action,primed_mode):
+        events=self.store.events(learner,skill)
+        fields={k:None for k in FEATURE_FIELDS}
+        fields.update(event_type='instruction',gap_seconds=None if not events else max(0,now-events[-1]['at']),
+                      new_session=None if not events else False,task=None)
+        payload=dict(features=fields,source='real_local_session',schema_version='dashboard-1',
+                     model_sha256=self.memory.version,ppo_action=ppo_action,primed_mode=primed_mode)
+        self.store.db.execute('INSERT INTO events(learner,skill,interaction,at,kind,payload) VALUES(?,?,?,?,?,?)',
+                             (learner,skill,f'lesson-{uuid.uuid4()}',now,'instruction',json.dumps(payload)))
+
     def predict(self,learner,skill,task,now):
         return self.memory.predict(self.store.events(learner,skill),features(task),now,key=(learner,skill,self.memory.version))
+
+    def ppo_state(self,learner,skill=None,difficulty=None,now=None):
+        self.profile(learner)
+        now=time.time() if now is None else now
+        items=self.store.interactions(learner)
+        all_events=self.store.events(learner)
+        return self.ppo.recommend(self.memory,learner,items,all_events,now,focus_skill=skill,focus_difficulty=difficulty)
 
     def public(self,item):
         t=TASKS[item['task']]
@@ -49,15 +72,16 @@ class Dashboard:
         if item.get('revealed'): data['solution']=solution(t)
         return data
 
-    def bootstrap(self,learner=None):
+    def bootstrap(self,learner=None,skill=None,difficulty=None):
         profiles=[dict(r) for r in self.store.db.execute('SELECT * FROM profiles ORDER BY created')]
-        result=dict(profiles=profiles,skills=[dict(id=k,name=v[0],description=v[1],number=v[2]) for k,v in SKILLS.items()],formats=list(FORMATS),device=self.memory.device,model='Monotonic GRU · v2.2',model_sha256=self.memory.version)
+        result=dict(profiles=profiles,skills=[dict(id=k,name=v[0],description=v[1],number=v[2]) for k,v in SKILLS.items()],formats=list(FORMATS),device=self.memory.device,model='Monotonic GRU · v2.2',model_sha256=self.memory.version,ppo_model='Delayed-Retention PPO · 8-Action Ensemble',ppo_sha256=self.ppo.version)
         if learner:
             self.profile(learner); result['learner']=learner
             items=self.store.interactions(learner)
             active=next((i for i in reversed(items) if not i['closed']),None)
             result['active']=self.public(active) if active else None
             result['progress']=self.progress(learner)
+            result['ppo']=self.ppo_state(learner,skill=skill or (active['skill'] if active else None),difficulty=difficulty)
         return result
 
     def progress(self,learner):
@@ -78,16 +102,31 @@ class Dashboard:
             history=[dict(id=i['id'],skill=SKILLS[i['skill']][0],format=TASKS[i['task']]['task_type'],at=i['created'],
                           mode=i['mode'],hints=len(i['hints']),results=i['results'],status=i['status']) for i in reversed(items)])
 
-    def curve(self,learner,skill,task_id=None):
+    def curve(self,learner,skill,task_id=None,fmt=None):
         self.profile(learner)
         if skill not in SKILLS: raise ValueError('Unknown skill')
-        task=TASKS[task_id] if task_id else self.references[skill][2]
+        if task_id:
+            task=TASKS[task_id]
+        elif fmt and fmt in FORMATS:
+            task=self.references_by_diff[(skill,fmt,'medium')]
+        else:
+            task=self.references[skill][2]
         if task['skill_id']!=skill: raise ValueError('Task does not match skill')
         now=time.time()
         ev=self.store.events(learner,skill)
         assessed=any(e['kind']=='grade' and e['features']['grading_status']=='resolved' for e in ev)
-        return dict(skill=skill,assessed=assessed,task=dict(task_id=task['task_id'],difficulty=task['difficulty'],task_type=task['task_type']),
-                    points=[dict(day=d,probability=self.predict(learner,skill,task,now+d*86400)) for d in (0,1,3,7,14,30,45,60)])
+        days=(0,1,3,7,14,30,45,60)
+        active_fmt=task['task_type']
+        curves_by_difficulty={
+            diff:[dict(day=d,probability=self.predict(learner,skill,self.references_by_diff[(skill,active_fmt,diff)],now+d*86400)) for d in days]
+            for diff in ('easy','medium','hard')
+        }
+        diagnostics=self.ppo.query_skill_metrics(self.memory,ev,now,key=(learner,skill,self.memory.version))
+        return dict(skill=skill,assessed=assessed,format=active_fmt,
+                    task=dict(task_id=task['task_id'],difficulty=task['difficulty'],task_type=task['task_type']),
+                    points=[dict(day=d,probability=self.predict(learner,skill,task,now+d*86400)) for d in days],
+                    curves_by_difficulty=curves_by_difficulty,
+                    diagnostics=diagnostics)
 
     def command(self,action,data):
         request=data.get('request_id')
@@ -104,6 +143,24 @@ class Dashboard:
             self.memory.cache.clear()
             raise
 
+    def _open_question(self,learner,items,skill,fmt,difficulty,mode,now,extra_fields=None):
+        if mode not in ('practice','assessment'): raise ValueError('Unknown mode')
+        pool='practice' if mode=='practice' else 'assessment'
+        used={i['task'] for i in items}
+        candidates=[t for t in TASKS.values() if t['skill_id']==skill and t['difficulty']==difficulty and t['pool']==pool and t['task_id'] not in used and (fmt=='mixed' or t['task_type']==fmt)]
+        if not candidates and fmt!='mixed':
+            candidates=[t for t in TASKS.values() if t['skill_id']==skill and t['difficulty']==difficulty and t['pool']==pool and t['task_id'] not in used]
+        if not candidates: raise ValueError('No unseen questions remain for these filters. Choose another format or difficulty.')
+        task=random.SystemRandom().choice(candidates); order=[o['id'] for o in task['options']]; random.SystemRandom().shuffle(order)
+        prediction=self.predict(learner,skill,task,now)
+        item=dict(id=str(uuid.uuid4()),learner=learner,skill=skill,task=task['task_id'],created=now,attempt_started=now,
+                  mode=mode,original_mode=mode,status='answering',attempt=1,hints=[],results=[],closed=False,revealed=False,
+                  order=order,prediction=prediction,assessment_incomplete=False)
+        if extra_fields:
+            item.update(extra_fields)
+        self.emit(item,'task',now,prediction_before=prediction,prediction_task=features(task),mode=mode)
+        self.store.save(item); return self.public(item)
+
     def _command(self,action,data):
         now=time.time()
         if action=='profile':
@@ -116,19 +173,55 @@ class Dashboard:
         items=self.store.interactions(learner)
         if action=='start':
             if any(not i['closed'] for i in items): raise ValueError('Finish or leave the current question first.')
-            skill=data.get('skill'); fmt=data.get('format'); difficulty=data.get('difficulty','easy'); mode=data.get('mode','practice')
-            if mode not in ('practice','assessment'): raise ValueError('Unknown mode')
-            pool='practice' if mode=='practice' else 'assessment'
+            skill=data.get('skill'); fmt=data.get('format','mixed'); difficulty=data.get('difficulty','easy'); mode=data.get('mode','practice')
             used={i['task'] for i in items}
+            pool='practice' if mode=='practice' else 'assessment'
+            if mode not in ('practice','assessment'): raise ValueError('Unknown mode')
             candidates=[t for t in TASKS.values() if t['skill_id']==skill and t['difficulty']==difficulty and t['pool']==pool and t['task_id'] not in used and (fmt=='mixed' or t['task_type']==fmt)]
             if not candidates: raise ValueError('No unseen questions remain for these filters. Choose another format or difficulty.')
-            task=random.SystemRandom().choice(candidates); order=[o['id'] for o in task['options']]; random.SystemRandom().shuffle(order)
-            prediction=self.predict(learner,skill,task,now)
-            item=dict(id=str(uuid.uuid4()),learner=learner,skill=skill,task=task['task_id'],created=now,attempt_started=now,
-                      mode=mode,original_mode=mode,status='answering',attempt=1,hints=[],results=[],closed=False,revealed=False,
-                      order=order,prediction=prediction,assessment_incomplete=False)
-            self.emit(item,'task',now,prediction_before=prediction,prediction_task=features(task),mode=mode)
-            self.store.save(item); return self.public(item)
+            return self._open_question(learner,items,skill,fmt,difficulty,mode,now)
+        if action=='ppo_step':
+            if any(not i['closed'] for i in items): raise ValueError('Finish or leave the current question first.')
+            focus_skill=data.get('skill')
+            focus_diff=data.get('difficulty')
+            fmt=data.get('format','mixed')
+            all_events=self.store.events(learner)
+            ppo_rec=self.ppo.recommend(self.memory,learner,items,all_events,now,focus_skill=focus_skill,focus_difficulty=focus_diff)
+            action_id=ppo_rec['recommended_action']['id'] if data.get('action_id') is None else int(data.get('action_id'))
+            act_entry=next((a for a in ppo_rec['actions'] if a['id']==action_id),None)
+            if act_entry is None: raise ValueError('Unknown PPO action.')
+            if not act_entry['valid']: raise ValueError(act_entry['mask_reason'] or 'This PPO action is masked in the current state.')
+            metrics_by_skill={
+                s:self.ppo.query_skill_metrics(self.memory,[e for e in all_events if e['skill']==s],now,key=(learner,s,self.memory.version))
+                for s in SKILLS
+            }
+            ctx=self.ppo.reconstruct_context(items,all_events,focus_skill=ppo_rec['focus_skill'],focus_difficulty=ppo_rec['focus_difficulty'])
+            target=self.ppo.resolve_action_target(action_id,ctx,metrics_by_skill)
+            if target['kind']=='lesson':
+                self.emit_instruction(learner,target['skill'],now,act_entry['name'],target['primed_mode'])
+                updated_ppo=self.ppo_state(learner,skill=target['skill'],difficulty=target['difficulty'],now=now)
+                return dict(
+                    kind='lesson',
+                    ppo_action=act_entry['name'],
+                    ppo_label=act_entry['label'],
+                    ppo_badge=act_entry['badge'],
+                    skill=target['skill'],
+                    skill_name=SKILLS[target['skill']][0],
+                    difficulty=target['difficulty'],
+                    primed_mode=target['primed_mode'],
+                    lesson=target['lesson'],
+                    ppo=updated_ppo,
+                )
+            extra_fields=dict(
+                ppo_action=act_entry['name'],
+                ppo_label=act_entry['label'],
+                ppo_badge=act_entry['badge'],
+            )
+            if target.get('self_explanation_prompt'):
+                extra_fields['self_explanation_prompt']=target['self_explanation_prompt']
+            if target.get('review_reason'):
+                extra_fields['review_reason']=target['review_reason']
+            return self._open_question(learner,items,target['skill'],fmt,target['difficulty'],target['mode'],now,extra_fields=extra_fields)
         item=next((i for i in items if i['id']==data.get('interaction')),None)
         if not item: raise ValueError('Question not found for this learner.')
         if item['closed']: raise ValueError('This question is already closed.')
