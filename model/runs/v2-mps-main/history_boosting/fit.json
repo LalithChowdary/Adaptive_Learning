@@ -1,0 +1,20 @@
+{
+  "device": "cpu",
+  "validation_delayed_log_loss": 0.605919599583133,
+  "trials": [
+    {
+      "parameters": {
+        "max_leaf_nodes": 15,
+        "max_iter": 120
+      },
+      "validation_delayed_log_loss": 0.605919599583133
+    },
+    {
+      "parameters": {
+        "max_leaf_nodes": 31,
+        "max_iter": 160
+      },
+      "validation_delayed_log_loss": 0.6098179793318114
+    }
+  ]
+}

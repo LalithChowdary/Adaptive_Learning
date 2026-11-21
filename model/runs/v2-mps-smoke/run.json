@@ -1,0 +1,3633 @@
+{
+  "status": "completed",
+  "mode": "smoke",
+  "recurrent_device": "mps",
+  "mps_cpu_fallback_enabled": false,
+  "seed": 20261109,
+  "epochs": 1,
+  "batch_size": 256,
+  "selection_tolerance": 0.001,
+  "dataset": "/Users/lalith/snu/sem7/minor_pro/code/3/data_Set/v2/dataset",
+  "dataset_manifests": {
+    "pilot": "6fbb4a16d406f06f82274083dba250ae6028245a7982b00102c07ac7b3b22ab5"
+  },
+  "implementation_sha256": {
+    "run.py": "947add278ea1c299403ca414126c0874c24cedf600ea9b7c6101b463d5cd5b10",
+    "memory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "memory/data.py": "71a42aa23d63fa6923e112a64a328608ec6c18d626c0188079d2d805ee236b90",
+    "memory/evaluation.py": "df70fe62a53af63a4d32462fd536aa12c3bfee096e22670a626fa825d5ea61f7",
+    "memory/features.py": "34f1157b0be4fc82fa091563726b725ae1893d6648927742c53fc0e4c076d257",
+    "memory/recurrent.py": "4a9be8948a82050c99cefbfcf0f3d86dafda30925330864963871f02fbf5cb3b",
+    "memory/tabular.py": "bd96c17e8e622c8084a882cbd522f3a504d363e6fe837fd69ff5c880da404fed",
+    "memory/training.py": "31cc66eec30618aa14b3bde2d185a6d41b98ea0b8e02f9f900c06a4e8c2b6430"
+  },
+  "environment": {
+    "python": "3.12.14",
+    "architecture": "arm64",
+    "macos": "27.0.1",
+    "torch": "2.14.1",
+    "numpy": "2.3.5",
+    "scikit_learn": "1.9.1"
+  },
+  "models": {
+    "task_logistic": {
+      "device": "cpu",
+      "validation_delayed_log_loss": 0.6242022494002285,
+      "trials": [
+        {
+          "parameters": {
+            "C": 0.1
+          },
+          "validation_delayed_log_loss": 0.6242022494002285
+        },
+        {
+          "parameters": {
+            "C": 1.0
+          },
+          "validation_delayed_log_loss": 0.6285981590410173
+        }
+      ]
+    },
+    "history_logistic": {
+      "device": "cpu",
+      "validation_delayed_log_loss": 0.6652560959396903,
+      "trials": [
+        {
+          "parameters": {
+            "C": 0.1
+          },
+          "validation_delayed_log_loss": 0.6685862775462038
+        },
+        {
+          "parameters": {
+            "C": 1.0
+          },
+          "validation_delayed_log_loss": 0.6652560959396903
+        }
+      ]
+    },
+    "history_boosting": {
+      "device": "cpu",
+      "validation_delayed_log_loss": 0.6856573093605774,
+      "trials": [
+        {
+          "parameters": {
+            "max_leaf_nodes": 15,
+            "max_iter": 120
+          },
+          "validation_delayed_log_loss": 0.6856573093605774
+        },
+        {
+          "parameters": {
+            "max_leaf_nodes": 31,
+            "max_iter": 160
+          },
+          "validation_delayed_log_loss": 0.8099088152841821
+        }
+      ]
+    },
+    "time_input_gru": {
+      "device": "mps:0",
+      "verified_gradient_device": "mps:0",
+      "hidden_size": 32,
+      "best_epoch": 1,
+      "validation_delayed_log_loss": 0.691726422003673,
+      "learning_curve": [
+        {
+          "epoch": 1,
+          "train_log_loss": 0.7129733956975045,
+          "validation_delayed_log_loss": 0.691726422003673,
+          "seconds": 0.572
+        }
+      ]
+    },
+    "time_decay_gru": {
+      "device": "mps:0",
+      "verified_gradient_device": "mps:0",
+      "hidden_size": 32,
+      "best_epoch": 1,
+      "validation_delayed_log_loss": 0.6911244720263151,
+      "learning_curve": [
+        {
+          "epoch": 1,
+          "train_log_loss": 0.7147777969031025,
+          "validation_delayed_log_loss": 0.6911244720263151,
+          "seconds": 0.311
+        }
+      ]
+    }
+  },
+  "evaluation": {
+    "pilot_validation": {
+      "metrics": {
+        "task_logistic": {
+          "all": {
+            "queries": 1619,
+            "learners": 12,
+            "log_loss": 0.6157346066034903,
+            "brier": 0.21117315992624625,
+            "ece_10": 0.0622055987247057,
+            "calibration": [
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 23,
+                "mean_prediction": 0.18990753591060638,
+                "observed_rate": 0.21739129722118378
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 115,
+                "mean_prediction": 0.26514759348786393,
+                "observed_rate": 0.2956521809101105
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 142,
+                "mean_prediction": 0.36102802778633547,
+                "observed_rate": 0.26760563254356384
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 226,
+                "mean_prediction": 0.44146017703862317,
+                "observed_rate": 0.3407079577445984
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 91,
+                "mean_prediction": 0.5489825907644335,
+                "observed_rate": 0.5494505763053894
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 361,
+                "mean_prediction": 0.646020823073189,
+                "observed_rate": 0.6121883392333984
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 298,
+                "mean_prediction": 0.7645048181082579,
+                "observed_rate": 0.7348993420600891
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 233,
+                "mean_prediction": 0.8657414450154284,
+                "observed_rate": 0.7381974458694458
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 130,
+                "mean_prediction": 0.9287571448546189,
+                "observed_rate": 0.8538461327552795
+              }
+            ]
+          },
+          "practice": {
+            "queries": 1418,
+            "learners": 12,
+            "log_loss": 0.6145847835474018,
+            "brier": 0.21067612236922859,
+            "ece_10": 0.05919620830812642,
+            "calibration": [
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 19,
+                "mean_prediction": 0.18990753591060638,
+                "observed_rate": 0.21052631735801697
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 94,
+                "mean_prediction": 0.2651326117363382,
+                "observed_rate": 0.28723403811454773
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 122,
+                "mean_prediction": 0.36006437119890433,
+                "observed_rate": 0.2786885201931
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 194,
+                "mean_prediction": 0.4404107487386035,
+                "observed_rate": 0.36082473397254944
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 80,
+                "mean_prediction": 0.5487008556723595,
+                "observed_rate": 0.5625
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 312,
+                "mean_prediction": 0.6452852029066819,
+                "observed_rate": 0.6121794581413269
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 263,
+                "mean_prediction": 0.7651127415918125,
+                "observed_rate": 0.730038046836853
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 218,
+                "mean_prediction": 0.865764278610912,
+                "observed_rate": 0.7431192398071289
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 116,
+                "mean_prediction": 0.928527622387327,
+                "observed_rate": 0.8534482717514038
+              }
+            ]
+          },
+          "ordinary": {
+            "queries": 1057,
+            "learners": 12,
+            "log_loss": 0.6143032595866249,
+            "brier": 0.21081648483370596,
+            "ece_10": 0.04572909079358164,
+            "calibration": [
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 11,
+                "mean_prediction": 0.18990753591060638,
+                "observed_rate": 0.27272728085517883
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 69,
+                "mean_prediction": 0.2653984379941139,
+                "observed_rate": 0.30434781312942505
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 100,
+                "mean_prediction": 0.3579166132211685,
+                "observed_rate": 0.3100000023841858
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 146,
+                "mean_prediction": 0.4408683684998996,
+                "observed_rate": 0.3904109597206116
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 64,
+                "mean_prediction": 0.5494568143039942,
+                "observed_rate": 0.53125
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 230,
+                "mean_prediction": 0.6460102972776993,
+                "observed_rate": 0.6391304135322571
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 199,
+                "mean_prediction": 0.7648620833104579,
+                "observed_rate": 0.7537688612937927
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 152,
+                "mean_prediction": 0.866865516493195,
+                "observed_rate": 0.7171052694320679
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 86,
+                "mean_prediction": 0.9286042313243068,
+                "observed_rate": 0.8720930218696594
+              }
+            ]
+          },
+          "followup": {
+            "queries": 361,
+            "learners": 12,
+            "log_loss": 0.6154090794657978,
+            "brier": 0.2102651441837644,
+            "ece_10": 0.11133933286092289,
+            "calibration": [
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 8,
+                "mean_prediction": 0.18990753591060638,
+                "observed_rate": 0.125
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 25,
+                "mean_prediction": 0.26439893126487735,
+                "observed_rate": 0.23999999463558197
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 22,
+                "mean_prediction": 0.3698269074613398,
+                "observed_rate": 0.13636364042758942
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 48,
+                "mean_prediction": 0.4390188219646613,
+                "observed_rate": 0.2708333432674408
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 16,
+                "mean_prediction": 0.5456770211458206,
+                "observed_rate": 0.6875
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 82,
+                "mean_prediction": 0.6432514016221209,
+                "observed_rate": 0.5365853905677795
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 64,
+                "mean_prediction": 0.7658921321853995,
+                "observed_rate": 0.65625
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 66,
+                "mean_prediction": 0.8632280943971692,
+                "observed_rate": 0.8030303120613098
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 30,
+                "mean_prediction": 0.9283080101013184,
+                "observed_rate": 0.800000011920929
+              }
+            ]
+          },
+          "assessment": {
+            "queries": 201,
+            "learners": 12,
+            "log_loss": 0.6238462936359965,
+            "brier": 0.21467962388570405,
+            "ece_10": 0.09799884697098045,
+            "calibration": [
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 4,
+                "mean_prediction": 0.18990753591060638,
+                "observed_rate": 0.25
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 21,
+                "mean_prediction": 0.26521465466136024,
+                "observed_rate": 0.3333333432674408
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 20,
+                "mean_prediction": 0.3669063329696655,
+                "observed_rate": 0.20000000298023224
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 32,
+                "mean_prediction": 0.44782233610749245,
+                "observed_rate": 0.21875
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 11,
+                "mean_prediction": 0.5510315732522444,
+                "observed_rate": 0.4545454680919647
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 49,
+                "mean_prediction": 0.6507047718884994,
+                "observed_rate": 0.6122449040412903
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 35,
+                "mean_prediction": 0.7599367073604039,
+                "observed_rate": 0.7714285850524902
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 15,
+                "mean_prediction": 0.8654095967610677,
+                "observed_rate": 0.6666666865348816
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 14,
+                "mean_prediction": 0.9306589024407523,
+                "observed_rate": 0.8571428656578064
+              }
+            ]
+          },
+          "day_1": {
+            "queries": 67,
+            "learners": 12,
+            "log_loss": 0.53268289256866,
+            "brier": 0.17892413929289708,
+            "ece_10": 0.10206810018019888,
+            "calibration": [
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 3,
+                "mean_prediction": 0.18990753591060638,
+                "observed_rate": 0.3333333432674408
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 7,
+                "mean_prediction": 0.26560098784310476,
+                "observed_rate": 0.2857142984867096
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 7,
+                "mean_prediction": 0.3644724828856332,
+                "observed_rate": 0.4285714328289032
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 8,
+                "mean_prediction": 0.44071270152926445,
+                "observed_rate": 0.25
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 2,
+                "mean_prediction": 0.5348346829414368,
+                "observed_rate": 0.5
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 17,
+                "mean_prediction": 0.6586391049272874,
+                "observed_rate": 0.8235294222831726
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 14,
+                "mean_prediction": 0.7636929069246564,
+                "observed_rate": 0.7142857313156128
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 2,
+                "mean_prediction": 0.8849168717861176,
+                "observed_rate": 1.0
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 7,
+                "mean_prediction": 0.9287962317466736,
+                "observed_rate": 1.0
+              }
+            ]
+          },
+          "day_7": {
+            "queries": 68,
+            "learners": 12,
+            "log_loss": 0.6341883735106871,
+            "brier": 0.22096400041834935,
+            "ece_10": 0.14832066634998603,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 10,
+                "mean_prediction": 0.26501320898532865,
+                "observed_rate": 0.5
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 3,
+                "mean_prediction": 0.35812950134277344,
+                "observed_rate": 0.3333333432674408
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 13,
+                "mean_prediction": 0.44447728303762585,
+                "observed_rate": 0.23076923191547394
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 7,
+                "mean_prediction": 0.5537564328738621,
+                "observed_rate": 0.4285714328289032
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 17,
+                "mean_prediction": 0.6539493623901816,
+                "observed_rate": 0.7058823704719543
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 11,
+                "mean_prediction": 0.7570824948224154,
+                "observed_rate": 0.9090909361839294
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 5,
+                "mean_prediction": 0.8658998250961304,
+                "observed_rate": 0.6000000238418579
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 2,
+                "mean_prediction": 0.938701868057251,
+                "observed_rate": 1.0
+              }
+            ]
+          },
+          "day_30": {
+            "queries": 66,
+            "learners": 12,
+            "log_loss": 0.7057354821213386,
+            "brier": 0.244502046059919,
+            "ece_10": 0.26947065171870316,
+            "calibration": [
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 1,
+                "mean_prediction": 0.18990753591060638,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 4,
+                "mean_prediction": 0.26504218578338623,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 10,
+                "mean_prediction": 0.3712430775165558,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 11,
+                "mean_prediction": 0.4569462239742279,
+                "observed_rate": 0.1818181872367859
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 2,
+                "mean_prediction": 0.5576914548873901,
+                "observed_rate": 0.5
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 15,
+                "mean_prediction": 0.6380353252092997,
+                "observed_rate": 0.2666666805744171
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 10,
+                "mean_prediction": 0.7578176617622375,
+                "observed_rate": 0.699999988079071
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 8,
+                "mean_prediction": 0.8602263852953911,
+                "observed_rate": 0.625
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 5,
+                "mean_prediction": 0.930049455165863,
+                "observed_rate": 0.6000000238418579
+              }
+            ]
+          },
+          "format/code_completion": {
+            "queries": 334,
+            "learners": 12,
+            "log_loss": 0.6207200218870917,
+            "brier": 0.2153661703715623,
+            "ece_10": 0.06615570763092556,
+            "calibration": [
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 23,
+                "mean_prediction": 0.18990753591060638,
+                "observed_rate": 0.21739129722118378
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 45,
+                "mean_prediction": 0.2658824622631073,
+                "observed_rate": 0.24444444477558136
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 41,
+                "mean_prediction": 0.3660711348056793,
+                "observed_rate": 0.3414634168148041
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 77,
+                "mean_prediction": 0.43551004861856435,
+                "observed_rate": 0.33766233921051025
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 32,
+                "mean_prediction": 0.5380551535636187,
+                "observed_rate": 0.71875
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 70,
+                "mean_prediction": 0.6365507023675101,
+                "observed_rate": 0.5714285969734192
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 46,
+                "mean_prediction": 0.769234845171804,
+                "observed_rate": 0.804347813129425
+              }
+            ]
+          },
+          "format/fill_in_the_blank": {
+            "queries": 315,
+            "learners": 12,
+            "log_loss": 0.6664116018495564,
+            "brier": 0.23165898510054694,
+            "ece_10": 0.077345619693635,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 30,
+                "mean_prediction": 0.2644916772842407,
+                "observed_rate": 0.30000001192092896
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 1,
+                "mean_prediction": 0.3039398193359375,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 68,
+                "mean_prediction": 0.43294841883813634,
+                "observed_rate": 0.3382352888584137
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 3,
+                "mean_prediction": 0.5088363289833069,
+                "observed_rate": 0.3333333432674408
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 108,
+                "mean_prediction": 0.6412042986463617,
+                "observed_rate": 0.6388888955116272
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 28,
+                "mean_prediction": 0.764196087207113,
+                "observed_rate": 0.7142857313156128
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 43,
+                "mean_prediction": 0.8283242153566938,
+                "observed_rate": 0.6279069781303406
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 34,
+                "mean_prediction": 0.904770099064883,
+                "observed_rate": 0.7352941036224365
+              }
+            ]
+          },
+          "format/multiple_select": {
+            "queries": 324,
+            "learners": 12,
+            "log_loss": 0.6226269621866922,
+            "brier": 0.21612144000438024,
+            "ece_10": 0.07018466758323307,
+            "calibration": [
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 65,
+                "mean_prediction": 0.3394141843685737,
+                "observed_rate": 0.2461538463830948
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 48,
+                "mean_prediction": 0.4458133901158969,
+                "observed_rate": 0.2916666567325592
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 56,
+                "mean_prediction": 0.557377533188888,
+                "observed_rate": 0.4642857015132904
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 74,
+                "mean_prediction": 0.6750087858857335,
+                "observed_rate": 0.6486486196517944
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 79,
+                "mean_prediction": 0.7689961692954921,
+                "observed_rate": 0.746835470199585
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 2,
+                "mean_prediction": 0.8178114891052246,
+                "observed_rate": 1.0
+              }
+            ]
+          },
+          "format/output_prediction": {
+            "queries": 330,
+            "learners": 12,
+            "log_loss": 0.6544960735830514,
+            "brier": 0.22834913423852413,
+            "ece_10": 0.08617084879766809,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 40,
+                "mean_prediction": 0.2648128032684326,
+                "observed_rate": 0.3499999940395355
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 35,
+                "mean_prediction": 0.3968914747238159,
+                "observed_rate": 0.22857142984867096
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 33,
+                "mean_prediction": 0.4665512442588806,
+                "observed_rate": 0.42424243688583374
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 109,
+                "mean_prediction": 0.6371949867371025,
+                "observed_rate": 0.5871559381484985
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 38,
+                "mean_prediction": 0.7588805556297302,
+                "observed_rate": 0.6842105388641357
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 75,
+                "mean_prediction": 0.8593304602305094,
+                "observed_rate": 0.7333333492279053
+              }
+            ]
+          },
+          "format/single_choice": {
+            "queries": 316,
+            "learners": 12,
+            "log_loss": 0.5124029942001795,
+            "brier": 0.16330982230913418,
+            "ece_10": 0.06469188008127333,
+            "calibration": [
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 107,
+                "mean_prediction": 0.7612334952176174,
+                "observed_rate": 0.7196261882781982
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 113,
+                "mean_prediction": 0.8850832560421091,
+                "observed_rate": 0.778761088848114
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 96,
+                "mean_prediction": 0.9372525569051504,
+                "observed_rate": 0.8958333134651184
+              }
+            ]
+          }
+        },
+        "history_logistic": {
+          "all": {
+            "queries": 1619,
+            "learners": 12,
+            "log_loss": 0.5833678140051884,
+            "brier": 0.1982303376064308,
+            "ece_10": 0.05405264330074108,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 18,
+                "mean_prediction": 0.07232033647596836,
+                "observed_rate": 0.0555555559694767
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 78,
+                "mean_prediction": 0.15501226952824837,
+                "observed_rate": 0.10256410390138626
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 118,
+                "mean_prediction": 0.2519318710191775,
+                "observed_rate": 0.26271185278892517
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 150,
+                "mean_prediction": 0.3507969323794047,
+                "observed_rate": 0.41333332657814026
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 151,
+                "mean_prediction": 0.4501219910896377,
+                "observed_rate": 0.3642384111881256
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 211,
+                "mean_prediction": 0.5515094170638171,
+                "observed_rate": 0.4739336371421814
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 202,
+                "mean_prediction": 0.6516195686146764,
+                "observed_rate": 0.6435643434524536
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 238,
+                "mean_prediction": 0.7545314776797255,
+                "observed_rate": 0.7394958138465881
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 263,
+                "mean_prediction": 0.8523927877157813,
+                "observed_rate": 0.7566539645195007
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 190,
+                "mean_prediction": 0.9354955274807779,
+                "observed_rate": 0.8684210777282715
+              }
+            ]
+          },
+          "practice": {
+            "queries": 1418,
+            "learners": 12,
+            "log_loss": 0.5719058745505571,
+            "brier": 0.19368867907201442,
+            "ece_10": 0.04662131675491465,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 18,
+                "mean_prediction": 0.07232033647596836,
+                "observed_rate": 0.0555555559694767
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 77,
+                "mean_prediction": 0.1547348186760754,
+                "observed_rate": 0.10389610379934311
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 110,
+                "mean_prediction": 0.25060702738436785,
+                "observed_rate": 0.27272728085517883
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 135,
+                "mean_prediction": 0.35048857198821176,
+                "observed_rate": 0.4148148000240326
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 131,
+                "mean_prediction": 0.45110815262976495,
+                "observed_rate": 0.39694657921791077
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 185,
+                "mean_prediction": 0.5512482034193503,
+                "observed_rate": 0.4972972869873047
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 177,
+                "mean_prediction": 0.6522464247073158,
+                "observed_rate": 0.6836158037185669
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 203,
+                "mean_prediction": 0.7549587191619309,
+                "observed_rate": 0.7536945939064026
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 220,
+                "mean_prediction": 0.8522116438909011,
+                "observed_rate": 0.7636363506317139
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 162,
+                "mean_prediction": 0.934591144323349,
+                "observed_rate": 0.8827160596847534
+              }
+            ]
+          },
+          "ordinary": {
+            "queries": 1057,
+            "learners": 12,
+            "log_loss": 0.5774217197983055,
+            "brier": 0.19612510890016485,
+            "ece_10": 0.03990711741565304,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 8,
+                "mean_prediction": 0.08023744774982333,
+                "observed_rate": 0.125
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 50,
+                "mean_prediction": 0.15277131974697114,
+                "observed_rate": 0.14000000059604645
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 84,
+                "mean_prediction": 0.25210800518592197,
+                "observed_rate": 0.2738095223903656
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 104,
+                "mean_prediction": 0.3509930492593692,
+                "observed_rate": 0.42307692766189575
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 99,
+                "mean_prediction": 0.45204056573636603,
+                "observed_rate": 0.4141414165496826
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 141,
+                "mean_prediction": 0.5495445554983531,
+                "observed_rate": 0.5035461187362671
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 133,
+                "mean_prediction": 0.6520537021464872,
+                "observed_rate": 0.6766917109489441
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 153,
+                "mean_prediction": 0.7549132206081565,
+                "observed_rate": 0.7450980544090271
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 162,
+                "mean_prediction": 0.8521342520360593,
+                "observed_rate": 0.7839506268501282
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 123,
+                "mean_prediction": 0.9333608649610504,
+                "observed_rate": 0.8861788511276245
+              }
+            ]
+          },
+          "followup": {
+            "queries": 361,
+            "learners": 12,
+            "log_loss": 0.5557556018999477,
+            "brier": 0.1865548665280946,
+            "ece_10": 0.07516234438257535,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 10,
+                "mean_prediction": 0.06598664745688439,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 27,
+                "mean_prediction": 0.1583709278040462,
+                "observed_rate": 0.03703703731298447
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 26,
+                "mean_prediction": 0.24575771448703912,
+                "observed_rate": 0.26923078298568726
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 31,
+                "mean_prediction": 0.3487961321107803,
+                "observed_rate": 0.3870967626571655
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 32,
+                "mean_prediction": 0.44822349958121777,
+                "observed_rate": 0.34375
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 44,
+                "mean_prediction": 0.5567076206207275,
+                "observed_rate": 0.47727271914482117
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 44,
+                "mean_prediction": 0.6528289724480022,
+                "observed_rate": 0.7045454382896423
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 50,
+                "mean_prediction": 0.7550979447364807,
+                "observed_rate": 0.7799999713897705
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 58,
+                "mean_prediction": 0.8524278073475279,
+                "observed_rate": 0.7068965435028076
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 39,
+                "mean_prediction": 0.9384712561582907,
+                "observed_rate": 0.8717948794364929
+              }
+            ]
+          },
+          "assessment": {
+            "queries": 201,
+            "learners": 12,
+            "log_loss": 0.6642286605060208,
+            "brier": 0.23027049582435338,
+            "ece_10": 0.17328028136224888,
+            "calibration": [
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 1,
+                "mean_prediction": 0.17637598514556885,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 8,
+                "mean_prediction": 0.27014847099781036,
+                "observed_rate": 0.125
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 15,
+                "mean_prediction": 0.3535721759001414,
+                "observed_rate": 0.4000000059604645
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 20,
+                "mean_prediction": 0.44366263300180436,
+                "observed_rate": 0.15000000596046448
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 26,
+                "mean_prediction": 0.5533680526109842,
+                "observed_rate": 0.3076923191547394
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 25,
+                "mean_prediction": 0.6471814274787903,
+                "observed_rate": 0.36000001430511475
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 35,
+                "mean_prediction": 0.7520534770829337,
+                "observed_rate": 0.6571428775787354
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 43,
+                "mean_prediction": 0.8533195700756339,
+                "observed_rate": 0.7209302186965942
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 28,
+                "mean_prediction": 0.9407280300344739,
+                "observed_rate": 0.7857142686843872
+              }
+            ]
+          },
+          "day_1": {
+            "queries": 67,
+            "learners": 12,
+            "log_loss": 0.4827171200818529,
+            "brier": 0.15948619978775283,
+            "ece_10": 0.07724221072979826,
+            "calibration": [
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 1,
+                "mean_prediction": 0.17637598514556885,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 4,
+                "mean_prediction": 0.2688928619027138,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 5,
+                "mean_prediction": 0.34980722665786745,
+                "observed_rate": 0.4000000059604645
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 6,
+                "mean_prediction": 0.46621782581011456,
+                "observed_rate": 0.3333333432674408
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 7,
+                "mean_prediction": 0.5266718864440918,
+                "observed_rate": 0.4285714328289032
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 7,
+                "mean_prediction": 0.6518111484391349,
+                "observed_rate": 0.4285714328289032
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 9,
+                "mean_prediction": 0.7582089768515693,
+                "observed_rate": 0.7777777910232544
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 20,
+                "mean_prediction": 0.8496204197406769,
+                "observed_rate": 0.8500000238418579
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 8,
+                "mean_prediction": 0.944760337471962,
+                "observed_rate": 1.0
+              }
+            ]
+          },
+          "day_7": {
+            "queries": 68,
+            "learners": 12,
+            "log_loss": 0.6532683227848244,
+            "brier": 0.22781620038755565,
+            "ece_10": 0.12528107885052178,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 2,
+                "mean_prediction": 0.25698480010032654,
+                "observed_rate": 0.5
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 7,
+                "mean_prediction": 0.3436316507203238,
+                "observed_rate": 0.4285714328289032
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 6,
+                "mean_prediction": 0.44187597433725995,
+                "observed_rate": 0.1666666716337204
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 8,
+                "mean_prediction": 0.5595645755529404,
+                "observed_rate": 0.375
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 10,
+                "mean_prediction": 0.6447108268737793,
+                "observed_rate": 0.6000000238418579
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 15,
+                "mean_prediction": 0.7440283934275309,
+                "observed_rate": 0.6666666865348816
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 14,
+                "mean_prediction": 0.8606722014290946,
+                "observed_rate": 0.7142857313156128
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 6,
+                "mean_prediction": 0.9422979553540548,
+                "observed_rate": 0.8333333134651184
+              }
+            ]
+          },
+          "day_30": {
+            "queries": 66,
+            "learners": 12,
+            "log_loss": 0.8597828449523934,
+            "brier": 0.30465594922063344,
+            "ece_10": 0.3584327575835314,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 2,
+                "mean_prediction": 0.28582336008548737,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 3,
+                "mean_prediction": 0.383041650056839,
+                "observed_rate": 0.3333333432674408
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 8,
+                "mean_prediction": 0.42808623239398,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 11,
+                "mean_prediction": 0.5658499598503113,
+                "observed_rate": 0.1818181872367859
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 8,
+                "mean_prediction": 0.6462186723947525,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 11,
+                "mean_prediction": 0.7579604549841448,
+                "observed_rate": 0.5454545617103577
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 9,
+                "mean_prediction": 0.8501024776034884,
+                "observed_rate": 0.4444444477558136
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 14,
+                "mean_prediction": 0.9377510292189462,
+                "observed_rate": 0.6428571343421936
+              }
+            ]
+          },
+          "format/code_completion": {
+            "queries": 334,
+            "learners": 12,
+            "log_loss": 0.5656965221827963,
+            "brier": 0.1921045623808635,
+            "ece_10": 0.027698514458840463,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 6,
+                "mean_prediction": 0.07644806057214737,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 38,
+                "mean_prediction": 0.15606354118177765,
+                "observed_rate": 0.15789473056793213
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 40,
+                "mean_prediction": 0.2455219641327858,
+                "observed_rate": 0.17499999701976776
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 51,
+                "mean_prediction": 0.3485267214915332,
+                "observed_rate": 0.3529411852359772
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 47,
+                "mean_prediction": 0.4491078219515212,
+                "observed_rate": 0.44680851697921753
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 56,
+                "mean_prediction": 0.5436868986913136,
+                "observed_rate": 0.5357142686843872
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 45,
+                "mean_prediction": 0.655837607383728,
+                "observed_rate": 0.644444465637207
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 28,
+                "mean_prediction": 0.7464245983532497,
+                "observed_rate": 0.8928571343421936
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 19,
+                "mean_prediction": 0.8499609043723658,
+                "observed_rate": 0.8421052694320679
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 4,
+                "mean_prediction": 0.9098950326442719,
+                "observed_rate": 1.0
+              }
+            ]
+          },
+          "format/fill_in_the_blank": {
+            "queries": 315,
+            "learners": 12,
+            "log_loss": 0.6348571677462124,
+            "brier": 0.22157002378299778,
+            "ece_10": 0.10618098877252095,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 5,
+                "mean_prediction": 0.07816928923130036,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 14,
+                "mean_prediction": 0.15587624747838294,
+                "observed_rate": 0.0714285746216774
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 18,
+                "mean_prediction": 0.27073399308655,
+                "observed_rate": 0.3888888955116272
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 35,
+                "mean_prediction": 0.35568860173225403,
+                "observed_rate": 0.5142857432365417
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 27,
+                "mean_prediction": 0.454444851036425,
+                "observed_rate": 0.29629629850387573
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 38,
+                "mean_prediction": 0.5472245153627897,
+                "observed_rate": 0.5263158082962036
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 51,
+                "mean_prediction": 0.6519606534172507,
+                "observed_rate": 0.5490196347236633
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 48,
+                "mean_prediction": 0.7490723816057047,
+                "observed_rate": 0.6875
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 49,
+                "mean_prediction": 0.8554483202038979,
+                "observed_rate": 0.6530612111091614
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 30,
+                "mean_prediction": 0.9336410760879517,
+                "observed_rate": 0.8999999761581421
+              }
+            ]
+          },
+          "format/multiple_select": {
+            "queries": 324,
+            "learners": 12,
+            "log_loss": 0.5974468899629565,
+            "brier": 0.20607971979742018,
+            "ece_10": 0.08558159755013973,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 3,
+                "mean_prediction": 0.05435964340964953,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 11,
+                "mean_prediction": 0.14934678172523325,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 35,
+                "mean_prediction": 0.253990518621036,
+                "observed_rate": 0.34285715222358704
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 37,
+                "mean_prediction": 0.3535421305411571,
+                "observed_rate": 0.3513513505458832
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 40,
+                "mean_prediction": 0.4498833633959293,
+                "observed_rate": 0.32499998807907104
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 56,
+                "mean_prediction": 0.5536562906844276,
+                "observed_rate": 0.3392857015132904
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 33,
+                "mean_prediction": 0.6456908890695283,
+                "observed_rate": 0.7272727489471436
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 61,
+                "mean_prediction": 0.7509697001488482,
+                "observed_rate": 0.7213114500045776
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 45,
+                "mean_prediction": 0.8429568820529514,
+                "observed_rate": 0.8222222328186035
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 3,
+                "mean_prediction": 0.9011162718137106,
+                "observed_rate": 1.0
+              }
+            ]
+          },
+          "format/output_prediction": {
+            "queries": 330,
+            "learners": 12,
+            "log_loss": 0.6288916452552299,
+            "brier": 0.21534151418388017,
+            "ece_10": 0.1083096692507917,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 4,
+                "mean_prediction": 0.07228807918727398,
+                "observed_rate": 0.25
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 15,
+                "mean_prediction": 0.15569735964139303,
+                "observed_rate": 0.06666667014360428
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 25,
+                "mean_prediction": 0.24576808750629425,
+                "observed_rate": 0.20000000298023224
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 26,
+                "mean_prediction": 0.3447411140570274,
+                "observed_rate": 0.5
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 34,
+                "mean_prediction": 0.44582181730691123,
+                "observed_rate": 0.3529411852359772
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 49,
+                "mean_prediction": 0.5539810462873809,
+                "observed_rate": 0.44897958636283875
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 54,
+                "mean_prediction": 0.6507096069830435,
+                "observed_rate": 0.7407407164573669
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 46,
+                "mean_prediction": 0.7570490837097168,
+                "observed_rate": 0.717391312122345
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 50,
+                "mean_prediction": 0.8479491543769836,
+                "observed_rate": 0.6600000262260437
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 27,
+                "mean_prediction": 0.930686785115136,
+                "observed_rate": 0.7777777910232544
+              }
+            ]
+          },
+          "format/single_choice": {
+            "queries": 316,
+            "learners": 12,
+            "log_loss": 0.48874306754134655,
+            "brier": 0.1555218555788422,
+            "ece_10": 0.06444532131846945,
+            "calibration": [
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 1,
+                "mean_prediction": 0.35124820470809937,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 3,
+                "mean_prediction": 0.47902190685272217,
+                "observed_rate": 0.3333333432674408
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 12,
+                "mean_prediction": 0.5814721286296844,
+                "observed_rate": 0.75
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 19,
+                "mean_prediction": 0.6535973203809637,
+                "observed_rate": 0.4736842215061188
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 55,
+                "mean_prediction": 0.7652676192196932,
+                "observed_rate": 0.7454545497894287
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 100,
+                "mean_prediction": 0.8578256088495254,
+                "observed_rate": 0.8100000023841858
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 126,
+                "mean_prediction": 0.9385987761474791,
+                "observed_rate": 0.8730158805847168
+              }
+            ]
+          }
+        },
+        "history_boosting": {
+          "all": {
+            "queries": 1619,
+            "learners": 12,
+            "log_loss": 0.6198537180819536,
+            "brier": 0.20902085371555737,
+            "ece_10": 0.07930947317364093,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 56,
+                "mean_prediction": 0.0753202603975296,
+                "observed_rate": 0.0892857164144516
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 103,
+                "mean_prediction": 0.15246347318896414,
+                "observed_rate": 0.223300963640213
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 103,
+                "mean_prediction": 0.2511816463537333,
+                "observed_rate": 0.28155338764190674
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 118,
+                "mean_prediction": 0.3536621244330367,
+                "observed_rate": 0.39830508828163147
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 108,
+                "mean_prediction": 0.4479630691737185,
+                "observed_rate": 0.40740740299224854
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 132,
+                "mean_prediction": 0.5514476644637873,
+                "observed_rate": 0.5
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 180,
+                "mean_prediction": 0.6504668671808495,
+                "observed_rate": 0.5833333134651184
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 234,
+                "mean_prediction": 0.7515415188471212,
+                "observed_rate": 0.6495726704597473
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 325,
+                "mean_prediction": 0.8541455347463118,
+                "observed_rate": 0.7753846049308777
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 260,
+                "mean_prediction": 0.9354399931824253,
+                "observed_rate": 0.7846153974533081
+              }
+            ]
+          },
+          "practice": {
+            "queries": 1418,
+            "learners": 12,
+            "log_loss": 0.6106981752225454,
+            "brier": 0.20482736422092807,
+            "ece_10": 0.06790718967349421,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 51,
+                "mean_prediction": 0.07533714035754852,
+                "observed_rate": 0.0784313753247261
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 95,
+                "mean_prediction": 0.15286111903919614,
+                "observed_rate": 0.23157894611358643
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 92,
+                "mean_prediction": 0.25305014173502743,
+                "observed_rate": 0.29347825050354004
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 107,
+                "mean_prediction": 0.35337874880187725,
+                "observed_rate": 0.38317757844924927
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 89,
+                "mean_prediction": 0.4498920556553814,
+                "observed_rate": 0.42696627974510193
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 118,
+                "mean_prediction": 0.5510532769272866,
+                "observed_rate": 0.508474588394165
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 157,
+                "mean_prediction": 0.65145941978107,
+                "observed_rate": 0.6369426846504211
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 199,
+                "mean_prediction": 0.7502822429939129,
+                "observed_rate": 0.643216073513031
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 275,
+                "mean_prediction": 0.8553042052610609,
+                "observed_rate": 0.7963636517524719
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 235,
+                "mean_prediction": 0.9357017613749856,
+                "observed_rate": 0.7872340679168701
+              }
+            ]
+          },
+          "ordinary": {
+            "queries": 1057,
+            "learners": 12,
+            "log_loss": 0.6053852628728085,
+            "brier": 0.20412996326228225,
+            "ece_10": 0.06343737251055122,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 27,
+                "mean_prediction": 0.07531328197597482,
+                "observed_rate": 0.07407407462596893
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 62,
+                "mean_prediction": 0.1562420427614904,
+                "observed_rate": 0.24193547666072845
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 72,
+                "mean_prediction": 0.25449621527723926,
+                "observed_rate": 0.3055555522441864
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 84,
+                "mean_prediction": 0.3527863001933801,
+                "observed_rate": 0.3928571343421936
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 76,
+                "mean_prediction": 0.45070600231519486,
+                "observed_rate": 0.42105263471603394
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 96,
+                "mean_prediction": 0.5501498869523124,
+                "observed_rate": 0.5
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 114,
+                "mean_prediction": 0.6501968533485935,
+                "observed_rate": 0.6578947305679321
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 156,
+                "mean_prediction": 0.7491954632784468,
+                "observed_rate": 0.6794871687889099
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 207,
+                "mean_prediction": 0.8559078333674911,
+                "observed_rate": 0.782608687877655
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 163,
+                "mean_prediction": 0.9366356289380675,
+                "observed_rate": 0.8098159432411194
+              }
+            ]
+          },
+          "followup": {
+            "queries": 361,
+            "learners": 12,
+            "log_loss": 0.6262542648449059,
+            "brier": 0.20686933877297406,
+            "ece_10": 0.08820670145496778,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 24,
+                "mean_prediction": 0.07536398103681889,
+                "observed_rate": 0.0833333358168602
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 33,
+                "mean_prediction": 0.14650908053064332,
+                "observed_rate": 0.21212121844291687
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 20,
+                "mean_prediction": 0.24784427698306472,
+                "observed_rate": 0.25
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 23,
+                "mean_prediction": 0.3555424741546498,
+                "observed_rate": 0.3478260934352875
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 13,
+                "mean_prediction": 0.4451335982595488,
+                "observed_rate": 0.4615384638309479
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 22,
+                "mean_prediction": 0.5549953422726277,
+                "observed_rate": 0.5454545617103577
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 43,
+                "mean_prediction": 0.6548066889276357,
+                "observed_rate": 0.5813953280448914
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 43,
+                "mean_prediction": 0.7542249787058363,
+                "observed_rate": 0.5116279125213623
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 68,
+                "mean_prediction": 0.8534666902900158,
+                "observed_rate": 0.8382353186607361
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 72,
+                "mean_prediction": 0.9335875889752308,
+                "observed_rate": 0.7361111044883728
+              }
+            ]
+          },
+          "assessment": {
+            "queries": 201,
+            "learners": 12,
+            "log_loss": 0.6844435677070313,
+            "brier": 0.23860477462791752,
+            "ece_10": 0.16744123466763158,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 5,
+                "mean_prediction": 0.0751480848053367,
+                "observed_rate": 0.20000000298023224
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 8,
+                "mean_prediction": 0.14774142871745904,
+                "observed_rate": 0.125
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 11,
+                "mean_prediction": 0.23555423043745535,
+                "observed_rate": 0.1818181872367859
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 11,
+                "mean_prediction": 0.3564185964815872,
+                "observed_rate": 0.5454545617103577
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 19,
+                "mean_prediction": 0.43892729039119205,
+                "observed_rate": 0.31578946113586426
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 14,
+                "mean_prediction": 0.5547717879857242,
+                "observed_rate": 0.4285714328289032
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 23,
+                "mean_prediction": 0.6436916168228214,
+                "observed_rate": 0.21739129722118378
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 35,
+                "mean_prediction": 0.7587014015553626,
+                "observed_rate": 0.6857143044471741
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 50,
+                "mean_prediction": 0.8477728469151912,
+                "observed_rate": 0.6600000262260437
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 25,
+                "mean_prediction": 0.9329793721723607,
+                "observed_rate": 0.7599999904632568
+              }
+            ]
+          },
+          "day_1": {
+            "queries": 67,
+            "learners": 12,
+            "log_loss": 0.580590900590844,
+            "brier": 0.19966830304953606,
+            "ece_10": 0.10265673563148033,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 3,
+                "mean_prediction": 0.08131055194151139,
+                "observed_rate": 0.3333333432674408
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 4,
+                "mean_prediction": 0.1517259510789356,
+                "observed_rate": 0.25
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 2,
+                "mean_prediction": 0.22722353260214367,
+                "observed_rate": 0.5
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 4,
+                "mean_prediction": 0.35249204344484963,
+                "observed_rate": 0.5
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 5,
+                "mean_prediction": 0.44431168660426856,
+                "observed_rate": 0.4000000059604645
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 5,
+                "mean_prediction": 0.5481423890541363,
+                "observed_rate": 0.6000000238418579
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 7,
+                "mean_prediction": 0.6552097998201984,
+                "observed_rate": 0.2857142984867096
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 11,
+                "mean_prediction": 0.7485593616416892,
+                "observed_rate": 0.7272727489471436
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 13,
+                "mean_prediction": 0.852678233323977,
+                "observed_rate": 0.7692307829856873
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 13,
+                "mean_prediction": 0.9389974873619729,
+                "observed_rate": 0.9230769276618958
+              }
+            ]
+          },
+          "day_7": {
+            "queries": 68,
+            "learners": 12,
+            "log_loss": 0.6162094775640441,
+            "brier": 0.21209875886267163,
+            "ece_10": 0.14288748986298414,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 1,
+                "mean_prediction": 0.08529845832160768,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 3,
+                "mean_prediction": 0.15407573942147182,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 4,
+                "mean_prediction": 0.21470277554814374,
+                "observed_rate": 0.25
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 6,
+                "mean_prediction": 0.35493484558026656,
+                "observed_rate": 0.6666666865348816
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 5,
+                "mean_prediction": 0.43735099414397355,
+                "observed_rate": 0.20000000298023224
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 5,
+                "mean_prediction": 0.5678201142885853,
+                "observed_rate": 0.6000000238418579
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 7,
+                "mean_prediction": 0.645071688730878,
+                "observed_rate": 0.2857142984867096
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 14,
+                "mean_prediction": 0.7598413748042238,
+                "observed_rate": 0.7857142686843872
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 17,
+                "mean_prediction": 0.8478221729309157,
+                "observed_rate": 0.7058823704719543
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 6,
+                "mean_prediction": 0.9198150299889356,
+                "observed_rate": 0.8333333134651184
+              }
+            ]
+          },
+          "day_30": {
+            "queries": 66,
+            "learners": 12,
+            "log_loss": 0.8601715499268444,
+            "brier": 0.30544042110955805,
+            "ece_10": 0.3304773089389127,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 1,
+                "mean_prediction": 0.04651030988054164,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 1,
+                "mean_prediction": 0.11280040715951443,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 5,
+                "mean_prediction": 0.2555676734830293,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 1,
+                "mean_prediction": 0.3810273140364612,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 9,
+                "mean_prediction": 0.43681167929904874,
+                "observed_rate": 0.3333333432674408
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 4,
+                "mean_prediction": 0.5467481287716331,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 9,
+                "mean_prediction": 0.633659640785262,
+                "observed_rate": 0.1111111119389534
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 10,
+                "mean_prediction": 0.7682616829119974,
+                "observed_rate": 0.5
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 20,
+                "mean_prediction": 0.8445424186361145,
+                "observed_rate": 0.550000011920929
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 6,
+                "mean_prediction": 0.9331044647782923,
+                "observed_rate": 0.3333333432674408
+              }
+            ]
+          },
+          "format/code_completion": {
+            "queries": 334,
+            "learners": 12,
+            "log_loss": 0.6150662379313235,
+            "brier": 0.20922292984356092,
+            "ece_10": 0.08476824814460351,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 31,
+                "mean_prediction": 0.06983422318836115,
+                "observed_rate": 0.12903225421905518
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 35,
+                "mean_prediction": 0.14959628436773417,
+                "observed_rate": 0.20000000298023224
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 27,
+                "mean_prediction": 0.25332505359876767,
+                "observed_rate": 0.3333333432674408
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 38,
+                "mean_prediction": 0.34722914796813276,
+                "observed_rate": 0.2368421107530594
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 35,
+                "mean_prediction": 0.45284828104636343,
+                "observed_rate": 0.5428571701049805
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 29,
+                "mean_prediction": 0.5573069575134576,
+                "observed_rate": 0.4482758641242981
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 41,
+                "mean_prediction": 0.6515322809053721,
+                "observed_rate": 0.6341463327407837
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 43,
+                "mean_prediction": 0.7512255967705513,
+                "observed_rate": 0.6279069781303406
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 37,
+                "mean_prediction": 0.8455605183748804,
+                "observed_rate": 0.7837837934494019
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 18,
+                "mean_prediction": 0.930273231633665,
+                "observed_rate": 0.7222222089767456
+              }
+            ]
+          },
+          "format/fill_in_the_blank": {
+            "queries": 315,
+            "learners": 12,
+            "log_loss": 0.6823391240093649,
+            "brier": 0.23637566883544972,
+            "ece_10": 0.13245798619159135,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 6,
+                "mean_prediction": 0.08667458435288994,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 24,
+                "mean_prediction": 0.15330736398721984,
+                "observed_rate": 0.25
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 21,
+                "mean_prediction": 0.2643690654762619,
+                "observed_rate": 0.380952388048172
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 22,
+                "mean_prediction": 0.3651203968029488,
+                "observed_rate": 0.40909090638160706
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 13,
+                "mean_prediction": 0.44950926839858624,
+                "observed_rate": 0.5384615659713745
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 26,
+                "mean_prediction": 0.5380424034138795,
+                "observed_rate": 0.5
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 40,
+                "mean_prediction": 0.6493382480260986,
+                "observed_rate": 0.42500001192092896
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 47,
+                "mean_prediction": 0.753568813148398,
+                "observed_rate": 0.6595744490623474
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 68,
+                "mean_prediction": 0.8536768703015656,
+                "observed_rate": 0.6764705777168274
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 48,
+                "mean_prediction": 0.9350253777560797,
+                "observed_rate": 0.7708333134651184
+              }
+            ]
+          },
+          "format/multiple_select": {
+            "queries": 324,
+            "learners": 12,
+            "log_loss": 0.6060963438197695,
+            "brier": 0.21066484436880978,
+            "ece_10": 0.084960586494868,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 12,
+                "mean_prediction": 0.0840623309570739,
+                "observed_rate": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 18,
+                "mean_prediction": 0.16012805274000694,
+                "observed_rate": 0.2777777910232544
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 32,
+                "mean_prediction": 0.2504138055439054,
+                "observed_rate": 0.28125
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 35,
+                "mean_prediction": 0.35781369077363057,
+                "observed_rate": 0.48571428656578064
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 38,
+                "mean_prediction": 0.43840829460580116,
+                "observed_rate": 0.2368421107530594
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 41,
+                "mean_prediction": 0.5599110815015157,
+                "observed_rate": 0.5121951103210449
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 41,
+                "mean_prediction": 0.6504394005736237,
+                "observed_rate": 0.5609756112098694
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 54,
+                "mean_prediction": 0.7506216098895855,
+                "observed_rate": 0.7037037014961243
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 40,
+                "mean_prediction": 0.8506317241443595,
+                "observed_rate": 0.7749999761581421
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 13,
+                "mean_prediction": 0.9303681235865564,
+                "observed_rate": 0.9230769276618958
+              }
+            ]
+          },
+          "format/output_prediction": {
+            "queries": 330,
+            "learners": 12,
+            "log_loss": 0.6582061607057491,
+            "brier": 0.22244793694590542,
+            "ece_10": 0.12202454995163056,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "queries": 7,
+                "mean_prediction": 0.07489688368860517,
+                "observed_rate": 0.1428571492433548
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "queries": 26,
+                "mean_prediction": 0.15023792694535412,
+                "observed_rate": 0.19230769574642181
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "queries": 23,
+                "mean_prediction": 0.23769308586353602,
+                "observed_rate": 0.1304347813129425
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "queries": 23,
+                "mean_prediction": 0.34701283276379763,
+                "observed_rate": 0.52173912525177
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 17,
+                "mean_prediction": 0.45541221075650345,
+                "observed_rate": 0.3529411852359772
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 25,
+                "mean_prediction": 0.5447415048155958,
+                "observed_rate": 0.47999998927116394
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 37,
+                "mean_prediction": 0.6523015226340129,
+                "observed_rate": 0.6756756901741028
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 56,
+                "mean_prediction": 0.7504600649016169,
+                "observed_rate": 0.5892857313156128
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 66,
+                "mean_prediction": 0.853417724236326,
+                "observed_rate": 0.7121211886405945
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 50,
+                "mean_prediction": 0.9327239365939929,
+                "observed_rate": 0.7400000095367432
+              }
+            ]
+          },
+          "format/single_choice": {
+            "queries": 316,
+            "learners": 12,
+            "log_loss": 0.5366802962410389,
+            "brier": 0.16583145299660834,
+            "ece_10": 0.07462865081232622,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 5,
+                "mean_prediction": 0.45703567341524887,
+                "observed_rate": 0.6000000238418579
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 11,
+                "mean_prediction": 0.5513814082378878,
+                "observed_rate": 0.6363636255264282
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "queries": 21,
+                "mean_prediction": 0.6473576615910305,
+                "observed_rate": 0.6666666865348816
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "queries": 34,
+                "mean_prediction": 0.7523808812526402,
+                "observed_rate": 0.6764705777168274
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "queries": 114,
+                "mean_prediction": 0.858865733919319,
+                "observed_rate": 0.8684210777282715
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "queries": 131,
+                "mean_prediction": 0.9378418281634195,
+                "observed_rate": 0.8015267252922058
+              }
+            ]
+          }
+        },
+        "time_input_gru": {
+          "all": {
+            "queries": 1619,
+            "learners": 12,
+            "log_loss": 0.6895011683408242,
+            "brier": 0.24817874947341353,
+            "ece_10": 0.0727748396479104,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 816,
+                "mean_prediction": 0.48813665523102473,
+                "observed_rate": 0.5232843160629272
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 803,
+                "mean_prediction": 0.51165381226118,
+                "observed_rate": 0.6226649880409241
+              }
+            ]
+          },
+          "practice": {
+            "queries": 1418,
+            "learners": 12,
+            "log_loss": 0.6891894361611773,
+            "brier": 0.24802299953431967,
+            "ece_10": 0.08224968879111895,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 763,
+                "mean_prediction": 0.48781037893082807,
+                "observed_rate": 0.5229358077049255
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 655,
+                "mean_prediction": 0.5117109151286934,
+                "observed_rate": 0.6488549709320068
+              }
+            ]
+          },
+          "ordinary": {
+            "queries": 1057,
+            "learners": 12,
+            "log_loss": 0.6886138198438457,
+            "brier": 0.24773529844422573,
+            "ece_10": 0.09139172573527192,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 468,
+                "mean_prediction": 0.48880633909223425,
+                "observed_rate": 0.5192307829856873
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 589,
+                "mean_prediction": 0.5121181257107059,
+                "observed_rate": 0.6519524455070496
+              }
+            ]
+          },
+          "followup": {
+            "queries": 361,
+            "learners": 12,
+            "log_loss": 0.6908748279822842,
+            "brier": 0.24886538195046723,
+            "ece_10": 0.05548190864169368,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 295,
+                "mean_prediction": 0.48623034721713954,
+                "observed_rate": 0.5288135409355164
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 66,
+                "mean_prediction": 0.5080768691770958,
+                "observed_rate": 0.6212121248245239
+              }
+            ]
+          },
+          "assessment": {
+            "queries": 201,
+            "learners": 12,
+            "log_loss": 0.6917003535683823,
+            "brier": 0.24927752267557804,
+            "ece_10": 0.012771974600369697,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 53,
+                "mean_prediction": 0.492833802722535,
+                "observed_rate": 0.5283018946647644
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 148,
+                "mean_prediction": 0.511401093489415,
+                "observed_rate": 0.5067567825317383
+              }
+            ]
+          },
+          "day_1": {
+            "queries": 67,
+            "learners": 12,
+            "log_loss": 0.6842076834355182,
+            "brier": 0.24553409939445023,
+            "ece_10": 0.12092206771694017,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 22,
+                "mean_prediction": 0.49283027242530475,
+                "observed_rate": 0.5909090638160706
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 45,
+                "mean_prediction": 0.5123545739385816,
+                "observed_rate": 0.644444465637207
+              }
+            ]
+          },
+          "day_7": {
+            "queries": 68,
+            "learners": 12,
+            "log_loss": 0.6928659135410448,
+            "brier": 0.24985908400107443,
+            "ece_10": 0.06625785108874827,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 17,
+                "mean_prediction": 0.4927632212638855,
+                "observed_rate": 0.6470588445663452
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 51,
+                "mean_prediction": 0.5121077077061522,
+                "observed_rate": 0.5490196347236633
+              }
+            ]
+          },
+          "day_30": {
+            "queries": 66,
+            "learners": 12,
+            "log_loss": 0.698105669034456,
+            "brier": 0.2524784800953024,
+            "ece_10": 0.17295247045430268,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 14,
+                "mean_prediction": 0.49292505638939993,
+                "observed_rate": 0.2857142984867096
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 52,
+                "mean_prediction": 0.509882940695836,
+                "observed_rate": 0.3461538553237915
+              }
+            ]
+          },
+          "format/code_completion": {
+            "queries": 334,
+            "learners": 12,
+            "log_loss": 0.6853778720446112,
+            "brier": 0.24611757933599285,
+            "ece_10": 0.13306246224991575,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 229,
+                "mean_prediction": 0.4873857097334216,
+                "observed_rate": 0.3711790442466736
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 105,
+                "mean_prediction": 0.506366343157632,
+                "observed_rate": 0.6761904954910278
+              }
+            ]
+          },
+          "format/fill_in_the_blank": {
+            "queries": 315,
+            "learners": 12,
+            "log_loss": 0.6866869177843989,
+            "brier": 0.24677135721680946,
+            "ece_10": 0.11380694555857826,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 138,
+                "mean_prediction": 0.49089518146238464,
+                "observed_rate": 0.4202898442745209
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 177,
+                "mean_prediction": 0.5078776997361479,
+                "observed_rate": 0.6553672552108765
+              }
+            ]
+          },
+          "format/multiple_select": {
+            "queries": 324,
+            "learners": 12,
+            "log_loss": 0.6857995037129748,
+            "brier": 0.24633097111275748,
+            "ece_10": 0.037149450983162274,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 19,
+                "mean_prediction": 0.49128840157860204,
+                "observed_rate": 0.10526315867900848
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 305,
+                "mean_prediction": 0.5190100073814392,
+                "observed_rate": 0.534426212310791
+              }
+            ]
+          },
+          "format/output_prediction": {
+            "queries": 330,
+            "learners": 12,
+            "log_loss": 0.6873743889152784,
+            "brier": 0.24711596794322413,
+            "ece_10": 0.0900819884105162,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 159,
+                "mean_prediction": 0.48783549403994336,
+                "observed_rate": 0.446540892124176
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 171,
+                "mean_prediction": 0.50782914503276,
+                "observed_rate": 0.6432748436927795
+              }
+            ]
+          },
+          "format/single_choice": {
+            "queries": 316,
+            "learners": 12,
+            "log_loss": 0.7026810621321611,
+            "brier": 0.25476469086753956,
+            "ece_10": 0.3046750484765331,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 271,
+                "mean_prediction": 0.4873222321601811,
+                "observed_rate": 0.7785977721214294
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 45,
+                "mean_prediction": 0.5035190290874905,
+                "observed_rate": 0.8888888955116272
+              }
+            ]
+          }
+        },
+        "time_decay_gru": {
+          "all": {
+            "queries": 1619,
+            "learners": 12,
+            "log_loss": 0.6910869929562855,
+            "brier": 0.2489709057801048,
+            "ece_10": 0.07950060282171768,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 1120,
+                "mean_prediction": 0.48531284587723866,
+                "observed_rate": 0.5339285731315613
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 499,
+                "mean_prediction": 0.5104972603086957,
+                "observed_rate": 0.6593186259269714
+              }
+            ]
+          },
+          "practice": {
+            "queries": 1418,
+            "learners": 12,
+            "log_loss": 0.691066311927587,
+            "brier": 0.24896073928784296,
+            "ece_10": 0.08629894624391968,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 935,
+                "mean_prediction": 0.48661443826986506,
+                "observed_rate": 0.5443850159645081
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 483,
+                "mean_prediction": 0.5106492663268964,
+                "observed_rate": 0.6521739363670349
+              }
+            ]
+          },
+          "ordinary": {
+            "queries": 1057,
+            "learners": 12,
+            "log_loss": 0.6910386729691121,
+            "brier": 0.2489468128066553,
+            "ece_10": 0.09661425541568273,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 634,
+                "mean_prediction": 0.4869502339077297,
+                "observed_rate": 0.5536277890205383
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 423,
+                "mean_prediction": 0.5109983514950349,
+                "observed_rate": 0.652482271194458
+              }
+            ]
+          },
+          "followup": {
+            "queries": 361,
+            "learners": 12,
+            "log_loss": 0.6911472381855036,
+            "brier": 0.24900151571614035,
+            "ece_10": 0.05609599763006383,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 301,
+                "mean_prediction": 0.4859071477901104,
+                "observed_rate": 0.52491694688797
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 60,
+                "mean_prediction": 0.5081882158915202,
+                "observed_rate": 0.6499999761581421
+              }
+            ]
+          },
+          "assessment": {
+            "queries": 201,
+            "learners": 12,
+            "log_loss": 0.6912328919547652,
+            "brier": 0.2490426276011362,
+            "ece_10": 0.03154016326909042,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 185,
+                "mean_prediction": 0.4787345275685594,
+                "observed_rate": 0.4810810685157776
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 16,
+                "mean_prediction": 0.5059085786342621,
+                "observed_rate": 0.875
+              }
+            ]
+          },
+          "day_1": {
+            "queries": 67,
+            "learners": 12,
+            "log_loss": 0.6939733069434998,
+            "brier": 0.2504121301160579,
+            "ece_10": 0.1393182415570786,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 54,
+                "mean_prediction": 0.48291448365758965,
+                "observed_rate": 0.5555555820465088
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 13,
+                "mean_prediction": 0.5067920914063087,
+                "observed_rate": 0.9230769276618958
+              }
+            ]
+          },
+          "day_7": {
+            "queries": 68,
+            "learners": 12,
+            "log_loss": 0.7005962573769575,
+            "brier": 0.2537195163352341,
+            "ece_10": 0.09220581151106781,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 65,
+                "mean_prediction": 0.48036563809101396,
+                "observed_rate": 0.5692307949066162
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 3,
+                "mean_prediction": 0.5020800232887268,
+                "observed_rate": 0.6666666865348816
+              }
+            ]
+          },
+          "day_30": {
+            "queries": 66,
+            "learners": 12,
+            "log_loss": 0.6788038517584881,
+            "brier": 0.24283376241297844,
+            "ece_10": 0.1403748235016158,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 66,
+                "mean_prediction": 0.4737081667690566,
+                "observed_rate": 0.3333333432674408
+              }
+            ]
+          },
+          "format/code_completion": {
+            "queries": 334,
+            "learners": 12,
+            "log_loss": 0.6850777208764762,
+            "brier": 0.2459690276501779,
+            "ece_10": 0.08503797061429054,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 292,
+                "mean_prediction": 0.4849068487751974,
+                "observed_rate": 0.42465752363204956
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 42,
+                "mean_prediction": 0.5045266988731566,
+                "observed_rate": 0.761904776096344
+              }
+            ]
+          },
+          "format/fill_in_the_blank": {
+            "queries": 315,
+            "learners": 12,
+            "log_loss": 0.6872928669505981,
+            "brier": 0.24707473105682182,
+            "ece_10": 0.08884365293714737,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 209,
+                "mean_prediction": 0.48650931028658123,
+                "observed_rate": 0.46411484479904175
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 106,
+                "mean_prediction": 0.5065537072577566,
+                "observed_rate": 0.7264150977134705
+              }
+            ]
+          },
+          "format/multiple_select": {
+            "queries": 324,
+            "learners": 12,
+            "log_loss": 0.6845979227674575,
+            "brier": 0.2457285709576606,
+            "ece_10": 0.1070941365611406,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 68,
+                "mean_prediction": 0.49243341167183485,
+                "observed_rate": 0.23529411852359772
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 256,
+                "mean_prediction": 0.5147928581573069,
+                "observed_rate": 0.58203125
+              }
+            ]
+          },
+          "format/output_prediction": {
+            "queries": 330,
+            "learners": 12,
+            "log_loss": 0.6876858691560117,
+            "brier": 0.2472721476850736,
+            "ece_10": 0.057103369272116476,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 245,
+                "mean_prediction": 0.48619438288163164,
+                "observed_rate": 0.4897959232330322
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 85,
+                "mean_prediction": 0.5063325524330139,
+                "observed_rate": 0.7176470756530762
+              }
+            ]
+          },
+          "format/single_choice": {
+            "queries": 316,
+            "learners": 12,
+            "log_loss": 0.7114258415693188,
+            "brier": 0.25913238991637677,
+            "ece_10": 0.3110692054976391,
+            "calibration": [
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "queries": 306,
+                "mean_prediction": 0.48259492121101205,
+                "observed_rate": 0.7875816822052002
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "queries": 10,
+                "mean_prediction": 0.5028079926967621,
+                "observed_rate": 1.0
+              }
+            ]
+          }
+        }
+      },
+      "paired_intervals": {
+        "ordinary": {
+          "history_logistic minus task_logistic": {
+            "delta_log_loss": -0.03688153978831948,
+            "lower_95": -0.059787101652791295,
+            "upper_95": -0.018674765895086837
+          },
+          "history_boosting minus history_logistic": {
+            "delta_log_loss": 0.027963543074502994,
+            "lower_95": 0.0054473769261834375,
+            "upper_95": 0.049742770446863586
+          },
+          "time_decay_gru minus time_input_gru": {
+            "delta_log_loss": 0.0024248531252664537,
+            "lower_95": 0.0005522778309836312,
+            "upper_95": 0.00454481773418811
+          },
+          "time_decay_gru minus task_logistic": {
+            "delta_log_loss": 0.0767354133824873,
+            "lower_95": 0.03353791241368058,
+            "upper_95": 0.11585581484270331
+          }
+        },
+        "followup": {
+          "history_logistic minus task_logistic": {
+            "delta_log_loss": -0.05965347756585012,
+            "lower_95": -0.09007299672557396,
+            "upper_95": -0.033346743206973756
+          },
+          "history_boosting minus history_logistic": {
+            "delta_log_loss": 0.07049866294495814,
+            "lower_95": 0.0273631413501402,
+            "upper_95": 0.11497094885444663
+          },
+          "time_decay_gru minus time_input_gru": {
+            "delta_log_loss": 0.0002724102032194669,
+            "lower_95": 0.00010172189335590914,
+            "upper_95": 0.0004960451233838747
+          },
+          "time_decay_gru minus task_logistic": {
+            "delta_log_loss": 0.0757381587197058,
+            "lower_95": 0.02317793714781798,
+            "upper_95": 0.12654812711259203
+          }
+        },
+        "day_1": {
+          "history_logistic minus task_logistic": {
+            "delta_log_loss": -0.04996577248680708,
+            "lower_95": -0.10437885427167355,
+            "upper_95": 0.0018169904280304783
+          },
+          "history_boosting minus history_logistic": {
+            "delta_log_loss": 0.09787378050899093,
+            "lower_95": 0.012233347218912352,
+            "upper_95": 0.19331344862723693
+          },
+          "time_decay_gru minus time_input_gru": {
+            "delta_log_loss": 0.009765623507981484,
+            "lower_95": -0.002166166906746294,
+            "upper_95": 0.02107303741775305
+          },
+          "time_decay_gru minus task_logistic": {
+            "delta_log_loss": 0.16129041437483968,
+            "lower_95": 0.07134067166698684,
+            "upper_95": 0.2540312407034519
+          }
+        },
+        "day_7": {
+          "history_logistic minus task_logistic": {
+            "delta_log_loss": 0.019079949274137215,
+            "lower_95": -0.035706494330161556,
+            "upper_95": 0.0829168623123575
+          },
+          "history_boosting minus history_logistic": {
+            "delta_log_loss": -0.037058845220780116,
+            "lower_95": -0.10351983245561448,
+            "upper_95": 0.03764532058871512
+          },
+          "time_decay_gru minus time_input_gru": {
+            "delta_log_loss": 0.0077303438359127286,
+            "lower_95": 0.00079359828237092,
+            "upper_95": 0.015046905413763318
+          },
+          "time_decay_gru minus task_logistic": {
+            "delta_log_loss": 0.06640788386627032,
+            "lower_95": -0.01111333203880018,
+            "upper_95": 0.1558042396551289
+          }
+        },
+        "day_30": {
+          "history_logistic minus task_logistic": {
+            "delta_log_loss": 0.15404736283105494,
+            "lower_95": 0.08334710678303862,
+            "upper_95": 0.23226906866360272
+          },
+          "history_boosting minus history_logistic": {
+            "delta_log_loss": 0.00038870497445084393,
+            "lower_95": -0.07148924383063268,
+            "upper_95": 0.07672669916855139
+          },
+          "time_decay_gru minus time_input_gru": {
+            "delta_log_loss": -0.01930181727596778,
+            "lower_95": -0.03219022485616641,
+            "upper_95": -0.008178297120415259
+          },
+          "time_decay_gru minus task_logistic": {
+            "delta_log_loss": -0.0269316303628503,
+            "lower_95": -0.14978863568211495,
+            "upper_95": 0.09567936468588746
+          }
+        }
+      }
+    }
+  },
+  "training": {
+    "learners": 12,
+    "queries": 1390
+  },
+  "selected_model": "task_logistic",
+  "elapsed_seconds": 1.809,
+  "mps_driver_allocated_bytes": 28000256
+}

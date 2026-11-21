@@ -1,0 +1,26 @@
+{
+  "device": "cpu",
+  "validation_practice_log_loss": 0.5633614546486557,
+  "validation_delayed_log_loss": 0.5472802858046163,
+  "validation_selection_log_loss": 0.555320870226636,
+  "trials": [
+    {
+      "parameters": {
+        "max_leaf_nodes": 15,
+        "max_iter": 120
+      },
+      "validation_practice_log_loss": 0.5633614546486557,
+      "validation_delayed_log_loss": 0.5472802858046163,
+      "validation_selection_log_loss": 0.555320870226636
+    },
+    {
+      "parameters": {
+        "max_leaf_nodes": 31,
+        "max_iter": 160
+      },
+      "validation_practice_log_loss": 0.5634467614725569,
+      "validation_delayed_log_loss": 0.5472296572594922,
+      "validation_selection_log_loss": 0.5553382093660246
+    }
+  ]
+}

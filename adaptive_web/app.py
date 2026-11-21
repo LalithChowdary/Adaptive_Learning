@@ -231,6 +231,26 @@ class AdaptiveLearningApp:
         ppo_dec = self.ppo.decide(self.store, learner, focus_skill=skill)
         skill_summary = ppo_dec["metrics_by_skill"][skill]
 
+        # Extract specific weak/missed patterns from stored interactions for this skill
+        weak_topics: list[str] = []
+        for it in reversed(self.store.get_interactions(learner, skill=skill)):
+            results = it.get("results") or []
+            if not results:
+                continue
+            first_res = results[0]
+            if not first_res.get("full_success") or len(it.get("hints") or []) > 0:
+                q_obj = it.get("question") or {}
+                fmt_label = q_obj.get("task_type") or "item"
+                diff_label = q_obj.get("difficulty") or "medium"
+                prompt_snip = str(q_obj.get("prompt") or "").strip()[:70]
+                missing = first_res.get("missing_concepts") or []
+                if missing:
+                    weak_topics.append(f"missing concepts ({', '.join(str(m) for m in missing[:3])})")
+                elif prompt_snip:
+                    weak_topics.append(f"{fmt_label}/{diff_label}: {prompt_snip}")
+            if len(weak_topics) >= 4:
+                break
+
         # Release any locks during outbound LLM calls so other learners/reads never block
         learning_path = self.pedagogy.curate_learning_path(
             skill,
@@ -242,6 +262,7 @@ class AdaptiveLearningApp:
             skill,
             memory_summary=skill_summary,
             focus_gap=f"P(Med)={skill_summary.get('p_med', 0.5):.2f}, floor_b={skill_summary.get('floor_b', 0.0):.2f}",
+            weak_topics=weak_topics,
         )
 
         # Persist path and material without disturbing any active open question

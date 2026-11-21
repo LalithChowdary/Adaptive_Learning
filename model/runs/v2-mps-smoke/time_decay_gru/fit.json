@@ -1,0 +1,15 @@
+{
+  "device": "mps:0",
+  "verified_gradient_device": "mps:0",
+  "hidden_size": 32,
+  "best_epoch": 1,
+  "validation_delayed_log_loss": 0.6911244720263151,
+  "learning_curve": [
+    {
+      "epoch": 1,
+      "train_log_loss": 0.7147777969031025,
+      "validation_delayed_log_loss": 0.6911244720263151,
+      "seconds": 0.311
+    }
+  ]
+}

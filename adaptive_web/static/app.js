@@ -1,6 +1,14 @@
 (() => {
   "use strict";
 
+  const ALL_FORMATS = [
+    "single_choice",
+    "multiple_select",
+    "output_prediction",
+    "fill_in_the_blank",
+    "code_completion",
+  ];
+
   const state = {
     csrfToken: null,
     learner: null,
@@ -11,8 +19,18 @@
     loadingSkill: null,
     revealedInfo: null,
     workspaceError: null,
+    formatIndex: 0,
     questionStartMs: null,
   };
+
+  function pickQuestionFormat() {
+    const sel = document.getElementById("question-format-select");
+    const val = sel ? sel.value : "auto";
+    if (val && val !== "auto") return val;
+    const fmt = ALL_FORMATS[state.formatIndex % ALL_FORMATS.length];
+    state.formatIndex = (state.formatIndex + 1) % ALL_FORMATS.length;
+    return fmt;
+  }
 
   function esc(val) {
     return String(val ?? "")
@@ -205,8 +223,12 @@
         const quickCheckHtml = cm.quick_check
           ? `<div class="hint-box"><strong>Quick Self-Check:</strong> ${esc(cm.quick_check)}</div>`
           : "";
+        const adaptBanner = cm.adaptation_note
+          ? `<div class="subgoal-item"><strong>Adapted for you (${esc(cm.mastery_tier || "standard")}):</strong> ${esc(cm.adaptation_note)}</div>`
+          : "";
         cmBody.innerHTML = `
           ${cm.title ? `<h3 style="margin-top:0">${esc(cm.title)}</h3>` : ""}
+          ${adaptBanner}
           <p>${esc(cm.concept_explanation)}</p>
           ${theoryHtml}
           <p><strong>Mental Model:</strong> ${esc(cm.mental_model)}</p>
@@ -537,11 +559,13 @@
     state.workspaceNotice = null;
     state.revealedInfo = null;
     const qSource = (document.getElementById("question-source-select") || {}).value || "v2.2";
+    const qFormat = pickQuestionFormat();
     try {
       const res = await apiPost("/api/ppo_step", {
         learner: state.learner,
         skill: state.skill,
         question_source: qSource,
+        format: qFormat,
       });
       if (res && res.type === "lesson") {
         state.workspaceNotice = `Primed Lesson Delivered (${res.action_name}). Review the Course Material above, then click Next PPO Step for your follow-up question.`;
@@ -562,6 +586,7 @@
     state.workspaceNotice = null;
     state.revealedInfo = null;
     const qSource = (document.getElementById("question-source-select") || {}).value || "v2.2";
+    const qFormat = pickQuestionFormat();
     try {
       const res = await apiPost("/api/ppo_step", {
         learner: state.learner,
@@ -569,6 +594,7 @@
         action_id: Number(val),
         policy_source: "learner_manual",
         question_source: qSource,
+        format: qFormat,
       });
       if (res && res.type === "lesson") {
         state.workspaceNotice = `Primed Lesson Delivered (${res.action_name}). Review the Course Material above, then click Next PPO Step for your follow-up question.`;

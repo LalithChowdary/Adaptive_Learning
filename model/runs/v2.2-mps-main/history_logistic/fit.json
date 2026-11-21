@@ -1,0 +1,24 @@
+{
+  "device": "cpu",
+  "validation_practice_log_loss": 0.5644772917547478,
+  "validation_delayed_log_loss": 0.5493705533577886,
+  "validation_selection_log_loss": 0.5569239225562682,
+  "trials": [
+    {
+      "parameters": {
+        "C": 0.1
+      },
+      "validation_practice_log_loss": 0.56450157307509,
+      "validation_delayed_log_loss": 0.5493738220163741,
+      "validation_selection_log_loss": 0.5569376975457321
+    },
+    {
+      "parameters": {
+        "C": 1.0
+      },
+      "validation_practice_log_loss": 0.5644772917547478,
+      "validation_delayed_log_loss": 0.5493705533577886,
+      "validation_selection_log_loss": 0.5569239225562682
+    }
+  ]
+}

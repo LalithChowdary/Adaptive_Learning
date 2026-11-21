@@ -63,6 +63,14 @@
             <option value="v2.2">Source: v2.2 Bank (2,160 items)</option>
             <option value="llm">Source: Fresh LLM Question</option>
           </select>
+          <select id="question-format-select" class="control-select" aria-label="Question format">
+            <option value="auto">Format: Auto (Rotate All 5)</option>
+            <option value="single_choice">Single Choice (Theory / Trace)</option>
+            <option value="multiple_select">Multiple Select</option>
+            <option value="output_prediction">Output Prediction</option>
+            <option value="fill_in_the_blank">Fill in the Blank</option>
+            <option value="code_completion">Code Completion (AST)</option>
+          </select>
           <button id="ppo-next-btn" class="btn btn-primary" type="button">Next PPO Step</button>
           <select id="manual-action-select" class="control-select" aria-label="Manual pedagogical override">
             <option value="">Manual Override...</option>
@@ -100,6 +108,6 @@
     </aside>
   </main>
 
-  <script src="/app.js?v=4"></script>
+  <script src="/app.js?v=6"></script>
 </body>
 </html>

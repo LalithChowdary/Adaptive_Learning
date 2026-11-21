@@ -1,0 +1,22 @@
+{
+  "device": "mps:0",
+  "verified_gradient_device": "mps:0",
+  "hidden_size": 32,
+  "best_epoch": 1,
+  "seed": 20261110,
+  "optimizer_steps": 2,
+  "validation_practice_log_loss": 0.6938992728203063,
+  "validation_delayed_log_loss": 0.681830311156029,
+  "validation_selection_log_loss": 0.6878647919881676,
+  "learning_curve": [
+    {
+      "epoch": 1,
+      "train_log_loss": 0.6982967729710821,
+      "learning_rate": 0.0019104988431301838,
+      "validation_practice_log_loss": 0.6938992728203063,
+      "validation_delayed_log_loss": 0.681830311156029,
+      "validation_selection_log_loss": 0.6878647919881676,
+      "seconds": 0.283
+    }
+  ]
+}

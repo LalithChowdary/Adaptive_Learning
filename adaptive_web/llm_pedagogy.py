@@ -366,15 +366,61 @@ class PedagogyRealizer:
         skill: str,
         memory_summary: dict[str, Any] | None = None,
         focus_gap: str | None = None,
+        weak_topics: list[str] | None = None,
     ) -> dict[str, Any]:
         """Generate comprehensive course explanation, mental model, pitfalls, and worked example."""
         default_data = DEFAULT_LESSONS.get(skill, {})
         skill_info = SKILL_META.get(skill, {"title": skill.replace("_", " ").title(), "summary": ""})
         mem = memory_summary or {}
+        weak_list = [str(w).strip() for w in (weak_topics or []) if str(w).strip()]
+
+        assessed = bool(mem.get("assessed", False))
+        p_med = float(mem.get("p_med", 0.5))
+        p_30d = float(mem.get("p_30d", 0.5))
+        fragility = float(mem.get("fragility", max(0.0, p_med - p_30d)))
+        floor_b = float(mem.get("floor_b", 0.0))
+        obs_rate = mem.get("observed_pass_rate")
+
+        weak_note = f" Specific areas missed: {'; '.join(weak_list[:3])}." if weak_list else ""
+
+        if not assessed:
+            mastery_tier = "unassessed"
+            adaptation_note = (
+                f"First time studying {skill_info['title']}: delivering the complete foundational theory, "
+                "mental model, and step-by-step worked trace."
+            )
+        elif p_med < 0.70 or (obs_rate is not None and float(obs_rate) < 0.70):
+            mastery_tier = "lacking"
+            unaided_ok = int(mem.get("observed_unaided_passes", 0))
+            unaided_tot = int(mem.get("observed_unaided_attempts", 0))
+            obs_str = (
+                f"unaided pass rate {unaided_ok}/{unaided_tot} ({float(obs_rate):.0%}), "
+                if obs_rate is not None
+                else ""
+            )
+            adaptation_note = (
+                f"Remediation Mode ({obs_str}P(Med)={p_med:.0%} < 70%): slowing down to reinforce "
+                f"step-by-step trace rules, boundary pitfalls, and scaffolded examples.{weak_note}"
+            )
+        elif fragility > 0.15:
+            mastery_tier = "fragile"
+            adaptation_note = (
+                f"Retention Refresher (30-day drop of {fragility * 100:.0f}%, floor b_t={floor_b:.2f}): "
+                f"skipping basic syntax and focusing on durable mental models to prevent forgetting.{weak_note}"
+            )
+        else:
+            mastery_tier = "mastered"
+            adaptation_note = (
+                f"Advanced Mastery Mode (P(Med)={p_med:.0%}, floor b_t={floor_b:.2f}): condensing basics "
+                "and emphasizing tricky edge cases, boundary combinations, and downstream transfer."
+            )
 
         system_prompt = (
             "You are an instructional designer for computer science. "
-            "Generate a complete, thorough, textbook-quality mini-course for a Python skill with deep theory. "
+            f"Generate a complete, textbook-quality mini-course tailored to mastery_tier='{mastery_tier}'. "
+            "If mastery_tier='lacking', emphasize step-by-step remediation on weak_topics and common mistakes. "
+            "If mastery_tier='fragile', focus on retention rules and preventing decay. "
+            "If mastery_tier='mastered', condense basics and focus on advanced edge cases and transfer. "
             "Output JSON with keys: title, concept_explanation (multi-sentence detailed theory), "
             "theory_sections (list of 3 objects with {heading, body}), mental_model, pitfalls (list of 3 specific mistakes), "
             "worked_example (object with title, code, subgoals (list of objects with label, detail)), quick_check."
@@ -383,6 +429,9 @@ class PedagogyRealizer:
             "intent": "generate_course_material",
             "skill": skill,
             "skill_title": skill_info["title"],
+            "mastery_tier": mastery_tier,
+            "adaptation_note": adaptation_note,
+            "weak_topics": weak_list,
             "focus_gap": focus_gap,
             "cognitive_state": mem,
         }
@@ -403,6 +452,8 @@ class PedagogyRealizer:
                 return {
                     "id": str(uuid.uuid4()),
                     "skill": skill,
+                    "mastery_tier": mastery_tier,
+                    "adaptation_note": adaptation_note,
                     "title": str(resp.get("title", f"Course Material: {skill_info['title']}")),
                     "concept_explanation": str(resp["concept_explanation"]),
                     "theory_sections": resp.get("theory_sections") or [],
@@ -415,7 +466,7 @@ class PedagogyRealizer:
         except LLMClientError:
             pass
 
-        # High-fidelity complete course fallback from _RICH_COURSE_CURRICULUM + DEFAULT_LESSONS
+        # High-fidelity mastery-tailored fallback from _RICH_COURSE_CURRICULUM + DEFAULT_LESSONS
         rich = _RICH_COURSE_CURRICULUM.get(skill, {})
         concept = default_data.get("concept", {})
         we = default_data.get("worked_example", {})
@@ -427,14 +478,62 @@ class PedagogyRealizer:
             else:
                 subgoals.append({"label": "Step", "detail": step.strip()})
 
+        base_title = rich.get("title") or concept.get("title", f"Course Material: {skill_info['title']}")
+        base_theory = list(rich.get("theory_sections", []))
+        base_pitfalls = list(rich.get("pitfalls", []))
+        base_expl = rich.get("concept_explanation") or concept.get("summary", skill_info["summary"])
+
+        if mastery_tier == "lacking":
+            title = f"Remediation & Core Trace: {skill_info['title']}"
+            expl = f"Focused review: {base_expl} Slow down and verify each intermediate value explicitly before moving to the next line."
+            weak_body = (
+                f"Your recent missed items on this skill involved: {'; '.join(weak_list[:3])}. "
+                "Write out each variable's value line-by-line and double-check boundary operators (< vs <=, stop exclusion)."
+                if weak_list
+                else "Avoid guessing from surface patterns. Write out each variable's value line-by-line and double-check boundary operators (< vs <=, stop exclusion)."
+            )
+            theory = [
+                {
+                    "heading": "Remediation Priority: Trace Your Missed Patterns",
+                    "body": weak_body,
+                },
+                *base_theory[:2],
+            ]
+        elif mastery_tier == "fragile":
+            title = f"Retention Refresher: {skill_info['title']}"
+            expl = f"Memory consolidation review: {base_expl}"
+            theory = [
+                {
+                    "heading": "Why This Skill Decays (and How to Lock It In)",
+                    "body": "Short-term pattern recognition fades over days. Focus on the underlying causal rule so you can reconstruct answers unaided after a 30-day gap.",
+                },
+                *base_theory[1:],
+            ]
+        elif mastery_tier == "mastered":
+            title = f"Advanced Edge Cases: {skill_info['title']}"
+            expl = f"You have strong mastery on {skill_info['title']} (P(Med)={p_med:.0%}). Use this concise brief to guard against subtle edge cases and prepare for harder multi-concept problems."
+            theory = [
+                *base_theory[1:],
+                {
+                    "heading": "Advanced Transfer & Boundary Stress Cases",
+                    "body": f"Test yourself on empty inputs, negative values, and combining {skill_info['title']} with downstream skills rather than repeating routine Easy exercises.",
+                },
+            ]
+        else:
+            title = base_title
+            expl = base_expl
+            theory = base_theory
+
         return {
             "id": str(uuid.uuid4()),
             "skill": skill,
-            "title": rich.get("title") or concept.get("title", f"Course Material: {skill_info['title']}"),
-            "concept_explanation": rich.get("concept_explanation") or concept.get("summary", skill_info["summary"]),
-            "theory_sections": rich.get("theory_sections", []),
+            "mastery_tier": mastery_tier,
+            "adaptation_note": adaptation_note,
+            "title": title,
+            "concept_explanation": expl,
+            "theory_sections": theory,
             "mental_model": "\n".join(concept.get("rules", [])),
-            "pitfalls": rich.get("pitfalls", []),
+            "pitfalls": base_pitfalls,
             "worked_example": {
                 "title": we.get("title", "Worked Trace Example"),
                 "problem": we.get("problem", ""),

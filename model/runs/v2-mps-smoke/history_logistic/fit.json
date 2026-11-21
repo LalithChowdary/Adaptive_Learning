@@ -1,0 +1,18 @@
+{
+  "device": "cpu",
+  "validation_delayed_log_loss": 0.6652560959396903,
+  "trials": [
+    {
+      "parameters": {
+        "C": 0.1
+      },
+      "validation_delayed_log_loss": 0.6685862775462038
+    },
+    {
+      "parameters": {
+        "C": 1.0
+      },
+      "validation_delayed_log_loss": 0.6652560959396903
+    }
+  ]
+}
