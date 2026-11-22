@@ -270,6 +270,18 @@ def serve(app: AdaptiveLearningApp, port: int = 8780) -> ThreadingHTTPServer:
                         ),
                     )
                     return
+                if path == "/api/chat":
+                    self._send_json(
+                        200,
+                        app.chat_doubt(
+                            data.get("learner") or None,
+                            data.get("skill", ""),
+                            data.get("message", ""),
+                            history=data.get("history"),
+                            request_id=req_id,
+                        ),
+                    )
+                    return
             except (ValueError, KeyError, InvalidActionError) as exc:
                 self._send_json(400, {"error": str(exc)})
                 return

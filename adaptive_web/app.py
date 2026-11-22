@@ -1071,3 +1071,51 @@ class AdaptiveLearningApp:
             "generated_tasks": self.store.list_generated_tasks(),
             "token_audit": token_audit,
         }
+
+    def chat_doubt(
+        self,
+        learner: str | None,
+        skill: str,
+        message: str,
+        *,
+        history: list[dict[str, str]] | None = None,
+        request_id: str | None = None,
+    ) -> dict[str, Any]:
+        """Answer a learner's question about the current skill's lesson/reference material."""
+        self._require_skill(skill)
+        if not isinstance(message, str) or not message.strip():
+            raise ValueError("Please enter a question to ask the tutor.")
+        cleaned = message.strip()
+        if len(cleaned) > 1000:
+            raise ValueError("Question must be 1000 characters or fewer.")
+
+        if request_id is not None:
+            cached = self.store.idempotent_get(request_id)
+            if cached is not None:
+                return cached
+
+        course_material = None
+        if learner:
+            try:
+                self._require_learner(learner)
+                course_material = self.store.get_latest_course_material(learner, skill)
+            except KeyError:
+                course_material = None
+
+        ans = self.pedagogy.answer_learner_doubt(
+            skill,
+            cleaned,
+            history=history if isinstance(history, list) else None,
+            course_material=course_material,
+        )
+        res = {
+            "status": "ok",
+            "skill": skill,
+            "reply": ans["reply"],
+            "code_example": ans.get("code_example", ""),
+            "source": ans.get("source", "fallback"),
+        }
+        if request_id is not None:
+            self.store.idempotent_set(request_id, res)
+        return res
+

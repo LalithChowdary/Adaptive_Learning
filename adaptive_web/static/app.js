@@ -9,16 +9,31 @@
     "code_completion",
   ];
 
+  const FORMAT_LABELS = {
+    single_choice: "Single Choice",
+    multiple_select: "Multiple Select",
+    output_prediction: "Output Prediction",
+    fill_in_the_blank: "Fill in the Blank",
+    code_completion: "Code Completion",
+    self_explanation: "Self-Explanation",
+  };
+
   const state = {
     csrfToken: null,
     learner: null,
     skill: "range_boundaries",
+    activeTab: "learn",
     data: null,
     curve: null,
     glassBoxOpen: false,
     loadingSkill: null,
+    loadingStep: false,
     revealedInfo: null,
     workspaceError: null,
+    workspaceNotice: null,
+    activeLesson: null,
+    chatBySkill: {},
+    sendingChat: false,
     formatIndex: 0,
     questionStartMs: null,
   };
@@ -46,6 +61,31 @@
       return window.crypto.randomUUID();
     }
     return "req-" + Math.random().toString(36).slice(2) + "-" + Date.now();
+  }
+
+  function getActiveInteraction(data) {
+    return (data && (data.active || data.active_interaction)) || null;
+  }
+
+  function setActiveTab(tab) {
+    if (!["learn", "practice", "progress"].includes(tab)) return;
+    state.activeTab = tab;
+    renderTabs();
+  }
+
+  function renderTabs() {
+    ["learn", "practice", "progress"].forEach((t) => {
+      const btn = document.getElementById(`tab-btn-${t}`);
+      const panel = document.getElementById(`tab-panel-${t}`);
+      const isActive = state.activeTab === t;
+      if (btn) {
+        btn.classList.toggle("active", isActive);
+        btn.setAttribute("aria-selected", isActive ? "true" : "false");
+      }
+      if (panel) {
+        panel.classList.toggle("hidden", !isActive);
+      }
+    });
   }
 
   async function apiGet(path) {
@@ -97,9 +137,63 @@
     render();
   }
 
+  async function requestNextStep({ finishInteractionId = null, actionId = null, policySource = null } = {}) {
+    if (!state.learner || state.loadingStep) return;
+    state.loadingStep = true;
+    state.workspaceError = null;
+    state.workspaceNotice = null;
+    state.revealedInfo = null;
+    state.activeLesson = null;
+    render();
+
+    try {
+      if (finishInteractionId) {
+        await apiPost("/api/finish", { learner: state.learner, interaction: finishInteractionId });
+        state.questionStartMs = null;
+      }
+
+      const qSource = (document.getElementById("question-source-select") || {}).value || "v2.2";
+      const qFormat = pickQuestionFormat();
+      const body = {
+        learner: state.learner,
+        skill: state.skill,
+        question_source: qSource,
+        format: qFormat,
+      };
+      if (actionId !== null && actionId !== undefined) {
+        body.action_id = Number(actionId);
+      }
+      if (policySource) {
+        body.policy_source = policySource;
+      }
+
+      const res = await apiPost("/api/ppo_step", body);
+      if (res && res.target_skill && res.target_skill !== state.skill) {
+        state.skill = res.target_skill;
+        await apiPost("/api/select_skill", { learner: state.learner, skill: state.skill });
+      }
+      if (res && res.type === "lesson") {
+        state.activeLesson = {
+          mode: res.primed_mode || (res.action_id === 4 ? "example" : "concept"),
+          material: res.lesson || (state.data && state.data.course_material) || null,
+          actionName: res.action_name || "",
+        };
+      }
+      state.questionStartMs = Date.now();
+      await refreshState();
+    } catch (err) {
+      state.workspaceError = err.message || String(err);
+    } finally {
+      state.loadingStep = false;
+      render();
+    }
+  }
+
   function render() {
     const d = state.data;
     if (!d) return;
+
+    renderTabs();
 
     // Profiles dropdown
     const sel = document.getElementById("profile-select");
@@ -108,31 +202,27 @@
         .map((p) => `<option value="${esc(p.id)}" ${p.id === state.learner ? "selected" : ""}>${esc(p.name)}</option>`)
         .join("");
 
-    // LLM badge
-    const llm = d.llm_status || {};
-    document.getElementById("llm-status-badge").textContent =
-      `LLM: ${llm.provider || "mock"} (${llm.is_live ? "live" : "offline"})`;
-
-    // Skill DAG
+    // Skill sidebar
     const dagEl = document.getElementById("skill-dag-list");
     const summaries = d.skill_summaries || {};
     const prereqs = d.prerequisites || {};
     const meta = d.skill_meta || {};
+
+    const skillNameOf = (sk) => (meta[sk] && (meta[sk].title || meta[sk].name)) || sk;
+
     dagEl.innerHTML = (d.skills || [])
       .map((sk) => {
         const s = summaries[sk];
         const assessed = s ? Boolean(s.assessed) : false;
-        const pMed = s ? `${Math.round((s.p_med || 0) * 100)}%` : "unassessed";
-        const floorB = s ? (s.floor_b || 0).toFixed(2) : "0.00";
-        const preList = (prereqs[sk] || []).join(", ") || "Root";
-        const floorText = assessed ? `floor b_t: ${floorB}` : `prior b_t: ${floorB} (unassessed)`;
+        const pMed = s ? `${Math.round((s.p_med || 0) * 100)}%` : "Not started";
+        const preNames = (prereqs[sk] || []).map((p) => skillNameOf(p)).join(", ") || "Starting topic";
         return `
           <button type="button" class="skill-node ${sk === state.skill ? "active" : ""}" data-skill="${esc(sk)}">
             <div class="skill-node-header">
-              <span>${esc((meta[sk] && meta[sk].name) || sk)}</span>
-              <span class="badge ${assessed ? "badge-lime" : ""}">${assessed ? pMed : "Unassessed"}</span>
+              <span>${esc(skillNameOf(sk))}</span>
+              <span class="badge ${assessed ? "badge-lime" : ""}">${assessed ? pMed : "New"}</span>
             </div>
-            <div class="skill-node-meta">Prereq: ${esc(preList)} · ${esc(floorText)}</div>
+            <div class="skill-node-meta">${assessed ? "Mastery estimate" : "Prereq"}: ${assessed ? pMed : esc(preNames)}</div>
           </button>`;
       })
       .join("");
@@ -144,12 +234,18 @@
         const chosen = btn.getAttribute("data-skill");
         state.skill = chosen;
         state.loadingSkill = chosen;
+        state.workspaceError = null;
+        state.workspaceNotice = null;
+        state.revealedInfo = null;
+        state.activeLesson = null;
         render();
         try {
           if (state.learner) {
             await apiPost("/api/select_skill", { learner: state.learner, skill: state.skill });
           }
           await refreshState();
+          const activeQ = getActiveInteraction(state.data);
+          setActiveTab(activeQ && activeQ.question ? "practice" : "learn");
         } finally {
           state.loadingSkill = null;
           render();
@@ -157,35 +253,50 @@
       });
     });
 
-    // Learning Path & Course Material (with explicit loading screen while curating)
+    // Active skill header
+    const activeSummary = summaries[state.skill];
+    const activeAssessed = activeSummary ? Boolean(activeSummary.assessed) : false;
+    const activePct = activeSummary ? `${Math.round((activeSummary.p_med || 0) * 100)}% Ready` : "Not started";
+    document.getElementById("active-skill-title").textContent = skillNameOf(state.skill);
+    document.getElementById("active-skill-subtitle").textContent = state.learner
+      ? (activeAssessed ? "Continue practicing or review your retention progress." : "Read the quick lesson below, then start practicing.")
+      : "Select or create a learner profile in the top bar to begin.";
+
+    const skillBadge = document.getElementById("active-skill-badge");
+    skillBadge.textContent = activeAssessed ? activePct : "Not started";
+    skillBadge.className = `badge ${activeAssessed ? "badge-lime" : ""}`;
+
+    // LLM / Study Path badge
     const lp = d.learning_path;
+    const llm = d.llm_status || {};
+    const llmBadge = document.getElementById("llm-status-badge");
+    if (lp && lp.source === "llm") {
+      llmBadge.textContent = `AI Tutor (${llm.model || "cloud"})`;
+    } else {
+      llmBadge.textContent = "Offline Curriculum";
+    }
+
+    // Learning Path & Course Material
     const cm = d.course_material;
     const cmBody = document.getElementById("course-material-body");
-    document.getElementById("active-skill-badge").textContent = state.skill;
 
     if (state.loadingSkill) {
-      const skName = (meta[state.loadingSkill] && (meta[state.loadingSkill].title || meta[state.loadingSkill].name)) || state.loadingSkill;
-      document.getElementById("path-title").textContent = `Curating Study Path: ${skName}`;
+      const skName = skillNameOf(state.loadingSkill);
+      document.getElementById("path-title").textContent = `Loading: ${skName}`;
       document.getElementById("path-summary").textContent = "";
       document.getElementById("path-steps").innerHTML = `
         <div class="loading-banner" role="status" aria-live="polite">
           <span class="loading-dot"></span>
-          <span>Reading monotonic_gru memory state &amp; curating personalized Learn → Code → Remember path for ${esc(skName)}...</span>
+          <span>Preparing personalized study plan for ${esc(skName)}...</span>
         </div>`;
       cmBody.innerHTML = `
         <div class="loading-banner" role="status" aria-live="polite">
           <span class="loading-dot"></span>
-          <span>Generating complete theory, pitfalls, and subgoal-labeled worked example for ${esc(skName)}...</span>
+          <span>Loading lesson, common pitfalls, and worked example for ${esc(skName)}...</span>
         </div>`;
     } else {
-      document.getElementById("path-title").textContent = lp ? lp.title : "Personalized Learning Path";
-      document.getElementById("path-summary").textContent = lp ? lp.summary : "Select a learner and skill to curate a path.";
-      if (lp && lp.source) {
-        document.getElementById("llm-status-badge").textContent =
-          lp.source === "llm"
-            ? `Study Path: Live LLM (${llm.model || "cloud"})`
-            : `Study Path: Curriculum Engine`;
-      }
+      document.getElementById("path-title").textContent = lp ? lp.title : "Study Plan";
+      document.getElementById("path-summary").textContent = lp ? lp.summary : "Select a learner and topic to begin.";
       document.getElementById("path-steps").innerHTML = lp && Array.isArray(lp.steps)
         ? lp.steps
             .map(
@@ -224,7 +335,7 @@
           ? `<div class="hint-box"><strong>Quick Self-Check:</strong> ${esc(cm.quick_check)}</div>`
           : "";
         const adaptBanner = cm.adaptation_note
-          ? `<div class="subgoal-item"><strong>Adapted for you (${esc(cm.mastery_tier || "standard")}):</strong> ${esc(cm.adaptation_note)}</div>`
+          ? `<div class="subgoal-item"><strong>Study Tip:</strong> ${esc(cm.adaptation_note)}</div>`
           : "";
         cmBody.innerHTML = `
           ${cm.title ? `<h3 style="margin-top:0">${esc(cm.title)}</h3>` : ""}
@@ -233,38 +344,150 @@
           ${theoryHtml}
           <p><strong>Mental Model:</strong> ${esc(cm.mental_model)}</p>
           ${pitfallsHtml}
-          ${we.code ? `<p><strong>${esc(we.title || "Worked Example")}:</strong></p><pre class="code-block">${esc(we.code)}</pre>` : ""}
+          ${we.title ? `<p><strong>Worked Example:</strong> ${esc(we.title)}</p>` : ""}
+          ${we.code ? `<pre class="code-block">${esc(we.code)}</pre>` : ""}
           ${subgoals}
           ${quickCheckHtml}
         `;
       } else {
-        cmBody.innerHTML = `<p class="brand-sub">Click a skill in the DAG to generate tailored course material.</p>`;
+        cmBody.innerHTML = `<p class="brand-sub">Select a learner profile and a Python topic to view its lesson and worked example.</p>`;
       }
     }
 
-    // Active Question / Workspace
-    renderWorkspace(d.active);
-
-    // 0-60d Curve SVG
+    renderTutorChat();
+    renderWorkspace(getActiveInteraction(d));
     renderCurve();
-
-    // Glass-Box Inspector
     renderGlassBox();
+  }
+
+  function renderTutorChat() {
+    const box = document.getElementById("tutor-chat-messages");
+    const sendBtn = document.getElementById("tutor-chat-send-btn");
+    if (!box) return;
+    const msgs = state.chatBySkill[state.skill] || [];
+    if (sendBtn) {
+      sendBtn.disabled = Boolean(state.sendingChat);
+      sendBtn.textContent = state.sendingChat ? "Thinking..." : "Ask Tutor";
+    }
+    if (!msgs.length) {
+      box.innerHTML = `
+        <div class="chat-msg chat-msg-assistant">
+          <div class="chat-msg-role">AI Tutor</div>
+          <div>Have any doubts about this lesson or worked example? Ask me here before you jump into practice!</div>
+        </div>`;
+      return;
+    }
+    box.innerHTML = msgs
+      .map((m) => {
+        const isUser = m.role === "user";
+        const codeHtml = !isUser && m.code
+          ? `<pre class="code-block" style="margin:8px 0 0">${esc(m.code)}</pre>`
+          : "";
+        return `
+          <div class="chat-msg ${isUser ? "chat-msg-user" : "chat-msg-assistant"}">
+            <div class="chat-msg-role">${isUser ? "You" : "AI Tutor"}</div>
+            <div>${esc(m.text)}</div>
+            ${codeHtml}
+          </div>`;
+      })
+      .join("");
+    box.scrollTop = box.scrollHeight;
   }
 
   function renderWorkspace(active) {
     const qArea = document.getElementById("question-area");
     const fArea = document.getElementById("feedback-area");
     const modeBadge = document.getElementById("workspace-mode-badge");
+
+    if (!state.learner) {
+      modeBadge.textContent = "Profile needed";
+      qArea.innerHTML = `
+        <div class="practice-empty">
+          <p>Select or create a learner profile in the top bar to start practicing.</p>
+        </div>`;
+      fArea.innerHTML = "";
+      return;
+    }
+
+    if (state.loadingStep) {
+      modeBadge.textContent = "Loading...";
+      qArea.innerHTML = `
+        <div class="loading-banner" role="status" aria-live="polite">
+          <span class="loading-dot"></span>
+          <span>Preparing your next activity...</span>
+        </div>`;
+      fArea.innerHTML = "";
+      return;
+    }
+
     if (!active || !active.question) {
+      if (state.activeLesson && state.activeLesson.material) {
+        const mat = state.activeLesson.material;
+        const isExample = state.activeLesson.mode === "example";
+        modeBadge.textContent = isExample ? "Worked Example" : "Concept Lesson";
+
+        let lessonHtml = "";
+        if (isExample && mat.worked_example) {
+          const we = mat.worked_example;
+          const subgoals = (we.subgoals || [])
+            .map((sg) => `<div class="subgoal-item"><strong>${esc(sg.label)}:</strong> ${esc(sg.detail)}</div>`)
+            .join("");
+          lessonHtml = `
+            <p class="brand-sub">Review this step-by-step example before your next question:</p>
+            ${we.title ? `<h3 style="margin:8px 0">${esc(we.title)}</h3>` : ""}
+            ${we.code ? `<pre class="code-block">${esc(we.code)}</pre>` : ""}
+            ${subgoals}
+          `;
+        } else {
+          const theoryHtml = Array.isArray(mat.theory_sections) && mat.theory_sections.length
+            ? `<div class="theory-grid">${mat.theory_sections
+                .map(
+                  (sec) => `
+                  <div class="theory-section">
+                    <h4>${esc(sec.heading)}</h4>
+                    <p>${esc(sec.body)}</p>
+                  </div>`
+                )
+                .join("")}</div>`
+            : "";
+          const pitfallsHtml = Array.isArray(mat.pitfalls) && mat.pitfalls.length
+            ? `<p><strong>Watch out for:</strong></p><ul class="pitfalls-list">${mat.pitfalls.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>`
+            : "";
+          lessonHtml = `
+            <p class="brand-sub">Concept lesson recommended before your next question:</p>
+            ${mat.title ? `<h3 style="margin:8px 0">${esc(mat.title)}</h3>` : ""}
+            <p>${esc(mat.concept_explanation)}</p>
+            ${theoryHtml}
+            ${mat.mental_model ? `<p><strong>Mental Model:</strong> ${esc(mat.mental_model)}</p>` : ""}
+            ${pitfallsHtml}
+          `;
+        }
+
+        qArea.innerHTML = `
+          ${lessonHtml}
+          <div class="practice-actions">
+            <button id="lesson-continue-btn" class="btn btn-primary" type="button">Got it, next question →</button>
+            <button id="lesson-full-btn" class="btn" type="button">Open Reference</button>
+          </div>`;
+        fArea.innerHTML = state.workspaceError
+          ? `<div class="hint-box"><strong>Notice:</strong> ${esc(state.workspaceError)}</div>`
+          : "";
+        document.getElementById("lesson-continue-btn").addEventListener("click", () => requestNextStep());
+        document.getElementById("lesson-full-btn").addEventListener("click", () => {
+          const ref = document.getElementById("course-material-card");
+          if (ref) ref.open = true;
+          setActiveTab("learn");
+        });
+        return;
+      }
+
       modeBadge.textContent = "Ready";
-      qArea.innerHTML = `<p class="brand-sub">Click "Next PPO Step" to let delayed_retention_ppo choose the next pedagogical action.</p>`;
       let extraMsg = "";
       if (state.revealedInfo) {
         const sol = Array.isArray(state.revealedInfo.solution)
           ? state.revealedInfo.solution.join(", ")
           : state.revealedInfo.solution;
-        extraMsg += `<div class="hint-box"><strong>Revealed Solution:</strong> <code>${esc(sol)}</code>${state.revealedInfo.explanation ? `<br/><span>${esc(state.revealedInfo.explanation)}</span>` : ""}</div>`;
+        extraMsg += `<div class="hint-box"><strong>Solution:</strong> <code>${esc(sol)}</code>${state.revealedInfo.explanation ? `<br/><span>${esc(state.revealedInfo.explanation)}</span>` : ""}</div>`;
       }
       if (state.workspaceNotice) {
         extraMsg += `<div class="hint-box">${esc(state.workspaceNotice)}</div>`;
@@ -272,13 +495,26 @@
       if (state.workspaceError) {
         extraMsg += `<div class="hint-box"><strong>Notice:</strong> ${esc(state.workspaceError)}</div>`;
       }
+
+      const ctaLabel = state.workspaceNotice ? "Continue to Question →" : "Start Practice →";
+      qArea.innerHTML = `
+        <div class="practice-empty">
+          <p>${state.workspaceNotice ? "Ready for your follow-up question?" : "Ready to practice this topic with an adaptive question."}</p>
+          <div class="practice-actions" style="justify-content:center">
+            <button id="empty-start-btn" class="btn btn-primary" type="button">${ctaLabel}</button>
+            <button id="empty-learn-btn" class="btn" type="button">Review Lesson</button>
+          </div>
+        </div>`;
       fArea.innerHTML = extraMsg;
+
+      document.getElementById("empty-start-btn").addEventListener("click", () => requestNextStep());
+      document.getElementById("empty-learn-btn").addEventListener("click", () => setActiveTab("learn"));
       return;
     }
 
     if (!state.questionStartMs) state.questionStartMs = Date.now();
     const q = active.question;
-    modeBadge.textContent = `${active.mode || "practice"} · ${q.task_type}`;
+    modeBadge.textContent = FORMAT_LABELS[q.task_type] || q.task_type;
 
     let inputHtml = "";
     const isMultiSnippetText =
@@ -343,94 +579,127 @@
     const retryCount = Number(active.retry_count || 0);
     const hintsCount = (active.hints || []).length;
     const canSubmit = results.length <= retryCount;
+    const canRetry = hasSubmitted && !hasPassed && retryCount < 2 && !canSubmit;
 
     qArea.innerHTML = `
       <p><strong>${esc(q.prompt)}</strong></p>
       ${snippetsHtml}
       ${inputHtml}
-      <div class="topbar-controls">
-        <button id="submit-ans-btn" class="btn btn-primary" type="button" ${canSubmit ? "" : "disabled"}>Submit</button>
-        <button id="hint-btn" class="btn" type="button" ${(hasPassed || hintsCount >= 3) ? "disabled" : ""}>Hint (${hintsCount}/3)</button>
-        <button id="retry-btn" class="btn" type="button" ${(!hasSubmitted || hasPassed || retryCount >= 2 || canSubmit) ? "disabled" : ""}>Retry (${retryCount}/2)</button>
-        <button id="reveal-btn" class="btn" type="button" ${!hasSubmitted ? "disabled" : ""}>Reveal</button>
-        <button id="finish-btn" class="btn btn-lime" type="button">Finish</button>
+      <div class="practice-actions">
+        ${canSubmit ? `<button id="submit-ans-btn" class="btn btn-primary" type="button">Submit</button>` : ""}
+        ${(!hasPassed && hintsCount < 3) ? `<button id="hint-btn" class="btn" type="button">Hint (${hintsCount}/3)</button>` : ""}
+        ${canRetry ? `<button id="retry-btn" class="btn" type="button">Retry (${retryCount}/2)</button>` : ""}
+        ${(hasSubmitted && !hasPassed && !state.revealedInfo) ? `<button id="reveal-btn" class="btn" type="button">Reveal Solution</button>` : ""}
+        ${hasSubmitted ? `<button id="next-question-btn" class="btn ${hasPassed || state.revealedInfo || !canRetry ? "btn-primary" : "btn-lime"}" type="button">Next →</button>` : ""}
+        <button id="finish-btn" class="btn" type="button">Stop</button>
       </div>
       ${hintsHtml}
     `;
 
-    let feedbackHtml = lastRes
-      ? `<div class="hint-box"><strong>Score:</strong> ${esc(lastRes.score)} · <strong>Status:</strong> ${esc(lastRes.grading_status)} · ${lastRes.full_success ? "Passed" : "Needs Review"}</div>`
-      : "";
+    let feedbackHtml = "";
+    if (lastRes) {
+      const cls = lastRes.full_success ? "feedback-pass" : "feedback-fail";
+      const msg = lastRes.full_success
+        ? "Nice job! Click Next → to continue."
+        : (canRetry ? "Not quite — try again with Retry, use a Hint, or Reveal Solution." : "Review the feedback or solution, then click Next → to continue.");
+      feedbackHtml += `<div class="feedback-banner ${cls}"><strong>${lastRes.full_success ? "Correct" : "Needs Review"}</strong> (Score: ${esc(lastRes.score)}) — ${msg}</div>`;
+    }
+    if (state.revealedInfo) {
+      const sol = Array.isArray(state.revealedInfo.solution)
+        ? state.revealedInfo.solution.join(", ")
+        : state.revealedInfo.solution;
+      feedbackHtml += `<div class="hint-box"><strong>Solution:</strong> <code>${esc(sol)}</code>${state.revealedInfo.explanation ? `<br/><span>${esc(state.revealedInfo.explanation)}</span>` : ""}</div>`;
+    }
     if (state.workspaceError) {
       feedbackHtml += `<div class="hint-box"><strong>Notice:</strong> ${esc(state.workspaceError)}</div>`;
     }
     fArea.innerHTML = feedbackHtml;
 
-    document.getElementById("submit-ans-btn").addEventListener("click", async () => {
-      state.workspaceError = null;
-      state.revealedInfo = null;
-      let answer = null;
-      if (q.task_type === "single_choice") {
-        const checked = qArea.querySelector('input[name="sc-opt"]:checked');
-        answer = checked ? checked.value : "";
-      } else if (q.task_type === "multiple_select") {
-        answer = Array.from(qArea.querySelectorAll('input[name="ms-opt"]:checked')).map((el) => el.value);
-      } else if (q.task_type === "code_completion") {
-        answer = document.getElementById("code-answer").value;
-      } else if (isMultiSnippetText) {
-        answer = Array.from(qArea.querySelectorAll(".multi-text-answer")).map((el) => el.value);
-      } else {
-        const val = document.getElementById("text-answer").value;
-        answer = q.task_type === "self_explanation" ? val : [val];
-      }
-      const elapsed = Math.max(1.0, (Date.now() - (state.questionStartMs || Date.now())) / 1000);
-      try {
-        await apiPost("/api/submit", {
-          learner: state.learner,
-          interaction: active.id,
-          answer,
-          active_seconds: elapsed,
-          self_explanation: q.task_type === "self_explanation" ? answer : undefined,
-        });
-        await refreshState();
-      } catch (err) {
-        state.workspaceError = err.message || String(err);
-        render();
-      }
-    });
+    const submitBtn = document.getElementById("submit-ans-btn");
+    if (submitBtn) {
+      submitBtn.addEventListener("click", async () => {
+        state.workspaceError = null;
+        state.revealedInfo = null;
+        let answer = null;
+        if (q.task_type === "single_choice") {
+          const checked = qArea.querySelector('input[name="sc-opt"]:checked');
+          answer = checked ? checked.value : "";
+        } else if (q.task_type === "multiple_select") {
+          answer = Array.from(qArea.querySelectorAll('input[name="ms-opt"]:checked')).map((el) => el.value);
+        } else if (q.task_type === "code_completion") {
+          answer = document.getElementById("code-answer").value;
+        } else if (isMultiSnippetText) {
+          answer = Array.from(qArea.querySelectorAll(".multi-text-answer")).map((el) => el.value);
+        } else {
+          const val = document.getElementById("text-answer").value;
+          answer = q.task_type === "self_explanation" ? val : [val];
+        }
+        const elapsed = Math.max(1.0, (Date.now() - (state.questionStartMs || Date.now())) / 1000);
+        try {
+          await apiPost("/api/submit", {
+            learner: state.learner,
+            interaction: active.id,
+            answer,
+            active_seconds: elapsed,
+            self_explanation: q.task_type === "self_explanation" ? answer : undefined,
+          });
+          await refreshState();
+        } catch (err) {
+          state.workspaceError = err.message || String(err);
+          render();
+        }
+      });
+    }
 
-    document.getElementById("hint-btn").addEventListener("click", async () => {
-      state.workspaceError = null;
-      try {
-        await apiPost("/api/hint", { learner: state.learner, interaction: active.id });
-        await refreshState();
-      } catch (err) {
-        state.workspaceError = err.message || String(err);
-        render();
-      }
-    });
-    document.getElementById("retry-btn").addEventListener("click", async () => {
-      state.workspaceError = null;
-      try {
-        await apiPost("/api/retry", { learner: state.learner, interaction: active.id });
-        await refreshState();
-      } catch (err) {
-        state.workspaceError = err.message || String(err);
-        render();
-      }
-    });
-    document.getElementById("reveal-btn").addEventListener("click", async () => {
-      state.workspaceError = null;
-      try {
-        const res = await apiPost("/api/reveal", { learner: state.learner, interaction: active.id });
-        state.revealedInfo = res;
-        state.questionStartMs = null;
-        await refreshState();
-      } catch (err) {
-        state.workspaceError = err.message || String(err);
-        render();
-      }
-    });
+    const hintBtn = document.getElementById("hint-btn");
+    if (hintBtn) {
+      hintBtn.addEventListener("click", async () => {
+        state.workspaceError = null;
+        try {
+          await apiPost("/api/hint", { learner: state.learner, interaction: active.id });
+          await refreshState();
+        } catch (err) {
+          state.workspaceError = err.message || String(err);
+          render();
+        }
+      });
+    }
+
+    const retryBtn = document.getElementById("retry-btn");
+    if (retryBtn) {
+      retryBtn.addEventListener("click", async () => {
+        state.workspaceError = null;
+        try {
+          await apiPost("/api/retry", { learner: state.learner, interaction: active.id });
+          await refreshState();
+        } catch (err) {
+          state.workspaceError = err.message || String(err);
+          render();
+        }
+      });
+    }
+
+    const revealBtn = document.getElementById("reveal-btn");
+    if (revealBtn) {
+      revealBtn.addEventListener("click", async () => {
+        state.workspaceError = null;
+        try {
+          const res = await apiPost("/api/reveal", { learner: state.learner, interaction: active.id });
+          state.revealedInfo = res;
+          state.questionStartMs = null;
+          await refreshState();
+        } catch (err) {
+          state.workspaceError = err.message || String(err);
+          render();
+        }
+      });
+    }
+
+    const nextQBtn = document.getElementById("next-question-btn");
+    if (nextQBtn) {
+      nextQBtn.addEventListener("click", () => requestNextStep({ finishInteractionId: active.id }));
+    }
+
     document.getElementById("finish-btn").addEventListener("click", async () => {
       state.workspaceError = null;
       state.revealedInfo = null;
@@ -450,16 +719,17 @@
     const badge = document.getElementById("curve-status-badge");
     const c = state.curve;
     if (!c || !c.assessed) {
-      badge.textContent = "Unassessed";
-      el.innerHTML = `<p class="brand-sub">Skill is unassessed. Complete an item to view personalized 0–60d retention curves and permastore floor b_t.</p>`;
+      badge.textContent = "Not started";
+      badge.className = "badge";
+      el.innerHTML = `<p class="brand-sub">Complete at least one practice question on this topic to view your 0–60 day retention forecast.</p>`;
       return;
     }
 
-    badge.textContent = `Assessed · floor b_t: ${(c.floor_b || 0).toFixed(3)}`;
+    badge.textContent = `Floor: ${Math.round((c.floor_b || 0) * 100)}%`;
+    badge.className = "badge badge-lime";
     const w = 540;
     const h = 180;
     const pad = 28;
-    const days = c.days || [0, 1, 3, 7, 14, 30, 45, 60];
     const xOf = (d) => pad + ((d / 60) * (w - 2 * pad));
     const yOf = (p) => h - pad - (p * (h - 2 * pad));
 
@@ -478,6 +748,12 @@
         <path d="${pathFor(byDiff.medium || [])}" fill="none" stroke="#293321" stroke-width="2.5"/>
         <path d="${pathFor(byDiff.hard || [])}" fill="none" stroke="#687064" stroke-width="2"/>
       </svg>
+      <div class="curve-legend">
+        <span class="legend-item"><span class="legend-swatch" style="background:#839f50"></span>Easy</span>
+        <span class="legend-item"><span class="legend-swatch" style="background:#293321"></span>Medium</span>
+        <span class="legend-item"><span class="legend-swatch" style="background:#687064"></span>Hard</span>
+        <span class="legend-item"><span class="legend-swatch" style="background:#7058ba"></span>Long-term floor</span>
+      </div>
     `;
   }
 
@@ -506,6 +782,76 @@
     `;
   }
 
+  // Tab bindings
+  ["learn", "practice", "progress"].forEach((t) => {
+    const btn = document.getElementById(`tab-btn-${t}`);
+    if (btn) btn.addEventListener("click", () => setActiveTab(t));
+  });
+
+  // Start Practice CTA buttons on Learn tab
+  const startFromLearn = async () => {
+    setActiveTab("practice");
+    if (!state.learner) return;
+    const activeQ = getActiveInteraction(state.data);
+    if (!activeQ || !activeQ.question) {
+      await requestNextStep();
+    }
+  };
+  document.getElementById("start-practice-from-learn-btn").addEventListener("click", startFromLearn);
+  const startAfterChatBtn = document.getElementById("start-practice-after-chat-btn");
+  if (startAfterChatBtn) startAfterChatBtn.addEventListener("click", startFromLearn);
+
+  async function handleSendChat() {
+    const input = document.getElementById("tutor-chat-input");
+    if (!input || state.sendingChat) return;
+    const text = input.value.trim();
+    if (!text) {
+      input.focus();
+      return;
+    }
+    const sk = state.skill;
+    if (!state.chatBySkill[sk]) state.chatBySkill[sk] = [];
+    const history = state.chatBySkill[sk].slice(-6);
+    state.chatBySkill[sk].push({ role: "user", text });
+    input.value = "";
+    state.sendingChat = true;
+    renderTutorChat();
+
+    try {
+      const res = await apiPost("/api/chat", {
+        learner: state.learner || undefined,
+        skill: sk,
+        message: text,
+        history,
+      });
+      state.chatBySkill[sk].push({
+        role: "assistant",
+        text: res.reply || "Here is a clarification based on the lesson.",
+        code: res.code_example || "",
+      });
+    } catch (err) {
+      state.chatBySkill[sk].push({
+        role: "assistant",
+        text: `Could not reach tutor: ${err.message || err}`,
+      });
+    } finally {
+      state.sendingChat = false;
+      renderTutorChat();
+    }
+  }
+
+  const chatSendBtn = document.getElementById("tutor-chat-send-btn");
+  if (chatSendBtn) chatSendBtn.addEventListener("click", handleSendChat);
+  const chatInput = document.getElementById("tutor-chat-input");
+  if (chatInput) {
+    chatInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleSendChat();
+      }
+    });
+  }
+
   document.getElementById("toggle-glass-box-btn").addEventListener("click", () => {
     state.glassBoxOpen = !state.glassBoxOpen;
     renderGlassBox();
@@ -527,6 +873,7 @@
       state.learner = res.learner;
       input.value = "";
       state.loadingSkill = state.skill;
+      setActiveTab("learn");
       render();
       await apiPost("/api/select_skill", { learner: state.learner, skill: state.skill });
       await refreshState();
@@ -550,61 +897,21 @@
 
   document.getElementById("profile-select").addEventListener("change", async (e) => {
     state.learner = e.target.value || null;
-    await refreshState();
-  });
-
-  document.getElementById("ppo-next-btn").addEventListener("click", async () => {
-    if (!state.learner) return;
     state.workspaceError = null;
     state.workspaceNotice = null;
     state.revealedInfo = null;
-    const qSource = (document.getElementById("question-source-select") || {}).value || "v2.2";
-    const qFormat = pickQuestionFormat();
-    try {
-      const res = await apiPost("/api/ppo_step", {
-        learner: state.learner,
-        skill: state.skill,
-        question_source: qSource,
-        format: qFormat,
-      });
-      if (res && res.type === "lesson") {
-        state.workspaceNotice = `Primed Lesson Delivered (${res.action_name}). Review the Course Material above, then click Next PPO Step for your follow-up question.`;
-      }
-      state.questionStartMs = Date.now();
-      await refreshState();
-    } catch (err) {
-      state.workspaceError = err.message || String(err);
-      render();
-    }
+    state.activeLesson = null;
+    await refreshState();
+    const activeQ = getActiveInteraction(state.data);
+    setActiveTab(activeQ && activeQ.question ? "practice" : "learn");
   });
 
-  document.getElementById("manual-step-btn").addEventListener("click", async () => {
-    if (!state.learner) return;
+  document.getElementById("ppo-next-btn").addEventListener("click", () => requestNextStep());
+
+  document.getElementById("manual-step-btn").addEventListener("click", () => {
     const val = document.getElementById("manual-action-select").value;
     if (val === "") return;
-    state.workspaceError = null;
-    state.workspaceNotice = null;
-    state.revealedInfo = null;
-    const qSource = (document.getElementById("question-source-select") || {}).value || "v2.2";
-    const qFormat = pickQuestionFormat();
-    try {
-      const res = await apiPost("/api/ppo_step", {
-        learner: state.learner,
-        skill: state.skill,
-        action_id: Number(val),
-        policy_source: "learner_manual",
-        question_source: qSource,
-        format: qFormat,
-      });
-      if (res && res.type === "lesson") {
-        state.workspaceNotice = `Primed Lesson Delivered (${res.action_name}). Review the Course Material above, then click Next PPO Step for your follow-up question.`;
-      }
-      state.questionStartMs = Date.now();
-      await refreshState();
-    } catch (err) {
-      state.workspaceError = err.message || String(err);
-      render();
-    }
+    requestNextStep({ actionId: Number(val), policySource: "learner_manual" });
   });
 
   refreshState().catch(console.error);
