@@ -862,3 +862,100 @@ class PedagogyRealizer:
             "difficulty": target_difficulty,
             "task": task,
         }
+
+    def answer_learner_doubt(
+        self,
+        skill: str,
+        question: str,
+        *,
+        history: list[dict[str, str]] | None = None,
+        course_material: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Answer a learner's question/doubt about a skill's reference lesson or worked example."""
+        if skill not in PPO_SKILLS_ORDER:
+            raise ValueError(f"Unknown skill {skill!r}")
+        cleaned_q = (question or "").strip()
+        if not cleaned_q:
+            raise ValueError("Question cannot be empty.")
+
+        meta = SKILL_META.get(skill, {})
+        skill_title = meta.get("title") or meta.get("name") or skill
+        rich = _RICH_COURSE_CURRICULUM.get(skill, {})
+        def_lesson = DEFAULT_LESSONS.get(skill, {})
+        mat = course_material or {
+            "concept_explanation": rich.get("concept_explanation") or def_lesson.get("concept_explanation", ""),
+            "mental_model": def_lesson.get("mental_model", ""),
+            "pitfalls": rich.get("pitfalls") or def_lesson.get("rules", []),
+            "worked_example": def_lesson.get("worked_example", {}),
+        }
+
+        if self.llm.is_live():
+            system_prompt = (
+                "You are a supportive, clear Python tutor answering a student's question about the reference "
+                "lesson and worked example before they begin practice. Keep explanations concise, accurate, "
+                "and grounded in the current topic. Return ONLY a JSON object with keys:\n"
+                '{"reply": "Clear explanation answering the doubt", "code_example": "Optional short Python snippet or empty string"}'
+            )
+            recent_history = []
+            for turn in (history or [])[-6:]:
+                if isinstance(turn, dict) and turn.get("role") in ("user", "assistant") and turn.get("text"):
+                    recent_history.append({"role": turn["role"], "text": str(turn["text"])[:400]})
+            user_payload = {
+                "skill": skill,
+                "skill_title": skill_title,
+                "lesson_summary": {
+                    "concept_explanation": mat.get("concept_explanation", ""),
+                    "mental_model": mat.get("mental_model", ""),
+                    "pitfalls": mat.get("pitfalls", []),
+                    "worked_example": mat.get("worked_example", {}),
+                },
+                "history": recent_history,
+                "student_question": cleaned_q,
+            }
+            try:
+                raw = self.llm.complete_json(
+                    system_prompt,
+                    json.dumps(user_payload, ensure_ascii=False),
+                    schema_name="tutor_chat",
+                    temperature=0.3,
+                    max_tokens=700,
+                )
+                reply = str(raw.get("reply") or raw.get("answer") or "").strip()
+                code_ex = str(raw.get("code_example") or raw.get("code") or "").strip()
+                if reply:
+                    return {
+                        "reply": reply,
+                        "code_example": code_ex,
+                        "source": "llm",
+                    }
+            except LLMClientError:
+                pass
+
+        # Deterministic offline fallback grounded in the skill's lesson & worked example
+        we = mat.get("worked_example") or {}
+        pitfalls = mat.get("pitfalls") or rich.get("pitfalls") or []
+        ql = cleaned_q.lower()
+        if any(k in ql for k in ("example", "code", "trace", "step", "subgoal", "work")):
+            sub_text = " ".join(f"{sg.get('label')}: {sg.get('detail')}" for sg in (we.get("subgoals") or []))
+            reply = (
+                f"In the worked example for {skill_title} ({we.get('title', 'trace')}), "
+                f"follow the subgoals step by step: {sub_text or mat.get('mental_model', '')}"
+            )
+            code_ex = str(we.get("code") or "")
+        elif any(k in ql for k in ("mistake", "pitfall", "wrong", "error", "bug", "watch", "careful")):
+            pit_str = " ".join(f"• {p}" for p in pitfalls[:3])
+            reply = f"Common pitfalls to watch out for in {skill_title}: {pit_str}"
+            code_ex = ""
+        else:
+            reply = (
+                f"For {skill_title}: {mat.get('concept_explanation', '')} "
+                f"Mental model: {mat.get('mental_model', '')}"
+            ).strip()
+            code_ex = str(we.get("code") or "")
+
+        return {
+            "reply": reply,
+            "code_example": code_ex,
+            "source": "fallback",
+        }
+

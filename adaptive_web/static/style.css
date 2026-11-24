@@ -71,6 +71,12 @@ header.topbar {
   flex-wrap: wrap;
 }
 
+.topbar-controls input.answer-input,
+.topbar-controls select.control-select {
+  width: auto;
+  min-width: 160px;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -388,7 +394,243 @@ textarea.code-editor {
   overflow-x: auto;
 }
 
+.sidebar-card {
+  position: sticky;
+  top: 16px;
+}
+
+.skill-header-card {
+  padding-bottom: 0;
+}
+
+.skill-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.skill-header-title {
+  margin: 0 0 2px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--forest);
+}
+
+.skill-header-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.workspace-tabs {
+  display: flex;
+  gap: 6px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  margin-top: 4px;
+}
+
+.tab-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 9px 16px;
+  border-radius: 8px 8px 0 0;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.tab-btn:hover {
+  color: var(--ink);
+  background-color: var(--bg);
+}
+
+.tab-btn.active {
+  color: var(--forest);
+  background-color: var(--bg);
+  border-bottom-color: var(--forest);
+}
+
+.tab-panel.hidden {
+  display: none;
+}
+
+.learn-footer-cta {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.practice-empty {
+  padding: 20px 12px;
+  text-align: center;
+}
+
+.practice-empty p {
+  margin: 0 0 14px;
+  color: var(--muted);
+}
+
+.practice-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.feedback-banner {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+.feedback-banner.feedback-pass {
+  background-color: #edf9d8;
+  border-color: var(--sage);
+}
+
+.feedback-banner.feedback-fail {
+  background-color: var(--tint-amber);
+}
+
+.advanced-controls {
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+
+.advanced-controls summary {
+  cursor: pointer;
+  font-weight: 600;
+  user-select: none;
+}
+
+.advanced-controls-grid {
+  margin-top: 10px;
+}
+
+.reference-details {
+  padding: 14px 18px;
+}
+
+.reference-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.96rem;
+  color: var(--forest);
+  user-select: none;
+}
+
+.reference-body {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.tutor-chat-section {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.tutor-chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background-color: var(--bg);
+  margin-bottom: 10px;
+}
+
+.chat-msg {
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  max-width: 92%;
+}
+
+.chat-msg-user {
+  align-self: flex-end;
+  background-color: var(--forest);
+  color: #ffffff;
+}
+
+.chat-msg-assistant {
+  align-self: flex-start;
+  background-color: #ffffff;
+  border: 1px solid var(--border);
+  color: var(--ink);
+}
+
+.chat-msg-role {
+  font-size: 0.74rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  opacity: 0.8;
+}
+
+.tutor-chat-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.tutor-chat-form input.answer-input {
+  flex: 1;
+}
+
+.curve-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-swatch {
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
 @media (max-width: 1080px) {
+  .sidebar-card {
+    position: static;
+  }
   .layout,
   .layout.with-inspector {
     grid-template-columns: 1fr;

@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Adaptive Python Tutor — PPO + Monotonic GRU + LLM</title>
+  <title>Adaptive Python Tutor</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="stylesheet" href="/style.css?v=2" />
+  <link rel="stylesheet" href="/style.css?v=3" />
 </head>
 <body>
   <header class="topbar">
@@ -13,7 +13,7 @@
       <img src="/favicon.svg" alt="Adaptive Python Tutor" width="32" height="32" />
       <div>
         <h1 class="brand-title">Adaptive Python Tutor</h1>
-        <div class="brand-sub">delayed_retention_ppo · monotonic_gru · Bounded LLM Realization</div>
+        <div class="brand-sub">Personalized Python learning &amp; interactive practice</div>
       </div>
     </div>
     <div class="topbar-controls">
@@ -25,76 +25,128 @@
   </header>
 
   <main id="main-layout" class="layout">
-    <!-- Left Sidebar: Skill Prerequisite DAG -->
-    <aside class="card" aria-label="Skill Prerequisite DAG">
+    <!-- Left Sidebar: Topics -->
+    <aside class="card sidebar-card" aria-label="Python Topics">
       <h2 class="card-title">
-        <span>Skill Prerequisite DAG</span>
+        <span>Python Topics</span>
         <span class="badge badge-lime">6 Skills</span>
       </h2>
       <div id="skill-dag-list" class="skill-dag-list"></div>
     </aside>
 
-    <!-- Center Workspace: Path, Course Material, Question/Code & Curves -->
-    <section>
-      <div id="learning-path-card" class="card">
-        <h2 class="card-title">
-          <span id="path-title">Personalized Learning Path</span>
-          <span id="llm-status-badge" class="badge">LLM</span>
-        </h2>
-        <p id="path-summary" class="brand-sub">Select a learner profile and a Python skill to begin.</p>
-        <div id="path-steps" class="path-steps"></div>
-      </div>
-
-      <div id="course-material-card" class="card">
-        <h2 class="card-title">
-          <span>Course Material &amp; Subgoal Worked Example</span>
-          <span id="active-skill-badge" class="badge">Ready</span>
-        </h2>
-        <div id="course-material-body"></div>
-      </div>
-
-      <div id="workspace-card" class="card">
-        <h2 class="card-title">
-          <span id="workspace-title">Interactive Practice &amp; Assessment</span>
-          <span id="workspace-mode-badge" class="badge badge-amber">Idle</span>
-        </h2>
-        <div id="workspace-controls" class="topbar-controls">
-          <select id="question-source-select" class="control-select" aria-label="Question source">
-            <option value="v2.2">Source: v2.2 Bank (2,160 items)</option>
-            <option value="llm">Source: Fresh LLM Question</option>
-          </select>
-          <select id="question-format-select" class="control-select" aria-label="Question format">
-            <option value="auto">Format: Auto (Rotate All 5)</option>
-            <option value="single_choice">Single Choice (Theory / Trace)</option>
-            <option value="multiple_select">Multiple Select</option>
-            <option value="output_prediction">Output Prediction</option>
-            <option value="fill_in_the_blank">Fill in the Blank</option>
-            <option value="code_completion">Code Completion (AST)</option>
-          </select>
-          <button id="ppo-next-btn" class="btn btn-primary" type="button">Next PPO Step</button>
-          <select id="manual-action-select" class="control-select" aria-label="Manual pedagogical override">
-            <option value="">Manual Override...</option>
-            <option value="0">0: Give Easier Question</option>
-            <option value="1">1: Give Same Difficulty</option>
-            <option value="2">2: Give Harder Question</option>
-            <option value="3">3: Explain Concept</option>
-            <option value="4">4: Show Worked Example</option>
-            <option value="5">5: Request Self-Explanation</option>
-            <option value="6">6: Review Prerequisite</option>
-            <option value="7">7: Advance Next Topic</option>
-          </select>
-          <button id="manual-step-btn" class="btn" type="button">Run Manual</button>
+    <!-- Center Workspace: Skill Header + Tabs (Learn / Practice / Progress) -->
+    <section class="workspace-col">
+      <div class="card skill-header-card">
+        <div class="skill-header-top">
+          <div>
+            <h2 id="active-skill-title" class="skill-header-title">Range boundaries</h2>
+            <div id="active-skill-subtitle" class="brand-sub">Select or create a learner profile to begin.</div>
+          </div>
+          <div class="skill-header-badges">
+            <span id="active-skill-badge" class="badge">Not started</span>
+            <span id="llm-status-badge" class="badge">Curriculum</span>
+          </div>
         </div>
-        <div id="question-area"></div>
-        <div id="feedback-area"></div>
+        <div class="workspace-tabs" role="tablist" aria-label="Workspace sections">
+          <button id="tab-btn-learn" class="tab-btn active" type="button" role="tab" aria-selected="true" data-tab="learn">Learn</button>
+          <button id="tab-btn-practice" class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="practice">Practice</button>
+          <button id="tab-btn-progress" class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="progress">Progress</button>
+        </div>
       </div>
 
-      <div id="curve-card" class="card">
-        <h2 class="card-title">
-          <span>0–60 Day Retention Forecast (monotonic_gru)</span>
-          <span id="curve-status-badge" class="badge">Unassessed</span>
-        </h2>
-        <div id="curve-container" class="svg-curve-wrap"></div>
+      <!-- Tab 1: Learn (Compact Study Plan + Optional Reference Drawer) -->
+      <div id="tab-panel-learn" class="tab-panel">
+        <div id="learning-path-card" class="card">
+          <div class="card-title">
+            <span id="path-title">Study Plan</span>
+            <button id="start-practice-from-learn-btn" class="btn btn-primary" type="button">Start Practice →</button>
+          </div>
+          <p id="path-summary" class="brand-sub">Select a learner profile and a Python topic to begin.</p>
+          <div id="path-steps" class="path-steps"></div>
+        </div>
+
+        <details id="course-material-card" class="card reference-details">
+          <summary class="reference-summary">
+            <span>Reference Lesson &amp; Worked Example</span>
+            <span class="brand-sub">Optional — read &amp; clarify doubts before practicing</span>
+          </summary>
+          <div id="course-material-body" class="reference-body"></div>
+
+          <div id="tutor-chat-section" class="tutor-chat-section">
+            <div class="card-title">
+              <span>Ask the Tutor — Clarify Your Doubts</span>
+              <span class="badge badge-lime">Interactive Q&amp;A</span>
+            </div>
+            <div id="tutor-chat-messages" class="tutor-chat-messages" aria-live="polite"></div>
+            <div class="tutor-chat-form">
+              <input
+                id="tutor-chat-input"
+                class="answer-input"
+                type="text"
+                placeholder="Ask a question about this lesson or worked example..."
+                aria-label="Ask a question about this lesson"
+              />
+              <button id="tutor-chat-send-btn" class="btn btn-primary" type="button">Ask Tutor</button>
+            </div>
+            <div class="learn-footer-cta">
+              <button id="start-practice-after-chat-btn" class="btn btn-lime" type="button">Doubts cleared? Start Practice →</button>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Tab 2: Practice (Focused Question & Feedback Workspace) -->
+      <div id="tab-panel-practice" class="tab-panel hidden">
+        <div id="workspace-card" class="card">
+          <h2 class="card-title">
+            <span id="workspace-title">Practice</span>
+            <span id="workspace-mode-badge" class="badge badge-amber">Ready</span>
+          </h2>
+          <div id="question-area"></div>
+          <div id="feedback-area"></div>
+
+          <details class="advanced-controls">
+            <summary>Advanced / Instructor Controls</summary>
+            <div id="workspace-controls" class="topbar-controls advanced-controls-grid">
+              <select id="question-source-select" class="control-select" aria-label="Question source">
+                <option value="v2.2">Source: v2.2 Bank (2,160 items)</option>
+                <option value="llm">Source: Fresh LLM Question</option>
+              </select>
+              <select id="question-format-select" class="control-select" aria-label="Question format">
+                <option value="auto">Format: Auto (Rotate All 5)</option>
+                <option value="single_choice">Single Choice (Theory / Trace)</option>
+                <option value="multiple_select">Multiple Select</option>
+                <option value="output_prediction">Output Prediction</option>
+                <option value="fill_in_the_blank">Fill in the Blank</option>
+                <option value="code_completion">Code Completion (AST)</option>
+              </select>
+              <button id="ppo-next-btn" class="btn btn-primary" type="button">Next PPO Step</button>
+              <select id="manual-action-select" class="control-select" aria-label="Manual pedagogical override">
+                <option value="">Manual Override...</option>
+                <option value="0">0: Give Easier Question</option>
+                <option value="1">1: Give Same Difficulty</option>
+                <option value="2">2: Give Harder Question</option>
+                <option value="3">3: Explain Concept</option>
+                <option value="4">4: Show Worked Example</option>
+                <option value="5">5: Request Self-Explanation</option>
+                <option value="6">6: Review Prerequisite</option>
+                <option value="7">7: Advance Next Topic</option>
+              </select>
+              <button id="manual-step-btn" class="btn" type="button">Run Manual</button>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- Tab 3: Progress (0-60 Day Retention Forecast) -->
+      <div id="tab-panel-progress" class="tab-panel hidden">
+        <div id="curve-card" class="card">
+          <h2 class="card-title">
+            <span>Long-Term Retention Forecast (0–60 Days)</span>
+            <span id="curve-status-badge" class="badge">Not started</span>
+          </h2>
+          <div id="curve-container" class="svg-curve-wrap"></div>
+        </div>
       </div>
     </section>
 
@@ -108,6 +160,6 @@
     </aside>
   </main>
 
-  <script src="/app.js?v=6"></script>
+  <script src="/app.js?v=7"></script>
 </body>
 </html>
