@@ -8,20 +8,25 @@ from typing import Any
 
 from . import PACKAGE_DIR, REPO_ROOT
 
-VALID_PROVIDERS = ("auto", "openai", "anthropic", "gemini", "mock")
+VALID_PROVIDERS = ("auto", "openai", "groq", "anthropic", "gemini", "ollama", "mock")
+VALID_FALLBACK_ITEMS = ("openai", "groq", "anthropic", "gemini", "ollama", "mock", "deterministic_double")
 VALID_DEVICES = ("cpu", "mps", "auto")
 
 DEFAULT_MODELS = {
     "openai": "gpt-4o-mini",
+    "groq": "openai/gpt-oss-120b",
     "anthropic": "claude-sonnet-4-20250514",
     "gemini": "gemini-2.5-flash",
+    "ollama": "llama3.1",
     "mock": "deterministic-double-v1",
 }
 
 DEFAULT_BASE_URLS = {
     "openai": "https://api.openai.com/v1",
+    "groq": "https://api.groq.com/openai/v1",
     "anthropic": "https://api.anthropic.com/v1",
     "gemini": "https://generativelanguage.googleapis.com/v1beta",
+    "ollama": "http://127.0.0.1:11434/v1",
     "mock": "",
 }
 
@@ -107,6 +112,10 @@ def _infer_provider(model: str, base_url: str) -> str:
         return "anthropic"
     if "gemini" in m or "generativelanguage" in b or "gemini" in b:
         return "gemini"
+    if "groq" in b:
+        return "groq"
+    if "11434" in b or "ollama" in b:
+        return "ollama"
     return "openai"
 
 
@@ -122,6 +131,8 @@ class Settings:
     llm_timeout_seconds: float = 45.0
     device: str = "cpu"
     env_source: str = "defaults"
+    fallback_providers: tuple[str, ...] = field(default_factory=tuple)
+    provider_configs: tuple[tuple[str, str, str, str], ...] = field(default_factory=tuple, repr=False)
 
     def __str__(self) -> str:
         return self.__repr__()
@@ -149,10 +160,23 @@ class Settings:
             "ADAPTIVE_WEB_PORT",
             "ADAPTIVE_WEB_DB",
             "LLM_PROVIDER",
+            "LLM_FALLBACK_PROVIDERS",
             "LLM_API_KEY",
             "OPENAI_API_KEY",
+            "OPENAI_MODEL",
+            "OPENAI_BASE_URL",
+            "GROQ_API_KEY",
+            "GROQ_MODEL",
+            "GROQ_BASE_URL",
             "ANTHROPIC_API_KEY",
+            "ANTHROPIC_MODEL",
+            "ANTHROPIC_BASE_URL",
             "GEMINI_API_KEY",
+            "GEMINI_MODEL",
+            "GEMINI_BASE_URL",
+            "OLLAMA_API_KEY",
+            "OLLAMA_MODEL",
+            "OLLAMA_BASE_URL",
             "LLM_MODEL",
             "LLM_BASE_URL",
             "LLM_TIMEOUT_SECONDS",
@@ -208,14 +232,33 @@ class Settings:
         generic_key = get("LLM_API_KEY", "").strip()
         provider_keys = {
             "openai": get("OPENAI_API_KEY", "").strip(),
+            "groq": get("GROQ_API_KEY", "").strip(),
             "anthropic": get("ANTHROPIC_API_KEY", "").strip(),
             "gemini": get("GEMINI_API_KEY", "").strip(),
+            "ollama": get("OLLAMA_API_KEY", "").strip(),
+        }
+        provider_models = {
+            "openai": get("OPENAI_MODEL", "").strip(),
+            "groq": get("GROQ_MODEL", "").strip(),
+            "anthropic": get("ANTHROPIC_MODEL", "").strip(),
+            "gemini": get("GEMINI_MODEL", "").strip(),
+            "ollama": get("OLLAMA_MODEL", "").strip(),
+        }
+        provider_urls = {
+            "openai": get("OPENAI_BASE_URL", "").strip(),
+            "groq": get("GROQ_BASE_URL", "").strip(),
+            "anthropic": get("ANTHROPIC_BASE_URL", "").strip(),
+            "gemini": get("GEMINI_BASE_URL", "").strip(),
+            "ollama": get("OLLAMA_BASE_URL", "").strip(),
         }
 
         if provider == "mock":
             effective_provider = "mock"
             api_key = ""
-        elif provider in ("openai", "anthropic", "gemini"):
+        elif provider == "ollama":
+            effective_provider = "ollama"
+            api_key = generic_key or provider_keys["ollama"] or "ollama"
+        elif provider in ("openai", "groq", "anthropic", "gemini"):
             effective_provider = provider
             api_key = generic_key or provider_keys[provider]
         else:  # provider == "auto"
@@ -225,14 +268,58 @@ class Settings:
             else:
                 effective_provider = "mock"
                 api_key = ""
-                for candidate_prov in ("openai", "anthropic", "gemini"):
+                for candidate_prov in ("openai", "groq", "anthropic", "gemini"):
                     if provider_keys[candidate_prov]:
                         effective_provider = candidate_prov
                         api_key = provider_keys[candidate_prov]
                         break
+                if effective_provider == "mock" and (provider_urls["ollama"] or provider_models["ollama"]):
+                    effective_provider = "ollama"
+                    api_key = provider_keys["ollama"] or "ollama"
 
-        llm_model = raw_model or DEFAULT_MODELS[effective_provider]
-        llm_base_url = raw_base_url or DEFAULT_BASE_URLS[effective_provider]
+        llm_model = raw_model or provider_models.get(effective_provider) or DEFAULT_MODELS[effective_provider]
+        llm_base_url = raw_base_url or provider_urls.get(effective_provider) or DEFAULT_BASE_URLS[effective_provider]
+
+        # Build ordered multi-provider fallback chain from LLM_FALLBACK_PROVIDERS
+        raw_fallback = get("LLM_FALLBACK_PROVIDERS", "").strip()
+        fallback_items: list[str] = []
+        for item in (p.strip().lower() for p in raw_fallback.split(",") if p.strip()):
+            if item not in VALID_FALLBACK_ITEMS:
+                raise ValueError(f"Invalid fallback provider {item!r}; expected one of {VALID_FALLBACK_ITEMS}")
+            if item not in fallback_items:
+                fallback_items.append(item)
+
+        chain_configs: list[tuple[str, str, str, str]] = []
+        seen_provs: set[str] = set()
+        if effective_provider != "mock" and api_key:
+            chain_configs.append((effective_provider, api_key, llm_model, llm_base_url))
+            seen_provs.add(effective_provider)
+
+        public_fallbacks: list[str] = []
+        for fb in fallback_items:
+            canonical_fb = "mock" if fb == "deterministic_double" else fb
+            if canonical_fb in seen_provs:
+                continue
+            if canonical_fb == "mock":
+                chain_configs.append(("mock", "", DEFAULT_MODELS["mock"], ""))
+                seen_provs.add("mock")
+                public_fallbacks.append("deterministic_double")
+            elif canonical_fb == "ollama":
+                fb_key = provider_keys["ollama"] or "ollama"
+                fb_model = provider_models["ollama"] or DEFAULT_MODELS["ollama"]
+                fb_url = provider_urls["ollama"] or DEFAULT_BASE_URLS["ollama"]
+                chain_configs.append(("ollama", fb_key, fb_model, fb_url))
+                seen_provs.add("ollama")
+                public_fallbacks.append("ollama")
+            else:
+                fb_key = provider_keys.get(canonical_fb) or (generic_key if canonical_fb == effective_provider else "")
+                if fb_key:
+                    fb_model = provider_models.get(canonical_fb) or DEFAULT_MODELS[canonical_fb]
+                    fb_url = provider_urls.get(canonical_fb) or DEFAULT_BASE_URLS[canonical_fb]
+                    chain_configs.append((canonical_fb, fb_key, fb_model, fb_url))
+                    seen_provs.add(canonical_fb)
+                    public_fallbacks.append(canonical_fb)
+
         env_source = " + ".join(sources) if sources else "defaults"
 
         return cls(
@@ -246,10 +333,14 @@ class Settings:
             llm_timeout_seconds=timeout,
             device=device,
             env_source=env_source,
+            fallback_providers=tuple(public_fallbacks),
+            provider_configs=tuple(chain_configs),
         )
 
     def is_live(self) -> bool:
-        return self.effective_provider != "mock" and bool(self.llm_api_key)
+        if self.effective_provider != "mock" and bool(self.llm_api_key):
+            return True
+        return any(prov != "mock" and bool(key) for prov, key, _, _ in self.provider_configs)
 
     def to_public_dict(self) -> dict[str, Any]:
         return {
@@ -262,6 +353,7 @@ class Settings:
             "llm_timeout_seconds": self.llm_timeout_seconds,
             "device": self.device,
             "env_source": self.env_source,
+            "fallback_providers": list(self.fallback_providers),
             "is_live": self.is_live(),
-            "api_key_configured": bool(self.llm_api_key),
+            "api_key_configured": bool(self.llm_api_key) or any(bool(k) for p, k, _, _ in self.provider_configs if p != "mock"),
         }

@@ -26,6 +26,8 @@
     data: null,
     curve: null,
     glassBoxOpen: false,
+    tutorDrawerOpen: false,
+    openCitationKey: null,
     loadingSkill: null,
     loadingStep: false,
     revealedInfo: null,
@@ -71,6 +73,7 @@
     if (!["learn", "practice", "progress"].includes(tab)) return;
     state.activeTab = tab;
     renderTabs();
+    renderTutorChat();
   }
 
   function renderTabs() {
@@ -123,6 +126,25 @@
     state.csrfToken = data.csrf_token || data.token || state.csrfToken;
     state.data = data;
 
+    if (data && data.chat_by_skill && typeof data.chat_by_skill === "object") {
+      const hydrated = {};
+      Object.keys(data.chat_by_skill).forEach((sk) => {
+        const list = Array.isArray(data.chat_by_skill[sk]) ? data.chat_by_skill[sk] : [];
+        hydrated[sk] = list.map((m) => ({
+          role: m.role,
+          text: m.message || m.text || "",
+          code: m.code_example || m.code || "",
+          citations: Array.isArray(m.citations) ? m.citations : [],
+          mastery_tier: m.mastery_tier || "",
+          guardrail_status: m.guardrail_status || "",
+          source: m.source || "",
+        }));
+      });
+      state.chatBySkill = hydrated;
+    } else if (!state.learner) {
+      state.chatBySkill = {};
+    }
+
     if (state.learner && state.skill) {
       try {
         state.curve = await apiGet(
@@ -167,9 +189,16 @@
         body.policy_source = policySource;
       }
 
+      const prevSkill = state.skill;
       const res = await apiPost("/api/ppo_step", body);
-      if (res && res.target_skill && res.target_skill !== state.skill) {
+      if (res && res.target_skill && res.target_skill !== prevSkill) {
         state.skill = res.target_skill;
+        const meta = (state.data && state.data.skill_meta) || {};
+        const toTitle = (meta[res.target_skill] && (meta[res.target_skill].title || meta[res.target_skill].name)) || res.target_skill;
+        const fromTitle = (meta[prevSkill] && (meta[prevSkill].title || meta[prevSkill].name)) || prevSkill;
+        state.workspaceNotice = Number(res.action_id) === 6
+          ? `Reviewing prerequisite: ${toTitle} (to strengthen ${fromTitle})`
+          : `Moved to topic: ${toTitle}`;
         await apiPost("/api/select_skill", { learner: state.learner, skill: state.skill });
       }
       if (res && res.type === "lesson") {
@@ -180,6 +209,7 @@
         };
       }
       state.questionStartMs = Date.now();
+      setActiveTab("practice");
       await refreshState();
     } catch (err) {
       state.workspaceError = err.message || String(err);
@@ -337,6 +367,7 @@
         const adaptBanner = cm.adaptation_note
           ? `<div class="subgoal-item"><strong>Study Tip:</strong> ${esc(cm.adaptation_note)}</div>`
           : "";
+        const cmCitationsHtml = renderCitationsHtml(cm.citations, `cm-${state.skill}`);
         cmBody.innerHTML = `
           ${cm.title ? `<h3 style="margin-top:0">${esc(cm.title)}</h3>` : ""}
           ${adaptBanner}
@@ -348,50 +379,259 @@
           ${we.code ? `<pre class="code-block">${esc(we.code)}</pre>` : ""}
           ${subgoals}
           ${quickCheckHtml}
+          ${cmCitationsHtml}
         `;
       } else {
         cmBody.innerHTML = `<p class="brand-sub">Select a learner profile and a Python topic to view its lesson and worked example.</p>`;
       }
     }
 
+    syncManualActionSelect(d);
     renderTutorChat();
     renderWorkspace(getActiveInteraction(d));
     renderCurve();
     renderGlassBox();
   }
 
-  function renderTutorChat() {
-    const box = document.getElementById("tutor-chat-messages");
-    const sendBtn = document.getElementById("tutor-chat-send-btn");
-    if (!box) return;
-    const msgs = state.chatBySkill[state.skill] || [];
-    if (sendBtn) {
-      sendBtn.disabled = Boolean(state.sendingChat);
-      sendBtn.textContent = state.sendingChat ? "Thinking..." : "Ask Tutor";
+  function syncManualActionSelect(d) {
+    const sel = document.getElementById("manual-action-select");
+    if (!sel) return;
+    const baseLabels = {
+      "0": "0: Give Easier Question",
+      "1": "1: Give Same Difficulty",
+      "2": "2: Give Harder Question",
+      "3": "3: Explain Concept (Tutor Explains)",
+      "4": "4: Show Worked Example (Tutor Trace)",
+      "5": "5: Request Self-Explanation (You Explain)",
+      "6": "6: Review Prerequisite",
+      "7": "7: Advance Next Topic",
+    };
+    const ppo = (d && d.ppo) || {};
+    const mask = Array.isArray(ppo.valid_mask) ? ppo.valid_mask : null;
+    const reasons = ppo.mask_reasons || {};
+    const actions = Array.isArray(ppo.actions) ? ppo.actions : [];
+    const meta = (d && d.skill_meta) || {};
+    Array.from(sel.options).forEach((opt) => {
+      if (!opt.value || !(opt.value in baseLabels)) return;
+      const aid = Number(opt.value);
+      const isValid = mask ? Boolean(mask[aid]) : true;
+      let label = baseLabels[opt.value];
+      const actObj = actions[aid];
+      const tgt = actObj && actObj.target && actObj.target.skill;
+      if (isValid && (aid === 6 || aid === 7) && tgt) {
+        const tgtName = (meta[tgt] && (meta[tgt].title || meta[tgt].name)) || tgt;
+        label = `${label} (→ ${tgtName})`;
+      } else if (!isValid) {
+        const rsn = String(reasons[aid] || reasons[String(aid)] || "Unavailable").split(".")[0];
+        label = `${label} — Locked (${rsn})`;
+      }
+      opt.textContent = label;
+      opt.disabled = !isValid;
+    });
+    if (sel.value) {
+      const selectedOpt = sel.options[sel.selectedIndex];
+      if (selectedOpt && selectedOpt.disabled) sel.value = "";
     }
+  }
+
+  function renderInlineMd(escapedLine) {
+    let s = escapedLine.replace(/`([^`\n]+)`/g, '<code class="inline-code">$1</code>');
+    s = s.replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>");
+    return s;
+  }
+
+  function renderMarkdown(rawText) {
+    const text = String(rawText ?? "").replace(/\r\n/g, "\n");
+    if (!text.trim()) return "";
+    const parts = text.split(/```(?:python|py)?\n?([\s\S]*?)```/gi);
+    const out = [];
+    parts.forEach((seg, idx) => {
+      if (idx % 2 === 1) {
+        out.push(`<pre class="code-block" style="margin:6px 0">${esc(seg.trim())}</pre>`);
+        return;
+      }
+      const lines = seg.split("\n");
+      let listMode = null;
+      const paraBuf = [];
+      const flushPara = () => {
+        if (paraBuf.length) {
+          out.push(`<p>${paraBuf.map((l) => renderInlineMd(esc(l))).join("<br>")}</p>`);
+          paraBuf.length = 0;
+        }
+      };
+      const closeList = () => {
+        if (listMode) {
+          out.push(`</${listMode}>`);
+          listMode = null;
+        }
+      };
+      lines.forEach((line) => {
+        const t = line.trim();
+        if (!t) {
+          flushPara();
+          closeList();
+          return;
+        }
+        const ulMatch = t.match(/^[-*•]\s+(.+)$/);
+        const olMatch = t.match(/^\d+[.)]\s+(.+)$/);
+        if (ulMatch) {
+          flushPara();
+          if (listMode !== "ul") {
+            closeList();
+            out.push("<ul>");
+            listMode = "ul";
+          }
+          out.push(`<li>${renderInlineMd(esc(ulMatch[1]))}</li>`);
+        } else if (olMatch) {
+          flushPara();
+          if (listMode !== "ol") {
+            closeList();
+            out.push("<ol>");
+            listMode = "ol";
+          }
+          out.push(`<li>${renderInlineMd(esc(olMatch[1]))}</li>`);
+        } else {
+          closeList();
+          paraBuf.push(t);
+        }
+      });
+      flushPara();
+      closeList();
+    });
+    return out.join("");
+  }
+
+  function renderCitationsHtml(citations, scopeKey) {
+    if (!Array.isArray(citations) || !citations.length) return "";
+    const shown = citations.slice(0, 4);
+    let previewHtml = "";
+    const chips = shown
+      .map((c, idx) => {
+        if (!c) return "";
+        const shortLabel = c.short_label || c.section || c.label || c.title || "";
+        if (!shortLabel) return "";
+        const citKey = `${scopeKey || "chat"}:${idx}`;
+        const isOpen = state.openCitationKey === citKey;
+        if (isOpen) {
+          const fullTitle = c.label || c.title || shortLabel;
+          const excerpt = c.excerpt ? `<div style="margin-top:3px">${esc(c.excerpt)}</div>` : "";
+          previewHtml = `<div class="citation-preview"><strong>${esc(fullTitle)}</strong>${excerpt}</div>`;
+        }
+        return `<button type="button" class="citation-chip ${isOpen ? "active" : ""}" data-cit-key="${esc(citKey)}" title="${esc(c.label || shortLabel)}">${esc(shortLabel)}</button>`;
+      })
+      .filter(Boolean)
+      .join("");
+    if (!chips) return "";
+    return `<div class="citation-list" aria-label="Retrieved knowledge citations"><span class="citation-prefix">Sources:</span>${chips}</div>${previewHtml}`;
+  }
+
+  function getStarterPrompts() {
+    const activeQ = getActiveInteraction(state.data);
+    const hasOpenQ = Boolean(activeQ && activeQ.status === "open" && activeQ.question);
+    if (hasOpenQ || state.activeTab === "practice") {
+      return [
+        "Walk me through the core rule step by step",
+        "Give me a small toy example",
+        "What common pitfalls trip students up here?",
+        "How should I trace boundary values without giving the answer?",
+      ];
+    }
+    return [
+      "Walk me through the worked example step by step",
+      "Summarize the mental model simply",
+      "What common mistakes should I avoid here?",
+    ];
+  }
+
+  function renderChatContainer(boxEl, chipsEl, msgs, scopePrefix) {
+    if (chipsEl) {
+      chipsEl.innerHTML = getStarterPrompts()
+        .map((p) => `<button type="button" class="starter-chip" data-prompt="${esc(p)}" ${state.sendingChat ? "disabled" : ""}>${esc(p)}</button>`)
+        .join("");
+    }
+    if (!boxEl) return;
     if (!msgs.length) {
-      box.innerHTML = `
+      boxEl.innerHTML = `
         <div class="chat-msg chat-msg-assistant">
-          <div class="chat-msg-role">AI Tutor</div>
-          <div>Have any doubts about this lesson or worked example? Ask me here before you jump into practice!</div>
+          <div class="chat-msg-role"><span>AI Tutor</span></div>
+          <div class="chat-msg-body"><p>Have doubts on this topic? Pick a quick question above or ask anything below — explanations adapt automatically to your mastery level.</p></div>
         </div>`;
       return;
     }
-    box.innerHTML = msgs
-      .map((m) => {
+    boxEl.innerHTML = msgs
+      .map((m, idx) => {
         const isUser = m.role === "user";
         const codeHtml = !isUser && m.code
           ? `<pre class="code-block" style="margin:8px 0 0">${esc(m.code)}</pre>`
           : "";
+        const tierBadge = !isUser && m.mastery_tier
+          ? `<span class="tutor-meta-badge">tier: ${esc(m.mastery_tier)}</span>`
+          : "";
+        const sourceBadge = !isUser && m.source
+          ? `<span class="tutor-meta-badge">${m.source === "llm" ? "Live LLM" : "Offline Guide"}</span>`
+          : "";
+        const guardBadge = !isUser && m.guardrail_status === "socratic_redirect"
+          ? `<span class="tutor-meta-badge tutor-meta-guard">EduGuard: Socratic</span>`
+          : "";
+        const citHtml = !isUser ? renderCitationsHtml(m.citations, `${scopePrefix}-${state.skill}-${idx}`) : "";
+        const bodyHtml = isUser ? `<p>${esc(m.text)}</p>` : renderMarkdown(m.text);
         return `
           <div class="chat-msg ${isUser ? "chat-msg-user" : "chat-msg-assistant"}">
-            <div class="chat-msg-role">${isUser ? "You" : "AI Tutor"}</div>
-            <div>${esc(m.text)}</div>
+            <div class="chat-msg-role">
+              <span>${isUser ? "You" : "AI Tutor"}</span>
+              ${tierBadge}
+              ${sourceBadge}
+              ${guardBadge}
+            </div>
+            <div class="chat-msg-body">${bodyHtml}</div>
             ${codeHtml}
+            ${citHtml}
           </div>`;
       })
       .join("");
-    box.scrollTop = box.scrollHeight;
+    boxEl.scrollTop = boxEl.scrollHeight;
+  }
+
+  function renderTutorChat() {
+    const msgs = state.chatBySkill[state.skill] || [];
+    const sendBtn = document.getElementById("tutor-chat-send-btn");
+    const dSendBtn = document.getElementById("drawer-tutor-send-btn");
+    [sendBtn, dSendBtn].forEach((b) => {
+      if (b) {
+        b.disabled = Boolean(state.sendingChat);
+        b.textContent = state.sendingChat ? "Thinking..." : "Ask Tutor";
+      }
+    });
+
+    const drawer = document.getElementById("tutor-drawer");
+    const toggleBtn = document.getElementById("toggle-tutor-drawer-btn");
+    if (drawer) drawer.classList.toggle("hidden", !state.tutorDrawerOpen);
+    if (toggleBtn) toggleBtn.classList.toggle("btn-primary", Boolean(state.tutorDrawerOpen));
+    const drawerSub = document.getElementById("drawer-tutor-subtitle");
+    if (drawerSub && state.data) {
+      const meta = (state.data.skill_meta || {})[state.skill] || {};
+      const title = meta.title || meta.name || state.skill;
+      const summ = ((state.data.skill_summaries || {})[state.skill]) || {};
+      const tierStr = !summ.assessed
+        ? "unassessed"
+        : (summ.p_med || 0) < 0.70
+          ? `lacking (${Math.round((summ.p_med || 0) * 100)}%)`
+          : `mastered (${Math.round((summ.p_med || 0) * 100)}%)`;
+      drawerSub.textContent = `${title} · Mastery: ${tierStr}`;
+    }
+
+    renderChatContainer(
+      document.getElementById("tutor-chat-messages"),
+      document.getElementById("tutor-starter-chips"),
+      msgs,
+      "inline"
+    );
+    renderChatContainer(
+      document.getElementById("drawer-tutor-messages"),
+      document.getElementById("drawer-starter-chips"),
+      msgs,
+      "drawer"
+    );
   }
 
   function renderWorkspace(active) {
@@ -420,67 +660,77 @@
       return;
     }
 
-    if (!active || !active.question) {
-      if (state.activeLesson && state.activeLesson.material) {
-        const mat = state.activeLesson.material;
-        const isExample = state.activeLesson.mode === "example";
-        modeBadge.textContent = isExample ? "Worked Example" : "Concept Lesson";
+    const topNotices = [
+      state.workspaceError
+        ? `<div class="feedback-banner feedback-fail" style="margin-bottom:12px"><strong>Notice:</strong> ${esc(state.workspaceError)}</div>`
+        : "",
+      state.workspaceNotice
+        ? `<div class="hint-box" style="margin-bottom:12px">${esc(state.workspaceNotice)}</div>`
+        : "",
+    ]
+      .filter(Boolean)
+      .join("");
 
-        let lessonHtml = "";
-        if (isExample && mat.worked_example) {
-          const we = mat.worked_example;
-          const subgoals = (we.subgoals || [])
-            .map((sg) => `<div class="subgoal-item"><strong>${esc(sg.label)}:</strong> ${esc(sg.detail)}</div>`)
-            .join("");
-          lessonHtml = `
-            <p class="brand-sub">Review this step-by-step example before your next question:</p>
-            ${we.title ? `<h3 style="margin:8px 0">${esc(we.title)}</h3>` : ""}
-            ${we.code ? `<pre class="code-block">${esc(we.code)}</pre>` : ""}
-            ${subgoals}
-          `;
-        } else {
-          const theoryHtml = Array.isArray(mat.theory_sections) && mat.theory_sections.length
-            ? `<div class="theory-grid">${mat.theory_sections
-                .map(
-                  (sec) => `
-                  <div class="theory-section">
-                    <h4>${esc(sec.heading)}</h4>
-                    <p>${esc(sec.body)}</p>
-                  </div>`
-                )
-                .join("")}</div>`
-            : "";
-          const pitfallsHtml = Array.isArray(mat.pitfalls) && mat.pitfalls.length
-            ? `<p><strong>Watch out for:</strong></p><ul class="pitfalls-list">${mat.pitfalls.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>`
-            : "";
-          lessonHtml = `
-            <p class="brand-sub">Concept lesson recommended before your next question:</p>
-            ${mat.title ? `<h3 style="margin:8px 0">${esc(mat.title)}</h3>` : ""}
-            <p>${esc(mat.concept_explanation)}</p>
-            ${theoryHtml}
-            ${mat.mental_model ? `<p><strong>Mental Model:</strong> ${esc(mat.mental_model)}</p>` : ""}
-            ${pitfallsHtml}
-          `;
-        }
+    if (state.activeLesson && state.activeLesson.material) {
+      const mat = state.activeLesson.material;
+      const isExample = state.activeLesson.mode === "example";
+      modeBadge.textContent = isExample ? "Worked Example" : "Concept Lesson";
 
-        qArea.innerHTML = `
-          ${lessonHtml}
-          <div class="practice-actions">
-            <button id="lesson-continue-btn" class="btn btn-primary" type="button">Got it, next question →</button>
-            <button id="lesson-full-btn" class="btn" type="button">Open Reference</button>
-          </div>`;
-        fArea.innerHTML = state.workspaceError
-          ? `<div class="hint-box"><strong>Notice:</strong> ${esc(state.workspaceError)}</div>`
+      let lessonHtml = "";
+      if (isExample && mat.worked_example) {
+        const we = mat.worked_example;
+        const subgoals = (we.subgoals || [])
+          .map((sg) => `<div class="subgoal-item"><strong>${esc(sg.label)}:</strong> ${esc(sg.detail)}</div>`)
+          .join("");
+        lessonHtml = `
+          <p class="brand-sub">Review this step-by-step example before your next question:</p>
+          ${we.title ? `<h3 style="margin:8px 0">${esc(we.title)}</h3>` : ""}
+          ${we.code ? `<pre class="code-block">${esc(we.code)}</pre>` : ""}
+          ${subgoals}
+        `;
+      } else {
+        const theoryHtml = Array.isArray(mat.theory_sections) && mat.theory_sections.length
+          ? `<div class="theory-grid">${mat.theory_sections
+              .map(
+                (sec) => `
+                <div class="theory-section">
+                  <h4>${esc(sec.heading)}</h4>
+                  <p>${esc(sec.body)}</p>
+                </div>`
+              )
+              .join("")}</div>`
           : "";
-        document.getElementById("lesson-continue-btn").addEventListener("click", () => requestNextStep());
-        document.getElementById("lesson-full-btn").addEventListener("click", () => {
-          const ref = document.getElementById("course-material-card");
-          if (ref) ref.open = true;
-          setActiveTab("learn");
-        });
-        return;
+        const pitfallsHtml = Array.isArray(mat.pitfalls) && mat.pitfalls.length
+          ? `<p><strong>Watch out for:</strong></p><ul class="pitfalls-list">${mat.pitfalls.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>`
+          : "";
+        lessonHtml = `
+          <p class="brand-sub">Concept lesson recommended before your next question:</p>
+          ${mat.title ? `<h3 style="margin:8px 0">${esc(mat.title)}</h3>` : ""}
+          <p>${esc(mat.concept_explanation)}</p>
+          ${theoryHtml}
+          ${mat.mental_model ? `<p><strong>Mental Model:</strong> ${esc(mat.mental_model)}</p>` : ""}
+          ${pitfallsHtml}
+        `;
       }
 
+      qArea.innerHTML = `
+        ${topNotices}
+        ${lessonHtml}
+        <div class="practice-actions">
+          <button id="lesson-continue-btn" class="btn btn-primary" type="button">Got it, next question →</button>
+          <button id="lesson-full-btn" class="btn" type="button">Open Reference</button>
+        </div>`;
+      fArea.innerHTML = "";
+      document.getElementById("lesson-continue-btn").addEventListener("click", () => requestNextStep());
+      document.getElementById("lesson-full-btn").addEventListener("click", () => {
+        const ref = document.getElementById("course-material-card");
+        if (ref) ref.open = true;
+        setActiveTab("learn");
+      });
+      return;
+    }
+
+    if (!active || !active.question) {
       modeBadge.textContent = "Ready";
       let extraMsg = "";
       if (state.revealedInfo) {
@@ -489,15 +739,10 @@
           : state.revealedInfo.solution;
         extraMsg += `<div class="hint-box"><strong>Solution:</strong> <code>${esc(sol)}</code>${state.revealedInfo.explanation ? `<br/><span>${esc(state.revealedInfo.explanation)}</span>` : ""}</div>`;
       }
-      if (state.workspaceNotice) {
-        extraMsg += `<div class="hint-box">${esc(state.workspaceNotice)}</div>`;
-      }
-      if (state.workspaceError) {
-        extraMsg += `<div class="hint-box"><strong>Notice:</strong> ${esc(state.workspaceError)}</div>`;
-      }
 
       const ctaLabel = state.workspaceNotice ? "Continue to Question →" : "Start Practice →";
       qArea.innerHTML = `
+        ${topNotices}
         <div class="practice-empty">
           <p>${state.workspaceNotice ? "Ready for your follow-up question?" : "Ready to practice this topic with an adaptive question."}</p>
           <div class="practice-actions" style="justify-content:center">
@@ -582,13 +827,13 @@
     const canRetry = hasSubmitted && !hasPassed && retryCount < 2 && !canSubmit;
 
     qArea.innerHTML = `
+      ${topNotices}
       <p><strong>${esc(q.prompt)}</strong></p>
       ${snippetsHtml}
       ${inputHtml}
       <div class="practice-actions">
-        ${canSubmit ? `<button id="submit-ans-btn" class="btn btn-primary" type="button">Submit</button>` : ""}
+        ${(canSubmit || canRetry) ? `<button id="submit-ans-btn" class="btn btn-primary" type="button">${canSubmit ? "Submit" : `Submit Retry (${retryCount + 1}/2)`}</button>` : ""}
         ${(!hasPassed && hintsCount < 3) ? `<button id="hint-btn" class="btn" type="button">Hint (${hintsCount}/3)</button>` : ""}
-        ${canRetry ? `<button id="retry-btn" class="btn" type="button">Retry (${retryCount}/2)</button>` : ""}
         ${(hasSubmitted && !hasPassed && !state.revealedInfo) ? `<button id="reveal-btn" class="btn" type="button">Reveal Solution</button>` : ""}
         ${hasSubmitted ? `<button id="next-question-btn" class="btn ${hasPassed || state.revealedInfo || !canRetry ? "btn-primary" : "btn-lime"}" type="button">Next →</button>` : ""}
         <button id="finish-btn" class="btn" type="button">Stop</button>
@@ -601,7 +846,7 @@
       const cls = lastRes.full_success ? "feedback-pass" : "feedback-fail";
       const msg = lastRes.full_success
         ? "Nice job! Click Next → to continue."
-        : (canRetry ? "Not quite — try again with Retry, use a Hint, or Reveal Solution." : "Review the feedback or solution, then click Next → to continue.");
+        : (canRetry ? "Not quite — edit your answer and click Submit Retry, use a Hint, or Reveal Solution." : "Review the feedback or solution, then click Next → to continue.");
       feedbackHtml += `<div class="feedback-banner ${cls}"><strong>${lastRes.full_success ? "Correct" : "Needs Review"}</strong> (Score: ${esc(lastRes.score)}) — ${msg}</div>`;
     }
     if (state.revealedInfo) {
@@ -609,9 +854,6 @@
         ? state.revealedInfo.solution.join(", ")
         : state.revealedInfo.solution;
       feedbackHtml += `<div class="hint-box"><strong>Solution:</strong> <code>${esc(sol)}</code>${state.revealedInfo.explanation ? `<br/><span>${esc(state.revealedInfo.explanation)}</span>` : ""}</div>`;
-    }
-    if (state.workspaceError) {
-      feedbackHtml += `<div class="hint-box"><strong>Notice:</strong> ${esc(state.workspaceError)}</div>`;
     }
     fArea.innerHTML = feedbackHtml;
 
@@ -636,6 +878,12 @@
         }
         const elapsed = Math.max(1.0, (Date.now() - (state.questionStartMs || Date.now())) / 1000);
         try {
+          if (!canSubmit && canRetry) {
+            await apiPost("/api/retry", {
+              learner: state.learner,
+              interaction: active.id,
+            });
+          }
           await apiPost("/api/submit", {
             learner: state.learner,
             interaction: active.id,
@@ -721,38 +969,171 @@
     if (!c || !c.assessed) {
       badge.textContent = "Not started";
       badge.className = "badge";
-      el.innerHTML = `<p class="brand-sub">Complete at least one practice question on this topic to view your 0–60 day retention forecast.</p>`;
+      el.innerHTML = `<p class="brand-sub" data-state="unassessed">This topic is currently unassessed. Complete at least one practice question to view your 0–60 day retention forecast.</p>`;
       return;
     }
 
-    badge.textContent = `Floor: ${Math.round((c.floor_b || 0) * 100)}%`;
+    const byDiff = c.curves_by_difficulty || {};
+    const easyPts = Array.isArray(byDiff.easy) ? byDiff.easy : [];
+    const medPts = Array.isArray(byDiff.medium) ? byDiff.medium : [];
+    const hardPts = Array.isArray(byDiff.hard) ? byDiff.hard : [];
+
+    const probAtDay = (pts, targetDay, fallbackProb = 0.5) => {
+      if (!pts.length) return fallbackProb;
+      let best = pts[0];
+      let bestDist = Math.abs(Number(best.day || 0) - targetDay);
+      pts.forEach((p) => {
+        const d = Math.abs(Number(p.day || 0) - targetDay);
+        if (d < bestDist) {
+          best = p;
+          bestDist = d;
+        }
+      });
+      return Number(best.probability ?? fallbackProb);
+    };
+
+    const summ = ((state.data && state.data.skill_summaries) || {})[state.skill] || {};
+    const pNowEasy = Math.round(probAtDay(easyPts, 0, c.p_easy || 0.7) * 100);
+    const pNowMed = Math.round(probAtDay(medPts, 0, summ.p_med || 0.5) * 100);
+    const pNowHard = Math.round(probAtDay(hardPts, 0, c.p_hard || 0.35) * 100);
+    const p30Med = Math.round(probAtDay(medPts, 30, summ.p_30d || 0.4) * 100);
+    const p60Easy = Math.round(probAtDay(easyPts, 60, pNowEasy / 100) * 100);
+    const p60Med = Math.round(probAtDay(medPts, 60, p30Med / 100) * 100);
+    const p60Hard = Math.round(probAtDay(hardPts, 60, pNowHard / 100) * 100);
+    const floorPct = Math.round((c.floor_b || 0) * 100);
+    const drop30 = Math.max(0, pNowMed - p30Med);
+
+    const unaidedPass = Number(summ.observed_unaided_passes || 0);
+    const unaidedTot = Number(summ.observed_unaided_attempts || 0);
+    const totalAtt = Number(summ.observed_attempts || 0);
+    const obsMain = unaidedTot > 0 ? `${unaidedPass}/${unaidedTot} unaided` : `${totalAtt} attempt${totalAtt === 1 ? "" : "s"}`;
+    const statusText = pNowMed >= 80 && floorPct >= 65
+      ? "Strong & durable"
+      : pNowMed < 70
+        ? "Needs remediation (< 70%)"
+        : drop30 > 15
+          ? "Fragile — review after gap"
+          : "Consolidating";
+
+    badge.textContent = `Durable Floor: ${floorPct}%`;
     badge.className = "badge badge-lime";
-    const w = 540;
-    const h = 180;
-    const pad = 28;
-    const xOf = (d) => pad + ((d / 60) * (w - 2 * pad));
-    const yOf = (p) => h - pad - (p * (h - 2 * pad));
+
+    const w = 620;
+    const h = 240;
+    const padL = 44;
+    const padR = 92;
+    const padT = 20;
+    const padB = 34;
+    const plotW = w - padL - padR;
+    const plotH = h - padT - padB;
+    const xOf = (d) => padL + ((d / 60) * plotW);
+    const yOf = (p) => padT + ((1 - Math.min(1, Math.max(0, p))) * plotH);
 
     const pathFor = (pts) =>
       pts.map((pt, idx) => `${idx === 0 ? "M" : "L"}${xOf(pt.day).toFixed(1)},${yOf(pt.probability).toFixed(1)}`).join(" ");
 
-    const byDiff = c.curves_by_difficulty || {};
-    const floorY = yOf(Math.min(1, Math.max(0, c.floor_b || 0))).toFixed(1);
+    const floorY = yOf(c.floor_b || 0);
+    const yTicks = [100, 75, 50, 25, 0]
+      .map((pct) => {
+        const y = yOf(pct / 100).toFixed(1);
+        return `
+          <line x1="${padL}" y1="${y}" x2="${w - padR}" y2="${y}" stroke="#e0e5d9" stroke-width="${pct === 0 ? "1.2" : "0.8"}" stroke-dasharray="${pct === 0 ? "" : "2 3"}"/>
+          <text x="${padL - 8}" y="${(Number(y) + 4).toFixed(1)}" text-anchor="end" font-size="11" fill="#687064">${pct}%</text>
+        `;
+      })
+      .join("");
+
+    const xTicks = [0, 15, 30, 45, 60]
+      .map((day) => {
+        const x = xOf(day).toFixed(1);
+        const lbl = day === 0 ? "Today" : `Day ${day}`;
+        return `
+          <line x1="${x}" y1="${padT}" x2="${x}" y2="${h - padB}" stroke="#e0e5d9" stroke-width="0.7" opacity="0.6"/>
+          <text x="${x}" y="${h - 10}" text-anchor="${day === 0 ? "start" : day === 60 ? "end" : "middle"}" font-size="11" fill="#687064">${lbl}</text>
+        `;
+      })
+      .join("");
+
+    const dotsFor = (pts, color) =>
+      [0, 30, 60]
+        .map((day) => {
+          const p = probAtDay(pts, day, 0);
+          return `<circle cx="${xOf(day).toFixed(1)}" cy="${yOf(p).toFixed(1)}" r="3.2" fill="${color}"/>`;
+        })
+        .join("");
+
+    // De-overlap right-edge labels so nearby values stay legible
+    const rawLabels = [
+      { id: "easy", text: `Easy ${p60Easy}%`, y: yOf(p60Easy / 100), color: "#839f50" },
+      { id: "floor", text: `Floor ${floorPct}%`, y: floorY, color: "#7058ba" },
+      { id: "med", text: `Med ${p60Med}%`, y: yOf(p60Med / 100), color: "#293321" },
+      { id: "hard", text: `Hard ${p60Hard}%`, y: yOf(p60Hard / 100), color: "#687064" },
+    ].sort((a, b) => a.y - b.y);
+    for (let i = 1; i < rawLabels.length; i++) {
+      if (rawLabels[i].y - rawLabels[i - 1].y < 14) {
+        rawLabels[i].y = rawLabels[i - 1].y + 14;
+      }
+    }
+    const rightLabelsHtml = rawLabels
+      .map(
+        (lb) =>
+          `<text x="${w - padR + 8}" y="${Math.min(h - padB, Math.max(padT + 8, lb.y + 4)).toFixed(1)}" font-size="11" font-weight="700" fill="${lb.color}">${lb.text}</text>`
+      )
+      .join("");
+
+    const advice = pNowMed < 70
+      ? "Medium recall is below 70%. Try Explain Concept or Easy/Medium unaided practice before moving on."
+      : drop30 > 15
+        ? `Retention drops ${drop30}% over 30 days. Complete a Self-Explanation or delayed check to raise your long-term floor.`
+        : `Your retention stays steady across 60 days (long-term floor ${floorPct}%). Keep challenging yourself on Hard items or Advance Next Topic.`;
 
     el.innerHTML = `
-      <svg viewBox="0 0 ${w} ${h}" width="100%" height="180" role="img" aria-label="0 to 60 day retention curve">
-        <line x1="${pad}" y1="${h - pad}" x2="${w - pad}" y2="${h - pad}" stroke="#e0e5d9" stroke-width="1"/>
-        <line x1="${pad}" y1="${pad}" x2="${pad}" y2="${h - pad}" stroke="#e0e5d9" stroke-width="1"/>
-        <line x1="${pad}" y1="${floorY}" x2="${w - pad}" y2="${floorY}" stroke="#7058ba" stroke-dasharray="4 3" stroke-width="1.5"/>
-        <path d="${pathFor(byDiff.easy || [])}" fill="none" stroke="#839f50" stroke-width="2"/>
-        <path d="${pathFor(byDiff.medium || [])}" fill="none" stroke="#293321" stroke-width="2.5"/>
-        <path d="${pathFor(byDiff.hard || [])}" fill="none" stroke="#687064" stroke-width="2"/>
+      <div class="progress-kpis">
+        <div class="kpi-card">
+          <div class="kpi-label">Today (Medium)</div>
+          <div class="kpi-value">${pNowMed}%</div>
+          <div class="kpi-sub">Easy ${pNowEasy}% · Hard ${pNowHard}%</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">In 30 Days</div>
+          <div class="kpi-value">${p30Med}%</div>
+          <div class="kpi-sub">Estimated ${drop30}% forgetting drop</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Long-Term Floor</div>
+          <div class="kpi-value">${floorPct}%</div>
+          <div class="kpi-sub">Durable recall baseline (60d)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Observed Practice</div>
+          <div class="kpi-value">${esc(obsMain)}</div>
+          <div class="kpi-sub">${esc(statusText)}</div>
+        </div>
+      </div>
+
+      <svg viewBox="0 0 ${w} ${h}" width="100%" style="max-height:260px;height:auto;display:block" role="img" aria-label="0 to 60 day retention curve">
+        ${yTicks}
+        ${xTicks}
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${h - padB}" stroke="#e0e5d9" stroke-width="1.2"/>
+        <line x1="${padL}" y1="${floorY.toFixed(1)}" x2="${w - padR}" y2="${floorY.toFixed(1)}" stroke="#7058ba" stroke-dasharray="5 4" stroke-width="1.8"/>
+        <path d="${pathFor(easyPts)}" fill="none" stroke="#839f50" stroke-width="2.2"/>
+        <path d="${pathFor(medPts)}" fill="none" stroke="#293321" stroke-width="2.8"/>
+        <path d="${pathFor(hardPts)}" fill="none" stroke="#687064" stroke-width="2.2"/>
+        ${dotsFor(easyPts, "#839f50")}
+        ${dotsFor(medPts, "#293321")}
+        ${dotsFor(hardPts, "#687064")}
+        ${rightLabelsHtml}
       </svg>
+
       <div class="curve-legend">
-        <span class="legend-item"><span class="legend-swatch" style="background:#839f50"></span>Easy</span>
-        <span class="legend-item"><span class="legend-swatch" style="background:#293321"></span>Medium</span>
-        <span class="legend-item"><span class="legend-swatch" style="background:#687064"></span>Hard</span>
-        <span class="legend-item"><span class="legend-swatch" style="background:#7058ba"></span>Long-term floor</span>
+        <span class="legend-item"><span class="legend-swatch" style="background-color:#839f50"></span>Easy questions (${pNowEasy}% → ${p60Easy}%)</span>
+        <span class="legend-item"><span class="legend-swatch" style="background-color:#293321"></span>Medium questions (${pNowMed}% → ${p60Med}%)</span>
+        <span class="legend-item"><span class="legend-swatch" style="background-color:#687064"></span>Hard questions (${pNowHard}% → ${p60Hard}%)</span>
+        <span class="legend-item"><span class="legend-swatch-dashed"></span>Long-term floor (${floorPct}%)</span>
+      </div>
+
+      <div class="progress-guide">
+        <strong>How to read this chart:</strong> Each line predicts your probability of solving an unaided question correctly if you return <strong>0 to 60 days later</strong> without extra practice. <strong>What to do next:</strong> ${esc(advice)}
       </div>
     `;
   }
@@ -772,13 +1153,28 @@
     const gb = (state.data && state.data.glass_box) || {};
     const ppo = gb.ppo || {};
     const audit = gb.token_audit || {};
+    const ragAudit = gb.rag_audit || (state.data && state.data.rag_audit) || {};
+    const corpus = ragAudit.corpus || {};
+    const lastRet = ragAudit.last_retrieval || null;
+    const llmStatus = (state.data && state.data.llm_status) || {};
+    const fallbacks = Array.isArray(llmStatus.fallback_providers) && llmStatus.fallback_providers.length
+      ? llmStatus.fallback_providers.join(" -> ")
+      : "none";
     body.innerHTML = `
       <div class="kv-row"><span>Token Dim</span><strong>${esc(audit.token_dim || 47)}</strong></div>
       <div class="kv-row"><span>Text/Code Embeddings</span><strong>${audit.uses_text_or_code_embeddings ? "YES" : "ZERO"}</strong></div>
       <div class="kv-row"><span>PPO Critic V(s_t)</span><strong>${ppo.critic_value !== undefined ? ppo.critic_value.toFixed(3) : "-"}</strong></div>
       <div class="kv-row"><span>Recommended Action</span><strong>${esc(ppo.action_name || "-")}</strong></div>
       <div class="kv-row"><span>Awaiting Question</span><strong>${ppo.awaiting_question ? "True" : "False"}</strong></div>
+      <div class="kv-row"><span>LLM Primary / Fallback</span><strong>${esc(llmStatus.provider || "mock")} / ${esc(fallbacks)}</strong></div>
       ${ppo.rationale_plain ? `<p class="brand-sub" style="margin-top:10px">${esc(ppo.rationale_plain)}</p>` : ""}
+      <div class="rag-audit-section">
+        <div class="rag-audit-title">RAG &amp; Guardrails Audit</div>
+        <div class="kv-row"><span>Curriculum / v2.2 / Episodic</span><strong>${esc(corpus.curriculum_chunks || 0)} / ${esc(corpus.v22_exemplars || 0)} / ${esc(corpus.episodic_learner || 0)}</strong></div>
+        <div class="kv-row"><span>Last Retrieval</span><strong>${esc(lastRet ? `${lastRet.purpose} (${lastRet.returned || 0} hits, ${lastRet.latency_ms || 0}ms)` : "none yet")}</strong></div>
+        <div class="kv-row"><span>FTS5 / Vector / RRF</span><strong>${lastRet ? `${lastRet.fts_hits} / ${lastRet.vector_hits} / ${lastRet.fused_candidates}` : "-"}</strong></div>
+        ${lastRet && lastRet.rewritten_query ? `<p class="brand-sub" style="margin-top:6px"><strong>Rewritten Query:</strong> ${esc(lastRet.rewritten_query)}</p>` : ""}
+      </div>
     `;
   }
 
@@ -801,19 +1197,22 @@
   const startAfterChatBtn = document.getElementById("start-practice-after-chat-btn");
   if (startAfterChatBtn) startAfterChatBtn.addEventListener("click", startFromLearn);
 
-  async function handleSendChat() {
-    const input = document.getElementById("tutor-chat-input");
-    if (!input || state.sendingChat) return;
-    const text = input.value.trim();
+  async function handleSendChat(sourceInputId = "tutor-chat-input", promptOverride = null) {
+    const input = document.getElementById(sourceInputId) || document.getElementById("tutor-chat-input");
+    if (state.sendingChat) return;
+    const text = (promptOverride !== null ? String(promptOverride) : (input ? input.value : "")).trim();
     if (!text) {
-      input.focus();
+      if (input) input.focus();
       return;
     }
     const sk = state.skill;
     if (!state.chatBySkill[sk]) state.chatBySkill[sk] = [];
     const history = state.chatBySkill[sk].slice(-6);
     state.chatBySkill[sk].push({ role: "user", text });
-    input.value = "";
+    if (promptOverride === null && input) {
+      input.value = "";
+      input.style.height = "auto";
+    }
     state.sendingChat = true;
     renderTutorChat();
 
@@ -828,7 +1227,16 @@
         role: "assistant",
         text: res.reply || "Here is a clarification based on the lesson.",
         code: res.code_example || "",
+        citations: Array.isArray(res.citations) ? res.citations : [],
+        mastery_tier: res.mastery_tier || "",
+        guardrail_status: res.guardrail_status || "",
+        source: res.source || "",
       });
+      if (res.rag_audit && state.data) {
+        state.data.rag_audit = res.rag_audit;
+        if (state.data.glass_box) state.data.glass_box.rag_audit = res.rag_audit;
+        renderGlassBox();
+      }
     } catch (err) {
       state.chatBySkill[sk].push({
         role: "assistant",
@@ -840,15 +1248,64 @@
     }
   }
 
-  const chatSendBtn = document.getElementById("tutor-chat-send-btn");
-  if (chatSendBtn) chatSendBtn.addEventListener("click", handleSendChat);
-  const chatInput = document.getElementById("tutor-chat-input");
-  if (chatInput) {
-    chatInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        handleSendChat();
+  function bindTutorInput(inputEl, btnEl, inputId) {
+    if (btnEl) btnEl.addEventListener("click", () => handleSendChat(inputId));
+    if (inputEl) {
+      inputEl.addEventListener("input", () => {
+        inputEl.style.height = "auto";
+        inputEl.style.height = `${Math.min(inputEl.scrollHeight, 130)}px`;
+      });
+      inputEl.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          handleSendChat(inputId);
+        }
+      });
+    }
+  }
+
+  bindTutorInput(document.getElementById("tutor-chat-input"), document.getElementById("tutor-chat-send-btn"), "tutor-chat-input");
+  bindTutorInput(document.getElementById("drawer-tutor-input"), document.getElementById("drawer-tutor-send-btn"), "drawer-tutor-input");
+
+  ["tutor-starter-chips", "drawer-starter-chips"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("click", (e) => {
+      const btn = e.target.closest(".starter-chip");
+      if (!btn || state.sendingChat) return;
+      const prompt = btn.getAttribute("data-prompt");
+      if (prompt) handleSendChat(id === "drawer-starter-chips" ? "drawer-tutor-input" : "tutor-chat-input", prompt);
+    });
+  });
+
+  ["tutor-chat-messages", "drawer-tutor-messages", "course-material-body"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("click", (e) => {
+      const chip = e.target.closest(".citation-chip");
+      if (!chip) return;
+      const key = chip.getAttribute("data-cit-key");
+      state.openCitationKey = state.openCitationKey === key ? null : key;
+      if (id === "course-material-body") {
+        render();
+      } else {
+        renderTutorChat();
       }
+    });
+  });
+
+  const toggleTutorBtn = document.getElementById("toggle-tutor-drawer-btn");
+  if (toggleTutorBtn) {
+    toggleTutorBtn.addEventListener("click", () => {
+      state.tutorDrawerOpen = !state.tutorDrawerOpen;
+      renderTutorChat();
+    });
+  }
+  const closeTutorBtn = document.getElementById("close-tutor-drawer-btn");
+  if (closeTutorBtn) {
+    closeTutorBtn.addEventListener("click", () => {
+      state.tutorDrawerOpen = false;
+      renderTutorChat();
     });
   }
 
@@ -897,6 +1354,7 @@
 
   document.getElementById("profile-select").addEventListener("change", async (e) => {
     state.learner = e.target.value || null;
+    state.chatBySkill = {};
     state.workspaceError = null;
     state.workspaceNotice = null;
     state.revealedInfo = null;
@@ -908,9 +1366,19 @@
 
   document.getElementById("ppo-next-btn").addEventListener("click", () => requestNextStep());
 
+  const manualSelEl = document.getElementById("manual-action-select");
+  const manualStepBtnEl = document.getElementById("manual-step-btn");
+  if (manualSelEl && manualStepBtnEl) {
+    manualSelEl.addEventListener("change", () => {
+      manualStepBtnEl.classList.toggle("btn-primary", manualSelEl.value !== "");
+    });
+  }
+
   document.getElementById("manual-step-btn").addEventListener("click", () => {
-    const val = document.getElementById("manual-action-select").value;
+    const val = manualSelEl ? manualSelEl.value : "";
     if (val === "") return;
+    if (manualSelEl) manualSelEl.value = "";
+    if (manualStepBtnEl) manualStepBtnEl.classList.remove("btn-primary");
     requestNextStep({ actionId: Number(val), policySource: "learner_manual" });
   });
 

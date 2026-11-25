@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Adaptive Python Tutor</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="stylesheet" href="/style.css?v=3" />
+  <link rel="stylesheet" href="/style.css?v=6" />
 </head>
 <body>
   <header class="topbar">
@@ -20,6 +20,7 @@
       <select id="profile-select" class="control-select" aria-label="Select learner profile"></select>
       <input id="new-profile-name" class="answer-input" type="text" placeholder="New learner name..." aria-label="New learner name" />
       <button id="create-profile-btn" class="btn btn-primary" type="button">Create Profile</button>
+      <button id="toggle-tutor-drawer-btn" class="btn" type="button">Ask Tutor</button>
       <button id="toggle-glass-box-btn" class="btn btn-lime" type="button">Glass-Box Inspector</button>
     </div>
   </header>
@@ -77,15 +78,16 @@
               <span>Ask the Tutor — Clarify Your Doubts</span>
               <span class="badge badge-lime">Interactive Q&amp;A</span>
             </div>
+            <div id="tutor-starter-chips" class="starter-chips" aria-label="Suggested tutor questions"></div>
             <div id="tutor-chat-messages" class="tutor-chat-messages" aria-live="polite"></div>
             <div class="tutor-chat-form">
-              <input
+              <textarea
                 id="tutor-chat-input"
-                class="answer-input"
-                type="text"
-                placeholder="Ask a question about this lesson or worked example..."
+                class="answer-input tutor-chat-textarea"
+                rows="2"
+                placeholder="Ask a question (Enter to send, Shift+Enter for new line)..."
                 aria-label="Ask a question about this lesson"
-              />
+              ></textarea>
               <button id="tutor-chat-send-btn" class="btn btn-primary" type="button">Ask Tutor</button>
             </div>
             <div class="learn-footer-cta">
@@ -160,6 +162,29 @@
     </aside>
   </main>
 
-  <script src="/app.js?v=7"></script>
+  <!-- Side-by-Side Full-Height AI Tutor Drawer (accessible from Learn & Practice) -->
+  <aside id="tutor-drawer" class="tutor-drawer hidden" aria-label="AI Tutor Side Drawer">
+    <div class="tutor-drawer-header">
+      <div>
+        <h2 class="card-title" style="margin:0">AI Tutor</h2>
+        <div id="drawer-tutor-subtitle" class="brand-sub">Side-by-side guidance grounded in your mastery state</div>
+      </div>
+      <button id="close-tutor-drawer-btn" class="btn" type="button" aria-label="Close tutor drawer">Close</button>
+    </div>
+    <div id="drawer-starter-chips" class="starter-chips" aria-label="Suggested tutor questions"></div>
+    <div id="drawer-tutor-messages" class="tutor-chat-messages tutor-drawer-messages" aria-live="polite"></div>
+    <div class="tutor-chat-form">
+      <textarea
+        id="drawer-tutor-input"
+        class="answer-input tutor-chat-textarea"
+        rows="2"
+        placeholder="Ask while practicing (Enter to send, Shift+Enter for new line)..."
+        aria-label="Ask tutor in side drawer"
+      ></textarea>
+      <button id="drawer-tutor-send-btn" class="btn btn-primary" type="button">Ask Tutor</button>
+    </div>
+  </aside>
+
+  <script src="/app.js?v=13"></script>
 </body>
 </html>

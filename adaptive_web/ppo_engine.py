@@ -265,6 +265,9 @@ class PPOEngine:
             if diff in DIFFICULTIES:
                 last_difficulty_by_skill[skill] = diff
 
+            if item.get("ppo_action") == "request_self_explanation":
+                can_self_explain[skill] = False
+
             resolved = [r for r in item.get("results", []) if r.get("grading_status") == "resolved"]
             if not resolved:
                 continue

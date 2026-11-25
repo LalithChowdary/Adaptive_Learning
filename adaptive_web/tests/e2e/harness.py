@@ -796,7 +796,12 @@ class AdaptiveWebHarness:
         self._env_patcher.start()
 
         try:
-            self.settings = Settings.from_env(env_path=self.env_path)
+            effective_env_path = (
+                self.env_path
+                if self.env_path is not None
+                else (Path(self.tmp_dir.name) / "_no_dotenv" if self.strip_keys else None)
+            )
+            self.settings = Settings.from_env(env_path=effective_env_path)
             self.app = AdaptiveLearningApp(self.settings)
             self.server = serve_fn(self.app, 0)
             self.port = int(self.server.server_port)

@@ -27,10 +27,16 @@ class LLMClientError(RuntimeError):
         self.kind = kind
 
 
-def _redact_secret(text: str, secret: str) -> str:
+def _redact_secret(text: str, secret: str | list[str] | tuple[str, ...]) -> str:
     if not secret:
         return text
-    return text.replace(secret, "[REDACTED]")
+    if isinstance(secret, str):
+        return text.replace(secret, "[REDACTED]")
+    out = text
+    for item in secret:
+        if item:
+            out = out.replace(item, "[REDACTED]")
+    return out
 
 
 def extract_json_object(raw_text: str, *, provider: str = "") -> dict[str, Any]:
@@ -111,6 +117,17 @@ class LLMClient:
     def __init__(self, settings: Settings | None = None):
         self.settings = settings or Settings.from_env()
         self._api_key = self.settings.llm_api_key
+        secrets = [self._api_key]
+        for _, key, _, _ in getattr(self.settings, "provider_configs", ()):
+            if key and key not in secrets:
+                secrets.append(key)
+        self._secrets: tuple[str, ...] = tuple(s for s in secrets if s)
+        self._last_telemetry: dict[str, Any] = {
+            "provider": self.provider_name(),
+            "model": self.model_name(),
+            "failover_used": False,
+            "attempts": [],
+        }
 
     def __repr__(self) -> str:
         return (
@@ -127,6 +144,27 @@ class LLMClient:
     def model_name(self) -> str:
         return self.settings.llm_model
 
+    def last_call_info(self) -> dict[str, Any]:
+        return {
+            "provider": self._last_telemetry.get("provider", self.provider_name()),
+            "model": self._last_telemetry.get("model", self.model_name()),
+            "failover_used": bool(self._last_telemetry.get("failover_used", False)),
+            "attempts": list(self._last_telemetry.get("attempts", [])),
+        }
+
+    def _provider_chain(self) -> list[tuple[str, str, str, str]]:
+        configs = list(getattr(self.settings, "provider_configs", ()) or ())
+        if configs:
+            return configs
+        return [
+            (
+                self.settings.effective_provider,
+                self._api_key,
+                self.settings.llm_model,
+                self.settings.llm_base_url,
+            )
+        ]
+
     def complete_json(
         self,
         system_prompt: str,
@@ -136,21 +174,96 @@ class LLMClient:
         temperature: float = 0.2,
         max_tokens: int = 1800,
     ) -> dict[str, Any]:
-        """Execute a structured JSON completion (live HTTP if configured, else deterministic double)."""
+        """Execute a structured JSON completion with ordered provider failover or offline double."""
         if not self.is_live():
-            return self._deterministic_double(system_prompt, user_prompt, schema_name)
+            res = self._deterministic_double(system_prompt, user_prompt, schema_name)
+            self._last_telemetry = {
+                "provider": "mock",
+                "model": self.model_name(),
+                "failover_used": False,
+                "attempts": [{"provider": "mock", "status": "ok"}],
+            }
+            return res
 
-        provider = self.provider_name()
-        if provider == "openai":
-            raw_text = self._call_openai(system_prompt, user_prompt, temperature=temperature, max_tokens=max_tokens)
-        elif provider == "anthropic":
-            raw_text = self._call_anthropic(system_prompt, user_prompt, temperature=temperature, max_tokens=max_tokens)
-        elif provider == "gemini":
-            raw_text = self._call_gemini(system_prompt, user_prompt, temperature=temperature, max_tokens=max_tokens)
-        else:
-            raise LLMClientError(f"Unsupported live provider {provider!r}.", provider=provider, kind="config_error")
+        attempts: list[dict[str, Any]] = []
+        last_exc: LLMClientError | None = None
+        chain = self._provider_chain()
+        for idx, (provider, api_key, model, base_url) in enumerate(chain):
+            if provider == "mock":
+                res = self._deterministic_double(system_prompt, user_prompt, schema_name)
+                attempts.append({"provider": "deterministic_double", "status": "ok"})
+                self._last_telemetry = {
+                    "provider": "deterministic_double",
+                    "model": model or "deterministic-double-v1",
+                    "failover_used": idx > 0,
+                    "attempts": attempts,
+                }
+                return res
+            try:
+                if provider in ("openai", "groq", "ollama"):
+                    raw_text = self._call_openai(
+                        system_prompt,
+                        user_prompt,
+                        temperature=temperature,
+                        max_tokens=max_tokens,
+                        api_key=api_key,
+                        model=model,
+                        base_url=base_url,
+                        provider=provider,
+                    )
+                elif provider == "anthropic":
+                    raw_text = self._call_anthropic(
+                        system_prompt,
+                        user_prompt,
+                        temperature=temperature,
+                        max_tokens=max_tokens,
+                        api_key=api_key,
+                        model=model,
+                        base_url=base_url,
+                    )
+                elif provider == "gemini":
+                    raw_text = self._call_gemini(
+                        system_prompt,
+                        user_prompt,
+                        temperature=temperature,
+                        max_tokens=max_tokens,
+                        api_key=api_key,
+                        model=model,
+                        base_url=base_url,
+                    )
+                else:
+                    raise LLMClientError(f"Unsupported live provider {provider!r}.", provider=provider, kind="config_error")
 
-        return extract_json_object(raw_text, provider=provider)
+                parsed = extract_json_object(raw_text, provider=provider)
+                attempts.append({"provider": provider, "model": model, "status": "ok"})
+                self._last_telemetry = {
+                    "provider": provider,
+                    "model": model,
+                    "failover_used": idx > 0,
+                    "attempts": attempts,
+                }
+                return parsed
+            except LLMClientError as exc:
+                last_exc = exc
+                attempts.append(
+                    {
+                        "provider": provider,
+                        "model": model,
+                        "status": "error",
+                        "kind": exc.kind,
+                        "status_code": exc.status_code,
+                    }
+                )
+                continue
+
+        self._last_telemetry = {
+            "provider": self.provider_name(),
+            "model": self.model_name(),
+            "failover_used": len(attempts) > 1,
+            "attempts": attempts,
+        }
+        assert last_exc is not None
+        raise last_exc
 
     def _post_json(
         self,
@@ -175,18 +288,18 @@ class LLMClient:
                 err_body = ""
             msg = _redact_secret(
                 f"HTTP {exc.code} from {provider}: {err_body or exc.reason}",
-                self._api_key,
+                self._secrets,
             )
             raise LLMClientError(msg, provider=provider, status_code=int(exc.code), kind="http_error") from exc
         except (TimeoutError, socket.timeout) as exc:
-            msg = _redact_secret(f"Request to {provider} timed out after {timeout:.1f}s.", self._api_key)
+            msg = _redact_secret(f"Request to {provider} timed out after {timeout:.1f}s.", self._secrets)
             raise LLMClientError(msg, provider=provider, kind="timeout") from exc
         except urllib.error.URLError as exc:
             reason = exc.reason
             if isinstance(reason, (TimeoutError, socket.timeout)):
-                msg = _redact_secret(f"Request to {provider} timed out after {timeout:.1f}s.", self._api_key)
+                msg = _redact_secret(f"Request to {provider} timed out after {timeout:.1f}s.", self._secrets)
                 raise LLMClientError(msg, provider=provider, kind="timeout") from exc
-            msg = _redact_secret(f"Network error contacting {provider}: {reason}", self._api_key)
+            msg = _redact_secret(f"Network error contacting {provider}: {reason}", self._secrets)
             raise LLMClientError(msg, provider=provider, kind="network_error") from exc
 
         try:
@@ -212,10 +325,16 @@ class LLMClient:
         *,
         temperature: float,
         max_tokens: int,
+        api_key: str | None = None,
+        model: str | None = None,
+        base_url: str | None = None,
+        provider: str = "openai",
     ) -> str:
-        url = _join_endpoint(self.settings.llm_base_url, "/chat/completions", version_prefix="/v1")
+        url = _join_endpoint(base_url or self.settings.llm_base_url, "/chat/completions", version_prefix="/v1")
+        used_model = model or self.model_name()
+        used_key = api_key if api_key is not None else self._api_key
         payload = {
-            "model": self.model_name(),
+            "model": used_model,
             "messages": [
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
@@ -226,15 +345,15 @@ class LLMClient:
         }
         headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {self._api_key}",
+            "Authorization": f"Bearer {used_key}",
         }
-        data = self._post_json(url, payload, headers, provider="openai")
+        data = self._post_json(url, payload, headers, provider=provider)
         try:
             content = data["choices"][0]["message"]["content"]
         except (KeyError, IndexError, TypeError) as exc:
             raise LLMClientError(
-                f"Unexpected OpenAI response structure: {exc}",
-                provider="openai",
+                f"Unexpected {provider} response structure: {exc}",
+                provider=provider,
                 kind="invalid_json",
             ) from exc
         if isinstance(content, list):
@@ -249,10 +368,15 @@ class LLMClient:
         *,
         temperature: float,
         max_tokens: int,
+        api_key: str | None = None,
+        model: str | None = None,
+        base_url: str | None = None,
     ) -> str:
-        url = _join_endpoint(self.settings.llm_base_url, "/messages", version_prefix="/v1")
+        url = _join_endpoint(base_url or self.settings.llm_base_url, "/messages", version_prefix="/v1")
+        used_model = model or self.model_name()
+        used_key = api_key if api_key is not None else self._api_key
         payload = {
-            "model": self.model_name(),
+            "model": used_model,
             "max_tokens": int(max_tokens),
             "temperature": float(temperature),
             "system": system_prompt,
@@ -260,7 +384,7 @@ class LLMClient:
         }
         headers = {
             "Content-Type": "application/json",
-            "x-api-key": self._api_key,
+            "x-api-key": used_key,
             "anthropic-version": "2023-06-01",
         }
         data = self._post_json(url, payload, headers, provider="anthropic")
@@ -291,15 +415,19 @@ class LLMClient:
         *,
         temperature: float,
         max_tokens: int,
+        api_key: str | None = None,
+        model: str | None = None,
+        base_url: str | None = None,
     ) -> str:
-        base = self.settings.llm_base_url.strip().rstrip("/")
-        model = self.model_name()
+        base = (base_url or self.settings.llm_base_url).strip().rstrip("/")
+        used_model = model or self.model_name()
+        used_key = api_key if api_key is not None else self._api_key
         if base.endswith(":generateContent"):
             url = base
         elif base.endswith("/v1beta"):
-            url = f"{base}/models/{model}:generateContent"
+            url = f"{base}/models/{used_model}:generateContent"
         else:
-            url = f"{base}/v1beta/models/{model}:generateContent"
+            url = f"{base}/v1beta/models/{used_model}:generateContent"
 
         payload = {
             "systemInstruction": {"parts": [{"text": system_prompt}]},
@@ -312,7 +440,7 @@ class LLMClient:
         }
         headers = {
             "Content-Type": "application/json",
-            "x-goog-api-key": self._api_key,
+            "x-goog-api-key": used_key,
         }
         data = self._post_json(url, payload, headers, provider="gemini")
         try:

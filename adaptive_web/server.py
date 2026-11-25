@@ -282,6 +282,18 @@ def serve(app: AdaptiveLearningApp, port: int = 8780) -> ThreadingHTTPServer:
                         ),
                     )
                     return
+                if path == "/api/rag/ingest":
+                    self._send_json(
+                        200,
+                        app.ingest_rag_markdown(
+                            data.get("skill", ""),
+                            data.get("title", ""),
+                            data.get("markdown", data.get("content", "")),
+                            doc_key=data.get("doc_key"),
+                            request_id=req_id,
+                        ),
+                    )
+                    return
             except (ValueError, KeyError, InvalidActionError) as exc:
                 self._send_json(400, {"error": str(exc)})
                 return

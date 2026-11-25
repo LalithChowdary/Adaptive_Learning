@@ -64,6 +64,7 @@ class AdaptiveStore:
                 );
                 CREATE TABLE IF NOT EXISTS generated_tasks(
                     task_id TEXT PRIMARY KEY,
+                    learner TEXT NOT NULL DEFAULT '',
                     skill TEXT NOT NULL,
                     difficulty TEXT NOT NULL,
                     task_type TEXT NOT NULL,
@@ -96,7 +97,32 @@ class AdaptiveStore:
                     created REAL NOT NULL
                 );
                 CREATE INDEX IF NOT EXISTS turns_lookup ON tutor_turns(learner, skill, created);
+                CREATE TABLE IF NOT EXISTS chat_messages(
+                    id TEXT PRIMARY KEY,
+                    learner TEXT NOT NULL,
+                    skill TEXT NOT NULL,
+                    role TEXT NOT NULL,
+                    message TEXT NOT NULL,
+                    code_example TEXT NOT NULL DEFAULT '',
+                    source TEXT NOT NULL DEFAULT '',
+                    citations_json TEXT NOT NULL DEFAULT '[]',
+                    mastery_tier TEXT NOT NULL DEFAULT '',
+                    guardrail_status TEXT NOT NULL DEFAULT '',
+                    created REAL NOT NULL
+                );
+                CREATE INDEX IF NOT EXISTS chat_lookup ON chat_messages(learner, skill, created);
                 """
+            )
+            gen_cols = {
+                row["name"]
+                for row in self.db.execute("PRAGMA table_info(generated_tasks)").fetchall()
+            }
+            if "learner" not in gen_cols:
+                self.db.execute(
+                    "ALTER TABLE generated_tasks ADD COLUMN learner TEXT NOT NULL DEFAULT ''"
+                )
+            self.db.execute(
+                "CREATE INDEX IF NOT EXISTS gen_tasks_learner ON generated_tasks(learner, skill, created)"
             )
 
     @contextmanager
@@ -181,24 +207,37 @@ class AdaptiveStore:
         task: dict[str, Any],
         created: float | None = None,
         *,
+        learner: str = "",
         verify_code_tests: bool = False,
     ) -> dict[str, Any]:
         catalogue_bridge.assert_valid_task(task, verify_code_tests=verify_code_tests)
         ts = float(time.time() if created is None else created)
-        payload = json.dumps(task)
+        stored = dict(task)
+        if learner:
+            stored.setdefault("learner", learner)
+        payload = json.dumps(stored)
         with self.transaction():
             self.db.execute(
                 """
-                INSERT INTO generated_tasks(task_id, skill, difficulty, task_type, payload, created)
-                VALUES (?, ?, ?, ?, ?, ?)
+                INSERT INTO generated_tasks(task_id, learner, skill, difficulty, task_type, payload, created)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(task_id) DO UPDATE SET
+                    learner=CASE WHEN excluded.learner != '' THEN excluded.learner ELSE generated_tasks.learner END,
                     skill=excluded.skill,
                     difficulty=excluded.difficulty,
                     task_type=excluded.task_type,
                     payload=excluded.payload,
                     created=excluded.created
                 """,
-                (task["task_id"], task["skill_id"], task["difficulty"], task["task_type"], payload, ts),
+                (
+                    task["task_id"],
+                    str(learner or stored.get("learner") or ""),
+                    task["skill_id"],
+                    task["difficulty"],
+                    task["task_type"],
+                    payload,
+                    ts,
+                ),
             )
         return json.loads(payload)
 
@@ -218,9 +257,14 @@ class AdaptiveStore:
         skill: str | None = None,
         difficulty: str | None = None,
         task_type: str | None = None,
+        *,
+        learner: str | None = None,
     ) -> list[dict[str, Any]]:
         query = "SELECT payload FROM generated_tasks WHERE 1=1"
         args: list[Any] = []
+        if learner is not None:
+            query += " AND learner=?"
+            args.append(learner)
         if skill is not None:
             query += " AND skill=?"
             args.append(skill)
@@ -489,6 +533,111 @@ class AdaptiveStore:
         with self._lock:
             rows = self.db.execute(query, args).fetchall()
             return [json.loads(r["payload"]) for r in rows]
+
+    # --- Doubt Tutor Chat History ---
+
+    def save_chat_message(
+        self,
+        learner: str,
+        skill: str,
+        role: str,
+        message: str,
+        *,
+        code_example: str = "",
+        source: str = "",
+        citations: list[dict[str, Any]] | None = None,
+        mastery_tier: str = "",
+        guardrail_status: str = "",
+        msg_id: str | None = None,
+        created: float | None = None,
+    ) -> dict[str, Any]:
+        cid = msg_id or f"chat-{uuid.uuid4().hex[:12]}"
+        ts = float(time.time() if created is None else created)
+        citations_list = list(citations or [])
+        citations_json = json.dumps(citations_list)
+        with self.transaction():
+            self.db.execute(
+                """
+                INSERT INTO chat_messages(
+                    id, learner, skill, role, message, code_example, source,
+                    citations_json, mastery_tier, guardrail_status, created
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(id) DO UPDATE SET
+                    role=excluded.role,
+                    message=excluded.message,
+                    code_example=excluded.code_example,
+                    source=excluded.source,
+                    citations_json=excluded.citations_json,
+                    mastery_tier=excluded.mastery_tier,
+                    guardrail_status=excluded.guardrail_status,
+                    created=excluded.created
+                """,
+                (
+                    cid,
+                    learner,
+                    skill,
+                    str(role),
+                    str(message),
+                    str(code_example or ""),
+                    str(source or ""),
+                    citations_json,
+                    str(mastery_tier or ""),
+                    str(guardrail_status or ""),
+                    ts,
+                ),
+            )
+        return {
+            "id": cid,
+            "learner": learner,
+            "skill": skill,
+            "role": str(role),
+            "message": str(message),
+            "code_example": str(code_example or ""),
+            "source": str(source or ""),
+            "citations": citations_list,
+            "mastery_tier": str(mastery_tier or ""),
+            "guardrail_status": str(guardrail_status or ""),
+            "created": ts,
+        }
+
+    def get_chat_messages(
+        self,
+        learner: str,
+        skill: str | None = None,
+        limit: int | None = None,
+    ) -> list[dict[str, Any]]:
+        query = (
+            "SELECT id, learner, skill, role, message, code_example, source, "
+            "citations_json, mastery_tier, guardrail_status, created "
+            "FROM chat_messages WHERE learner=?"
+        )
+        args: list[Any] = [learner]
+        if skill is not None:
+            query += " AND skill=?"
+            args.append(skill)
+        query += " ORDER BY created ASC, rowid ASC"
+        with self._lock:
+            rows = self.db.execute(query, args).fetchall()
+        items = [
+            {
+                "id": r["id"],
+                "learner": r["learner"],
+                "skill": r["skill"],
+                "role": r["role"],
+                "message": r["message"],
+                "code_example": r["code_example"],
+                "source": r["source"],
+                "citations": json.loads(r["citations_json"] or "[]"),
+                "mastery_tier": r["mastery_tier"],
+                "guardrail_status": r["guardrail_status"],
+                "created": float(r["created"]),
+            }
+            for r in rows
+        ]
+        if limit is not None and int(limit) >= 0:
+            items = items[-int(limit) :] if int(limit) > 0 else []
+        return items
 
     # --- Idempotency ---
 
