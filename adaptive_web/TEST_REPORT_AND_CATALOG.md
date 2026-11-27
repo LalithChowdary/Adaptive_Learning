@@ -1,6 +1,6 @@
 # Complete Verification & Test Catalog (`3/adaptive_web/` & Regression Suites)
 
-This document records all **246 automated tests** executed and verified (`201/201` in `3/adaptive_web/tests/` plus `45/45` regression tests in `3/dashboard/`, `3/ppo/`, and `3/model/`).
+This document records all **260 automated tests** (`215` in `3/adaptive_web/tests/` including `test_chat.py` and `test_rag.py`, plus `45` regression tests in `3/dashboard/`, `3/ppo/`, and `3/model/`).
 
 ---
 
@@ -10,6 +10,8 @@ This document records all **246 automated tests** executed and verified (`201/20
 | :--- | :--- | :---: | :---: | :--- |
 | **Unit Suite 1 — Core Engine & Adapters** | `3/adaptive_web/tests/test_core.py` | **22** | `PASS (22/22)` | Automated verification |
 | **Unit Suite 2 — LLM Pedagogy Realizer** | `3/adaptive_web/tests/test_llm_pedagogy.py` | **6** | `PASS (6/6)` | Automated verification |
+| **Unit/HTTP Suite 3 — Ask the Tutor Chat** | `3/adaptive_web/tests/test_chat.py` | **4** | `PASS (4/4)` | Automated verification |
+| **Unit/HTTP Suite 4 — Hybrid RAG, Guardrails & Failover** | `3/adaptive_web/tests/test_rag.py` | **10** | `PASS (10/10)` | Automated verification |
 | **E2E Tier 0 — Infrastructure & Harness Smoke** | `3/adaptive_web/tests/e2e/test_tier0_infra_smoke.py` | **4** | `PASS (4/4)` | Automated verification |
 | **E2E Tier 1 — Category-Partition Feature Matrix F01..F14** | `3/adaptive_web/tests/e2e/test_tier1_features.py` | **73** | `PASS (73/73)` | Automated verification |
 | **E2E Tier 2 — Boundary, Security & Negative Tests F01..F14** | `3/adaptive_web/tests/e2e/test_tier2_boundaries.py` | **72** | `PASS (72/72)` | Automated verification |
@@ -18,16 +20,16 @@ This document records all **246 automated tests** executed and verified (`201/20
 | **Regression Suite 1 — Reference Dashboard** | `3/dashboard/tests/test_dashboard.py` | **26** | `PASS (26/26)` | Automated verification |
 | **Regression Suite 2 — Frozen PPO Policy & Env** | `3/ppo/tests/test_ppo.py` | **6** | `PASS (6/6)` | Automated verification |
 | **Regression Suite 3 — Frozen Monotonic GRU Memory** | `3/model/tests/test_memory.py` | **13** | `PASS (13/13)` | Automated verification |
-| **Adaptive Web Subtotal** | `3/adaptive_web/tests/` | **201** | **PASS (201/201)** | Unit + Tier 0–4 E2E |
-| **Grand Total (with Regressions)** | All Suites | **246** | **PASS (246/246)** | Full repository verification |
+| **Adaptive Web Subtotal** | `3/adaptive_web/tests/` | **215** | **PASS (215/215)** | Unit + Chat + RAG + Tier 0–4 E2E |
+| **Grand Total (with Regressions)** | All Suites | **260** | **PASS (260/260)** | Full repository verification |
 
 ---
 
 ## 2. How to Run All Tests
 
 ```bash
-# Run all 201 adaptive_web tests (28 unit + 173 E2E)
-3/model/.venv/bin/python -m unittest discover -s 3/adaptive_web/tests -p "test_*.py" -v
+# Run all adaptive_web tests (42 unit/chat/RAG + 173 E2E)
+PYTHONPATH=3 3/model/.venv/bin/python -m unittest discover -s 3/adaptive_web/tests -p "test_*.py" -v
 
 # Run only the 173 opaque-box E2E tests (Tiers 0..4)
 3/model/.venv/bin/python -m unittest discover -s 3/adaptive_web/tests/e2e -p "test_*.py" -v
@@ -40,7 +42,7 @@ PYTHONPATH=3/model 3/model/.venv/bin/python -m unittest discover -s 3/model/test
 
 ---
 
-## 3. Complete Itemized Catalog of All 246 Tests
+## 3. Complete Itemized Catalog of All Automated Tests
 
 ### Unit Suite 1 — Core Engine & Adapters (`3/adaptive_web/tests/test_core.py`) (22 tests)
 
@@ -75,6 +77,26 @@ PYTHONPATH=3/model 3/model/.venv/bin/python -m unittest discover -s 3/model/test
 4. `PedagogyRealizerTests.test_generate_hints_progressive_leakage` — **PASS**
 5. `PedagogyRealizerTests.test_evaluate_self_explanation_scoring` — **PASS**
 6. `PedagogyRealizerTests.test_realize_ppo_turns` — **PASS**
+
+### Unit/HTTP Suite 3 — Ask the Tutor Chat (`3/adaptive_web/tests/test_chat.py`) (4 tests)
+
+1. `AnswerLearnerDoubtUnitTests.test_offline_fallback_branches_example_pitfall_concept` — **PASS**
+2. `AnswerLearnerDoubtUnitTests.test_rejects_unknown_skill_or_empty_question` — **PASS**
+3. `ChatEndpointHTTPTests.test_chat_offline_with_and_without_learner_validation_csrf_and_idempotency` — **PASS**
+4. `ChatEndpointHTTPTests.test_chat_live_llm_stub_idempotency_and_error_fallback` — **PASS**
+
+### Unit/HTTP Suite 4 — Hybrid RAG, Guardrails & Failover (`3/adaptive_web/tests/test_rag.py`) (10 tests)
+
+1. `HybridRAGEngineTests.test_hybrid_fts5_vector_rrf_rewriting_and_ingestion` — **PASS**
+2. `HybridRAGEngineTests.test_difficulty_locked_exemplar_retrieval` — **PASS**
+3. `StoreMigrationAndLearnerIsolationTests.test_legacy_generated_tasks_migration_preserves_rows` — **PASS**
+4. `StoreMigrationAndLearnerIsolationTests.test_episodic_rag_and_generated_tasks_and_export_isolated_by_learner` — **PASS**
+5. `QuestionGuardrailAndOneShotRepairTests.test_one_shot_schema_repair_and_anti_duplicate_guard` — **PASS**
+6. `MasteryChatEduGuardAndPersistenceTests.test_mastery_adaptation_eduguard_and_reload_persistence` — **PASS**
+7. `MasteryChatEduGuardAndPersistenceTests.test_eduguard_blocks_pasted_question_cross_skill_and_cleans_excerpts` — **PASS**
+8. `MasteryChatEduGuardAndPersistenceTests.test_stale_open_interactions_do_not_resurrect_after_finish_or_lesson_step` — **PASS**
+9. `MasteryChatEduGuardAndPersistenceTests.test_skipped_self_explanation_relocks_action_5_preventing_loop` — **PASS**
+10. `MultiProviderFailoverTests.test_provider_chain_fails_over_on_403_without_secret_leaks` — **PASS**
 
 ### E2E Tier 0 — Infrastructure & Harness Smoke (`3/adaptive_web/tests/e2e/test_tier0_infra_smoke.py`) (4 tests)
 

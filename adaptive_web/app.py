@@ -16,6 +16,7 @@ from .llm_client import LLMClient
 from .llm_pedagogy import PedagogyRealizer
 from .memory_adapter import MemoryAdapter
 from .ppo_engine import ACTIONS as PPO_ACTIONS, PPOEngine
+from .rag import HybridRAGEngine
 from .store import AdaptiveStore
 
 
@@ -41,7 +42,8 @@ class AdaptiveLearningApp:
             self.memory = MemoryAdapter(device=settings.device)
         self.ppo = PPOEngine(self.memory)
         self.llm_client = LLMClient(settings)
-        self.pedagogy = PedagogyRealizer(self.llm_client)
+        self.rag = HybridRAGEngine(self.store)
+        self.pedagogy = PedagogyRealizer(self.llm_client, rag=self.rag)
         self.csrf_token = secrets.token_hex(16)
         self._lock = threading.Lock()
 
@@ -88,6 +90,19 @@ class AdaptiveLearningApp:
             if item.get("status") == "open":
                 return item
         return None
+
+    def _close_stale_open_interactions(
+        self,
+        learner: str,
+        skill: str,
+        *,
+        exclude_id: str | None = None,
+    ) -> None:
+        """Close any older status='open' interactions on (learner, skill) so they never resurrect."""
+        for old in self.store.get_interactions(learner, skill=skill):
+            if old.get("status") == "open" and old.get("id") != exclude_id:
+                old["status"] = "finished"
+                self.store.save_interaction(old)
 
     def _sanitize_active_interaction(self, item: dict[str, Any] | None) -> dict[str, Any] | None:
         if item is None:
@@ -148,10 +163,13 @@ class AdaptiveLearningApp:
                 "provider": self.llm_client.provider_name(),
                 "model": self.llm_client.model_name(),
                 "is_live": self.llm_client.is_live(),
+                "fallback_providers": list(self.settings.fallback_providers),
+                "last_call": self.llm_client.last_call_info(),
             },
         }
 
         if not learner:
+            base["rag_audit"] = self.rag.get_latest_audit()
             return base
 
         profile = self._require_learner(learner)
@@ -168,6 +186,12 @@ class AdaptiveLearningApp:
         active = self._sanitize_active_interaction(
             self._get_active_interaction(learner, skill=focus_skill)
         )
+        all_chat = self.store.get_chat_messages(learner)
+        chat_by_skill: dict[str, list[dict[str, Any]]] = {}
+        for msg in all_chat:
+            chat_by_skill.setdefault(msg["skill"], []).append(msg)
+        chat_history = list(chat_by_skill.get(focus_skill, []))
+        rag_audit = self.rag.get_latest_audit(learner=learner)
 
         base.update(
             {
@@ -181,9 +205,13 @@ class AdaptiveLearningApp:
                 "learning_path": learning_path,
                 "course_material": course_material,
                 "active": active,
+                "chat_history": chat_history,
+                "chat_by_skill": chat_by_skill,
+                "rag_audit": rag_audit,
                 "glass_box": {
                     "token_audit": token_audit,
                     "ppo": ppo_dec,
+                    "rag_audit": rag_audit,
                     "model_sha256": self.memory.version,
                     "ppo_sha256": self.ppo.version,
                 },
@@ -263,6 +291,7 @@ class AdaptiveLearningApp:
             memory_summary=skill_summary,
             focus_gap=f"P(Med)={skill_summary.get('p_med', 0.5):.2f}, floor_b={skill_summary.get('floor_b', 0.0):.2f}",
             weak_topics=weak_topics,
+            learner=learner,
         )
 
         # Persist path and material without disturbing any active open question
@@ -276,6 +305,7 @@ class AdaptiveLearningApp:
             "learning_path": learning_path,
             "course_material": course_material,
             "ppo": ppo_dec,
+            "rag_audit": self.rag.get_latest_audit(learner=learner),
             "active": self._sanitize_active_interaction(
                 self._get_active_interaction(learner, skill=skill)
             ),
@@ -330,13 +360,18 @@ class AdaptiveLearningApp:
         target_skill = target.get("skill", skill)
         target_diff = diff or target.get("difficulty", "easy")
         now = time.time()
+        self._close_stale_open_interactions(learner, target_skill)
 
         # Passive lessons: 3 (explain_concept) and 4 (show_worked_example)
         if chosen_id in (3, 4):
             primed_mode = "concept" if chosen_id == 3 else "example"
             material = self.store.get_latest_course_material(learner, target_skill)
             if material is None:
-                material = self.pedagogy.generate_course_material(target_skill)
+                material = self.pedagogy.generate_course_material(
+                    target_skill,
+                    memory_summary=ppo_dec["metrics_by_skill"].get(target_skill),
+                    learner=learner,
+                )
                 self.store.save_course_material(learner, target_skill, material)
 
             lesson_iid = f"lesson-{uuid.uuid4().hex[:12]}"
@@ -510,21 +545,35 @@ class AdaptiveLearningApp:
         src = question_source or "v2.2"
         chosen_fmt = fmt or ("output_prediction" if src == "llm" else catalogue_bridge.FORMATS[0])
 
+        seen_ids = {
+            it.get("task")
+            for it in self.store.get_interactions(learner, skill=target_skill)
+            if it.get("task")
+        }
         if src == "llm":
+            recent_mistakes = []
+            for past_it in reversed(self.store.get_interactions(learner, skill=target_skill)):
+                past_res = past_it.get("results") or []
+                if past_res and not past_res[-1].get("full_success"):
+                    past_q = past_it.get("raw_task") or {}
+                    recent_mistakes.append(
+                        f"{past_q.get('difficulty', '?')} {past_q.get('task_type', '?')}: {str(past_q.get('prompt', ''))[:100]}"
+                    )
+                if len(recent_mistakes) >= 3:
+                    break
             raw_task = self.pedagogy.generate_question(
                 target_skill,
                 difficulty=target_diff,
                 task_format=chosen_fmt,
                 pool=pool,
+                recent_mistakes=recent_mistakes,
+                learner=learner,
+                memory_summary=ppo_dec["metrics_by_skill"].get(target_skill),
+                exclude_task_ids=seen_ids,
             )
             raw_task["memory_task"] = catalogue_bridge.task_memory_features(raw_task)
-            self.store.save_generated_task(raw_task)
+            self.store.save_generated_task(raw_task, learner=learner)
         else:
-            seen_ids = {
-                it.get("task")
-                for it in self.store.get_interactions(learner, skill=target_skill)
-                if it.get("task")
-            }
             raw_task = catalogue_bridge.sample_v22_task(
                 skill=target_skill,
                 difficulty=target_diff,
@@ -611,6 +660,7 @@ class AdaptiveLearningApp:
             "interaction": iid,
             "question": sanitized_task,
             "ppo": post_ppo,
+            "rag_audit": self.rag.get_latest_audit(learner=learner),
         }
         if request_id is not None:
             self.store.idempotent_set(request_id, res)
@@ -664,6 +714,7 @@ class AdaptiveLearningApp:
                     learner_answer=None,
                     hint_level=level,
                     prior_hints=item.get("hints"),
+                    learner=learner,
                 )
                 hint_obj.setdefault("kind", hint_obj.get("hint_kind", "conceptual"))
 
@@ -862,6 +913,24 @@ class AdaptiveLearningApp:
                     },
                 },
             )
+            if not grade_result.get("full_success") or hints_used > 0:
+                missing_list = grade_result.get("missing_concepts") or []
+                gap_summary = (
+                    f"Missing concepts: {', '.join(str(m) for m in missing_list[:4])}"
+                    if missing_list
+                    else f"Attempt on {raw_task.get('difficulty')} {raw_task.get('task_type')} scored {float(grade_result.get('score') or 0.0):.0%} (hints={hints_used}): {str(raw_task.get('prompt', ''))[:160]}"
+                )
+                self.rag.record_episodic(
+                    learner=learner,
+                    skill=item["skill"],
+                    event_kind="mistake" if not grade_result.get("full_success") else "assisted_attempt",
+                    summary=gap_summary,
+                    task_id=str(raw_task.get("task_id") or ""),
+                    difficulty=str(raw_task.get("difficulty") or ""),
+                    task_type=str(raw_task.get("task_type") or ""),
+                    metadata={"score": grade_result.get("score"), "hints": hints_used},
+                    created=now,
+                )
 
             return {
                 "status": "ok",
@@ -969,6 +1038,15 @@ class AdaptiveLearningApp:
                 }
             },
         )
+        self.rag.record_episodic(
+            learner=learner,
+            skill=item["skill"],
+            event_kind="reveal",
+            summary=f"Solution revealed on {raw_task.get('difficulty')} {raw_task.get('task_type')}: {str(raw_task.get('prompt', ''))[:160]}",
+            task_id=str(raw_task.get("task_id") or ""),
+            difficulty=str(raw_task.get("difficulty") or ""),
+            task_type=str(raw_task.get("task_type") or ""),
+        )
 
         res = {
             "status": "ok",
@@ -1000,6 +1078,7 @@ class AdaptiveLearningApp:
 
         item["status"] = "finished"
         self.store.save_interaction(item)
+        self._close_stale_open_interactions(learner, item["skill"], exclude_id=interaction_id)
         self._emit_event(
             learner,
             item["skill"],
@@ -1068,7 +1147,8 @@ class AdaptiveLearningApp:
             "learning_paths": learning_paths,
             "course_materials": course_materials,
             "tutor_turns": self.store.get_tutor_turns(learner),
-            "generated_tasks": self.store.list_generated_tasks(),
+            "chat_messages": self.store.get_chat_messages(learner),
+            "generated_tasks": self.store.list_generated_tasks(learner=learner),
             "token_audit": token_audit,
         }
 
@@ -1081,7 +1161,7 @@ class AdaptiveLearningApp:
         history: list[dict[str, str]] | None = None,
         request_id: str | None = None,
     ) -> dict[str, Any]:
-        """Answer a learner's question about the current skill's lesson/reference material."""
+        """Answer a learner's question adaptively by mastery level, grounded with RAG + EduGuard."""
         self._require_skill(skill)
         if not isinstance(message, str) or not message.strip():
             raise ValueError("Please enter a question to ask the tutor.")
@@ -1095,25 +1175,122 @@ class AdaptiveLearningApp:
                 return cached
 
         course_material = None
+        memory_summary = None
+        active_question = None
+        effective_history: list[dict[str, str]] = list(history) if isinstance(history, list) else []
         if learner:
-            try:
-                self._require_learner(learner)
-                course_material = self.store.get_latest_course_material(learner, skill)
-            except KeyError:
-                course_material = None
+            self._require_learner(learner)
+            course_material = self.store.get_latest_course_material(learner, skill)
+            ppo_dec = self.ppo.decide(self.store, learner, focus_skill=skill)
+            memory_summary = ppo_dec["metrics_by_skill"].get(skill)
+            active_question = self._get_active_interaction(learner, skill=skill)
+            if active_question is None:
+                # Cross-skill EduGuard protection: catch pasted open unpassed items even across topic tabs
+                for candidate_it in reversed(self.store.get_interactions(learner)):
+                    if candidate_it.get("status") != "open":
+                        continue
+                    if any(r.get("full_success") for r in (candidate_it.get("results") or [])):
+                        continue
+                    if self.pedagogy._is_pasted_active_question(cleaned, candidate_it):
+                        active_question = candidate_it
+                        break
+            if not effective_history:
+                persisted = self.store.get_chat_messages(learner, skill=skill, limit=8)
+                effective_history = [
+                    {"role": m["role"], "text": m["message"]}
+                    for m in persisted
+                ]
 
         ans = self.pedagogy.answer_learner_doubt(
             skill,
             cleaned,
-            history=history if isinstance(history, list) else None,
+            history=effective_history or None,
             course_material=course_material,
+            learner=learner,
+            memory_summary=memory_summary,
+            active_question=active_question,
         )
+        mastery_tier = ans.get("mastery_tier", "unassessed")
+        guardrail_status = ans.get("guardrail_status", "grounded_open")
+        citations = ans.get("citations", [])
+
+        if learner:
+            now_ts = time.time()
+            self.store.save_chat_message(
+                learner,
+                skill,
+                "user",
+                cleaned,
+                mastery_tier=mastery_tier,
+                created=now_ts,
+            )
+            self.store.save_chat_message(
+                learner,
+                skill,
+                "assistant",
+                ans["reply"],
+                code_example=ans.get("code_example", ""),
+                source=ans.get("source", "fallback"),
+                citations=citations,
+                mastery_tier=mastery_tier,
+                guardrail_status=guardrail_status,
+                created=now_ts + 0.001,
+            )
+            # Record learner doubt after retrieval so it becomes episodic context for future turns
+            self.rag.record_episodic(
+                learner=learner,
+                skill=skill,
+                event_kind="doubt",
+                summary=f"Learner asked: {cleaned[:260]}",
+                created=now_ts,
+            )
+
         res = {
             "status": "ok",
             "skill": skill,
             "reply": ans["reply"],
             "code_example": ans.get("code_example", ""),
             "source": ans.get("source", "fallback"),
+            "citations": citations,
+            "mastery_tier": mastery_tier,
+            "guardrail_status": guardrail_status,
+            "rag_audit": self.rag.get_latest_audit(learner=learner),
+        }
+        if request_id is not None:
+            self.store.idempotent_set(request_id, res)
+        return res
+
+    def ingest_rag_markdown(
+        self,
+        skill: str,
+        title: str,
+        markdown: str,
+        *,
+        doc_key: str | None = None,
+        request_id: str | None = None,
+    ) -> dict[str, Any]:
+        """Ingest custom instructor Markdown curriculum docs into HybridRAGEngine."""
+        self._require_skill(skill)
+        if not isinstance(title, str) or not title.strip():
+            raise ValueError("Document title is required.")
+        if not isinstance(markdown, str) or not markdown.strip():
+            raise ValueError("Document markdown content is required.")
+        if request_id is not None:
+            cached = self.store.idempotent_get(request_id)
+            if cached is not None:
+                return cached
+        chunks = self.rag.ingest_markdown(
+            skill=skill,
+            title=title.strip()[:120],
+            markdown_text=markdown,
+            doc_key=doc_key,
+        )
+        res = {
+            "status": "ok",
+            "skill": skill,
+            "chunks_indexed": len(chunks),
+            "chunks": chunks,
+            "corpus": self.rag.stats(),
         }
         if request_id is not None:
             self.store.idempotent_set(request_id, res)

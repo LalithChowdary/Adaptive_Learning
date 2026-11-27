@@ -4,8 +4,9 @@ from __future__ import annotations
 import copy
 import json
 import random
+import re
+from typing import TYPE_CHECKING, Any, Iterable
 import uuid
-from typing import Any
 
 from .catalogue_bridge import (
     DEFAULT_LESSONS,
@@ -21,6 +22,129 @@ from .catalogue_bridge import (
 )
 from .grader import grade_self_explanation
 from .llm_client import LLMClient, LLMClientError
+from .rag import max_text_similarity
+
+if TYPE_CHECKING:
+    from .rag import HybridRAGEngine
+
+_DIFFICULTY_GUARDRAILS: dict[str, dict[str, Any]] = {
+    "easy": {
+        "max_lines": 5,
+        "target_seconds_min": 15,
+        "target_seconds_max": 35,
+        "rules": (
+            "Keep snippet concise (1-5 lines), test a single core rule with straightforward inputs, "
+            "no nested loops, target reference_seconds in 15..35."
+        ),
+    },
+    "medium": {
+        "max_lines": 10,
+        "target_seconds_min": 35,
+        "target_seconds_max": 60,
+        "rules": (
+            "Use 4-10 lines, 1-2 coupled variables or strided/conditional logic, include one exact "
+            "boundary check, target reference_seconds in 35..60."
+        ),
+    },
+    "hard": {
+        "max_lines": 16,
+        "target_seconds_min": 60,
+        "target_seconds_max": 110,
+        "rules": (
+            "Use 7-16 lines with compound branching, nested/dependent iteration, negative step/index, "
+            "or subtle edge cases (empty range, early return), target reference_seconds in 60..110."
+        ),
+    },
+}
+
+_ANSWER_FISHING_RE = re.compile(
+    r"(?:\b(give me the answer|give the answer|tell me the answer|what is the answer|just tell me|solve this|"
+    r"solve it|solve for me|which option is correct|which option|which choice|what goes in the blank|"
+    r"what should go in|exact output of|tell me the output|what is the output|what does it return|"
+    r"what does this return|what does this print|full code solution|correct option|restore the missing|"
+    r"fill in the blank)\b|__blank_\d*__)",
+    re.IGNORECASE,
+)
+
+
+def _clean_excerpt(text: str, max_chars: int = 210) -> str:
+    """Format a clean plain-text sentence excerpt without broken Markdown or partial backticks."""
+    raw = str(text or "").strip()
+    if not raw:
+        return ""
+    lines = []
+    for ln in raw.splitlines():
+        s = re.sub(r"^#{1,6}\s+", "", ln.strip())
+        s = re.sub(r"^[-*•]\s+", "", s)
+        s = re.sub(r"^\d+\.\s+", "", s)
+        s = s.replace("**", "")
+        if s:
+            lines.append(s)
+    joined = re.sub(r"\s+", " ", " ".join(lines)).strip()
+    if len(joined) > max_chars:
+        clipped = joined[:max_chars]
+        for end_ch in (". ", "! ", "? "):
+            pos = clipped.rfind(end_ch)
+            if pos >= max_chars // 2:
+                joined = clipped[: pos + 1].strip()
+                break
+        else:
+            sp = clipped.rfind(" ")
+            joined = (clipped[:sp] if sp > max_chars // 3 else clipped).rstrip(" ,;:-") + "…"
+    if joined.count("`") % 2 == 1:
+        last_bt = joined.rfind("`")
+        if last_bt != -1:
+            joined = joined[:last_bt].rstrip(" ,;:-")
+    return joined
+
+
+def _resolve_mastery_tier(memory_summary: dict[str, Any] | None) -> dict[str, Any]:
+    mem = memory_summary or {}
+    assessed = bool(mem.get("assessed", False))
+    p_med = float(mem.get("p_med", 0.5))
+    p_30d = float(mem.get("p_30d", 0.5))
+    fragility = float(mem.get("fragility", max(0.0, p_med - p_30d)))
+    floor_b = float(mem.get("floor_b", 0.0))
+    obs_rate = mem.get("observed_pass_rate")
+
+    if not assessed:
+        tier = "unassessed"
+        instruction = (
+            "Learner is UNASSESSED on this skill: start with an intuitive foundational mental model, "
+            "walk through a tiny concrete step-by-step trace, and avoid assumed jargon."
+        )
+    elif p_med < 0.70 or (obs_rate is not None and float(obs_rate) < 0.70):
+        tier = "lacking"
+        instruction = (
+            f"Learner is LACKING mastery (P(Med)={p_med:.0%} < 70%): enter Remediation Mode — slow down, "
+            "write an explicit step-by-step variable trace, surface common off-by-one/boundary misconceptions, "
+            "and reference any prior mistakes cleanly."
+        )
+    elif fragility > 0.15:
+        tier = "fragile"
+        instruction = (
+            f"Learner has FRAGILE retention (30d drop={fragility:.0%}, floor b_t={floor_b:.2f}): "
+            "skip basic syntax and reinforce durable causal rules and tricky boundary traps."
+        )
+    else:
+        tier = "mastered"
+        instruction = (
+            f"Learner has MASTERED this skill (P(Med)={p_med:.0%}, floor b_t={floor_b:.2f}): keep basics "
+            "concise and focus on subtle edge cases, corner inputs, and prerequisite/downstream transfer."
+        )
+
+    return {
+        "mastery_tier": tier,
+        "assessed": assessed,
+        "p_med": round(p_med, 4),
+        "p_30d": round(p_30d, 4),
+        "fragility": round(fragility, 4),
+        "floor_b": round(floor_b, 4),
+        "observed_pass_rate": None if obs_rate is None else round(float(obs_rate), 4),
+        "observed_unaided_passes": int(mem.get("observed_unaided_passes", 0)),
+        "observed_unaided_attempts": int(mem.get("observed_unaided_attempts", 0)),
+        "instruction": instruction,
+    }
 
 
 _SKILL_PATH_FOCUS: dict[str, dict[str, str]] = {
@@ -233,8 +357,13 @@ _RICH_COURSE_CURRICULUM: dict[str, dict[str, Any]] = {
 class PedagogyRealizer:
     """Realizes pedagogical interventions (curated path, course material, fresh questions, hints, self-explanation)."""
 
-    def __init__(self, llm_client: LLMClient | None = None) -> None:
+    def __init__(
+        self,
+        llm_client: LLMClient | None = None,
+        rag: "HybridRAGEngine | None" = None,
+    ) -> None:
         self.llm = llm_client or LLMClient()
+        self.rag = rag
 
     # ---- 1. Curate Learning Path ----
 
@@ -367,6 +496,8 @@ class PedagogyRealizer:
         memory_summary: dict[str, Any] | None = None,
         focus_gap: str | None = None,
         weak_topics: list[str] | None = None,
+        *,
+        learner: str | None = None,
     ) -> dict[str, Any]:
         """Generate comprehensive course explanation, mental model, pitfalls, and worked example."""
         default_data = DEFAULT_LESSONS.get(skill, {})
@@ -374,25 +505,23 @@ class PedagogyRealizer:
         mem = memory_summary or {}
         weak_list = [str(w).strip() for w in (weak_topics or []) if str(w).strip()]
 
-        assessed = bool(mem.get("assessed", False))
-        p_med = float(mem.get("p_med", 0.5))
-        p_30d = float(mem.get("p_30d", 0.5))
-        fragility = float(mem.get("fragility", max(0.0, p_med - p_30d)))
-        floor_b = float(mem.get("floor_b", 0.0))
+        tier_info = _resolve_mastery_tier(mem)
+        mastery_tier = tier_info["mastery_tier"]
+        p_med = tier_info["p_med"]
+        fragility = tier_info["fragility"]
+        floor_b = tier_info["floor_b"]
         obs_rate = mem.get("observed_pass_rate")
 
         weak_note = f" Specific areas missed: {'; '.join(weak_list[:3])}." if weak_list else ""
 
-        if not assessed:
-            mastery_tier = "unassessed"
+        if mastery_tier == "unassessed":
             adaptation_note = (
                 f"First time studying {skill_info['title']}: delivering the complete foundational theory, "
                 "mental model, and step-by-step worked trace."
             )
-        elif p_med < 0.70 or (obs_rate is not None and float(obs_rate) < 0.70):
-            mastery_tier = "lacking"
-            unaided_ok = int(mem.get("observed_unaided_passes", 0))
-            unaided_tot = int(mem.get("observed_unaided_attempts", 0))
+        elif mastery_tier == "lacking":
+            unaided_ok = tier_info["observed_unaided_passes"]
+            unaided_tot = tier_info["observed_unaided_attempts"]
             obs_str = (
                 f"unaided pass rate {unaided_ok}/{unaided_tot} ({float(obs_rate):.0%}), "
                 if obs_rate is not None
@@ -402,22 +531,45 @@ class PedagogyRealizer:
                 f"Remediation Mode ({obs_str}P(Med)={p_med:.0%} < 70%): slowing down to reinforce "
                 f"step-by-step trace rules, boundary pitfalls, and scaffolded examples.{weak_note}"
             )
-        elif fragility > 0.15:
-            mastery_tier = "fragile"
+        elif mastery_tier == "fragile":
             adaptation_note = (
                 f"Retention Refresher (30-day drop of {fragility * 100:.0f}%, floor b_t={floor_b:.2f}): "
                 f"skipping basic syntax and focusing on durable mental models to prevent forgetting.{weak_note}"
             )
         else:
-            mastery_tier = "mastered"
             adaptation_note = (
                 f"Advanced Mastery Mode (P(Med)={p_med:.0%}, floor b_t={floor_b:.2f}): condensing basics "
                 "and emphasizing tricky edge cases, boundary combinations, and downstream transfer."
             )
 
+        citations: list[dict[str, Any]] = []
+        rag_passages: list[dict[str, str]] = []
+        if self.rag is not None:
+            rag_query = f"{skill} {skill_info['title']} {' '.join(weak_list[:3])} {focus_gap or ''}"
+            rag_res = self.rag.retrieve(
+                rag_query,
+                purpose="course_material",
+                skill=skill,
+                learner=learner,
+                source_types=("curriculum", "episodic"),
+                include_prerequisites=(mastery_tier in ("unassessed", "lacking")),
+                mastery_tier=mastery_tier,
+                top_k=3,
+            )
+            citations = rag_res["citations"]
+            rag_passages = [
+                {
+                    "citation": (ch.get("metadata") or {}).get("citation_label") or f"{ch['title']} — {ch['section']}",
+                    "source_type": ch["source_type"],
+                    "excerpt": ch["content"][:500],
+                }
+                for ch in rag_res["chunks"]
+            ]
+
         system_prompt = (
             "You are an instructional designer for computer science. "
             f"Generate a complete, textbook-quality mini-course tailored to mastery_tier='{mastery_tier}'. "
+            "Ground your explanations in the provided curriculum and learner-history passages when present. "
             "If mastery_tier='lacking', emphasize step-by-step remediation on weak_topics and common mistakes. "
             "If mastery_tier='fragile', focus on retention rules and preventing decay. "
             "If mastery_tier='mastered', condense basics and focus on advanced edge cases and transfer. "
@@ -434,6 +586,7 @@ class PedagogyRealizer:
             "weak_topics": weak_list,
             "focus_gap": focus_gap,
             "cognitive_state": mem,
+            "rag_curriculum_context": rag_passages,
         }
 
         try:
@@ -461,12 +614,14 @@ class PedagogyRealizer:
                     "pitfalls": [str(p) for p in resp.get("pitfalls", [])],
                     "worked_example": resp["worked_example"],
                     "quick_check": str(resp.get("quick_check", "")),
+                    "citations": citations,
+                    "rag_used": bool(citations),
                     "source": "llm" if self.llm.is_live() else "deterministic_double",
                 }
         except LLMClientError:
             pass
 
-        # High-fidelity mastery-tailored fallback from _RICH_COURSE_CURRICULUM + DEFAULT_LESSONS
+        # High-fidelity mastery-tailored fallback from _RICH_COURSE_CURRICULUM + DEFAULT_LESSONS + RAG passages
         rich = _RICH_COURSE_CURRICULUM.get(skill, {})
         concept = default_data.get("concept", {})
         we = default_data.get("worked_example", {})
@@ -541,10 +696,117 @@ class PedagogyRealizer:
                 "subgoals": subgoals,
             },
             "quick_check": rich.get("quick_check") or default_data.get("self_explanation_prompt", "Trace the values before submitting."),
+            "citations": citations,
+            "rag_used": bool(citations),
             "source": "deterministic_double",
         }
 
     # ---- 3. Generate Fresh Question ----
+
+    @staticmethod
+    def _normalize_candidate_task(
+        resp: dict[str, Any],
+        *,
+        skill: str,
+        difficulty: str,
+        task_format: str,
+        pool: str,
+        guardrail: dict[str, Any],
+    ) -> dict[str, Any]:
+        task_id = f"llm.{skill}.{difficulty}.{task_format}.{uuid.uuid4().hex[:8]}"
+        raw_ref_sec = resp.get("reference_seconds", (guardrail["target_seconds_min"] + guardrail["target_seconds_max"]) / 2.0)
+        try:
+            ref_sec = float(raw_ref_sec)
+        except (TypeError, ValueError):
+            ref_sec = float(guardrail["target_seconds_max"])
+        ref_sec = max(10.0, min(180.0, ref_sec))
+
+        raw_tests = resp.get("tests", [])
+        norm_tests: list[Any] = []
+        if isinstance(raw_tests, list):
+            for tc in raw_tests:
+                if isinstance(tc, dict) and "input" in tc:
+                    fixed = dict(tc)
+                    if "expected" not in fixed and "output" in fixed:
+                        fixed["expected"] = fixed.pop("output")
+                    norm_tests.append(fixed)
+                else:
+                    norm_tests.append(tc)
+
+        cand_task = {
+            "task_id": task_id,
+            "skill_id": skill,
+            "task_type": task_format,
+            "difficulty": difficulty,
+            "pool": pool,
+            "prompt": str(resp.get("prompt", "")),
+            "snippets": [str(s) for s in (resp.get("snippets") or [])],
+            "options": resp.get("options") if isinstance(resp.get("options"), list) else [],
+            "answer_key": resp.get("answer_key"),
+            "reference_solution": resp.get("reference_solution"),
+            "tests": norm_tests,
+            "criteria": resp.get("criteria") if isinstance(resp.get("criteria"), list) and resp.get("criteria") else [{"kind": "exact_match", "weight": 1.0}],
+            "reference_seconds": ref_sec,
+            "hints": resp.get("hints", []),
+            "version": "llm-generated-v2",
+        }
+        raw_hints = cand_task.get("hints")
+        if not isinstance(raw_hints, list) or len(raw_hints) < 3:
+            cand_task["hints"] = [
+                {"level": 1, "kind": "conceptual", "text": "Carefully review the core Python rule."},
+                {"level": 2, "kind": "targeted", "text": "Trace variables step by step."},
+                {"level": 3, "kind": "scaffold", "text": "Check your boundary or operator precedence."},
+            ]
+        else:
+            norm_hints = []
+            for idx, h in enumerate(raw_hints[:3]):
+                default_kind = ("conceptual", "targeted", "scaffold")[min(idx, 2)]
+                if isinstance(h, str) and h.strip():
+                    norm_hints.append({"level": idx + 1, "kind": default_kind, "text": h.strip()})
+                elif isinstance(h, dict):
+                    raw_lvl = h.get("level")
+                    lvl = raw_lvl if isinstance(raw_lvl, int) and not isinstance(raw_lvl, bool) else (idx + 1)
+                    norm_hints.append(
+                        {
+                            "level": lvl,
+                            "kind": h.get("kind") if h.get("kind") in ("conceptual", "targeted", "scaffold") else default_kind,
+                            "text": str(h.get("text", "")).strip() or "Review the step.",
+                        }
+                    )
+            while len(norm_hints) < 3:
+                nxt = len(norm_hints) + 1
+                default_kind = ("conceptual", "targeted", "scaffold")[min(nxt - 1, 2)]
+                norm_hints.append({"level": nxt, "kind": default_kind, "text": "Trace boundary conditions carefully."})
+            cand_task["hints"] = norm_hints
+        return cand_task
+
+    def _validate_with_guardrails(
+        self,
+        cand_task: dict[str, Any],
+        *,
+        difficulty: str,
+        exemplar_texts: list[str],
+    ) -> list[str]:
+        _, errors = validate_task_schema(cand_task, verify_code_tests=True)
+        guardrail = _DIFFICULTY_GUARDRAILS.get(difficulty, _DIFFICULTY_GUARDRAILS["medium"])
+        total_lines = sum(len(s.splitlines()) for s in cand_task.get("snippets") or [])
+        if difficulty == "easy" and total_lines > guardrail["max_lines"] + 2:
+            errors.append(
+                f"Easy question snippet has {total_lines} lines; keep easy questions <= {guardrail['max_lines']} lines."
+            )
+        if cand_task.get("task_type") in ("output_prediction", "fill_in_the_blank") and not cand_task.get("reference_solution"):
+            ak = cand_task.get("answer_key")
+            if isinstance(ak, list) and ak:
+                cand_task["reference_solution"] = str(ak[0])
+        if exemplar_texts:
+            cand_text = f"{cand_task.get('prompt', '')} {' '.join(cand_task.get('snippets') or [])}"
+            sim = max_text_similarity(cand_text, exemplar_texts)
+            if sim > 0.85:
+                errors.append(
+                    f"Candidate question is too similar to a retrieved v2.2 exemplar (similarity={sim:.2f} > 0.85); "
+                    "use fresh variable names, constants, and a novel scenario."
+                )
+        return errors
 
     def generate_question(
         self,
@@ -553,88 +815,170 @@ class PedagogyRealizer:
         task_format: str = "output_prediction",
         pool: str = "practice",
         recent_mistakes: list[str] | None = None,
+        *,
+        learner: str | None = None,
+        memory_summary: dict[str, Any] | None = None,
+        exclude_task_ids: Iterable[str] = (),
     ) -> dict[str, Any]:
-        """Generate a fresh verifiable Python question matching the v2.2 schema and 8-key memory_task."""
+        """Generate a difficulty-calibrated Python question using RAG exemplars, guardrails, and 1-shot schema repair."""
         if difficulty not in DIFFICULTIES:
             difficulty = "medium"
         if task_format not in FORMATS:
             task_format = "output_prediction"
 
+        guardrail = _DIFFICULTY_GUARDRAILS[difficulty]
+        tier_info = _resolve_mastery_tier(memory_summary) if memory_summary else None
+        exemplars: list[dict[str, Any]] = []
+        curriculum_notes: list[str] = []
+        citations: list[dict[str, Any]] = []
+        rag_audit: dict[str, Any] | None = None
+        if self.rag is not None:
+            ex_res = self.rag.retrieve_exemplars(
+                skill=skill,
+                difficulty=difficulty,
+                task_format=task_format,
+                query=f"{skill} {difficulty} {task_format} {' '.join(recent_mistakes or [])}",
+                exclude_task_ids=exclude_task_ids,
+                top_k=3,
+            )
+            exemplars = ex_res["exemplars"]
+            citations.extend(ex_res["citations"])
+            rag_audit = ex_res["audit"]
+            cur_res = self.rag.retrieve(
+                f"{skill} {difficulty} pitfalls edge cases",
+                purpose="question_curriculum",
+                skill=skill,
+                learner=learner,
+                source_types=("curriculum", "episodic"),
+                mastery_tier=tier_info["mastery_tier"] if tier_info else None,
+                top_k=2,
+                record_audit=False,
+            )
+            curriculum_notes = [f"{ch['section']}: {ch['content'][:260]}" for ch in cur_res["chunks"]]
+            citations.extend(cur_res["citations"])
+
+        sanitized_exemplars = [
+            {
+                "task_id": ex["task_id"],
+                "difficulty": ex["difficulty"],
+                "task_type": ex["task_type"],
+                "reference_seconds": ex.get("reference_seconds"),
+                "prompt": ex.get("prompt"),
+                "snippets": ex.get("snippets", []),
+                "options": ex.get("options", []),
+                "criteria": ex.get("criteria", []),
+                "tests": ex.get("tests", []),
+            }
+            for ex in exemplars
+        ]
+        exemplar_texts = [
+            f"{ex.get('prompt', '')} {' '.join(ex.get('snippets') or [])}"
+            for ex in exemplars
+        ]
+
+        format_rule = {
+            "single_choice": "Include options (list of >=2 {id, text}), answer_key (single string option id), criteria (1 entry summing to 1.0), reference_solution.",
+            "multiple_select": "Include options (list of >=2 {id, text}), answer_key (list of option ids), criteria (1 entry per option), reference_solution.",
+            "output_prediction": "Include non-empty snippets (list of runnable Python snippets), answer_key (list of exact stdout strings), criteria (matching snippets length), reference_solution.",
+            "fill_in_the_blank": "Include non-empty snippets with ___, answer_key (list of integer strings), criteria (matching blanks length), reference_solution.",
+            "code_completion": "Include snippets (def solve(x): starter), reference_solution (runnable def solve(x): body), tests (list of {input, expected}), criteria (matching tests length).",
+        }[task_format]
         system_prompt = (
-            f"You are a computer science question author. Generate a fresh, valid Python exercise on skill '{skill}', "
+            f"You are a computer science question author. Generate a NOVEL, runnable Python exercise on skill '{skill}', "
             f"difficulty '{difficulty}', format '{task_format}'. "
-            "Output JSON with keys: prompt, snippets (list of strings), options (list of {id, text} for choice formats), "
-            "answer_key (string for single_choice, list for others), reference_solution, tests (list of {input, output} for code_completion), "
-            "criteria (list of {kind, weight}), reference_seconds (number), hints (list of 3 {level, kind, text})."
+            f"DIFFICULTY GUARDRAIL ({difficulty}): {guardrail['rules']} "
+            "Do NOT copy any exemplar verbatim; write fresh variable names, numbers, and code paths. "
+            f"{format_rule} "
+            "Output ONLY a JSON object with keys: prompt, snippets, options, answer_key, reference_solution, tests, criteria, "
+            "reference_seconds (number), hints (list of 3 {level, kind, text})."
         )
         context_payload = {
             "intent": "generate_question",
             "skill": skill,
             "difficulty": difficulty,
+            "difficulty_guardrail": guardrail,
             "task_format": task_format,
             "pool": pool,
             "recent_mistakes": recent_mistakes or [],
+            "mastery_tier": tier_info["mastery_tier"] if tier_info else None,
+            "curriculum_guidance": curriculum_notes,
+            "v22_few_shot_exemplars": sanitized_exemplars,
         }
 
+        repair_attempted = False
         try:
-            resp = self.llm.complete_json(system_prompt, json.dumps(context_payload), schema_name="question")
+            resp = self.llm.complete_json(system_prompt, json.dumps(context_payload, ensure_ascii=False), schema_name="question")
             if isinstance(resp, dict) and "prompt" in resp:
-                task_id = f"llm.{skill}.{difficulty}.{task_format}.{uuid.uuid4().hex[:8]}"
-                cand_task = {
-                    "task_id": task_id,
-                    "skill_id": skill,
-                    "task_type": task_format,
-                    "difficulty": difficulty,
-                    "pool": pool,
-                    "prompt": str(resp["prompt"]),
-                    "snippets": [str(s) for s in resp.get("snippets", [])],
-                    "options": resp.get("options", []),
-                    "answer_key": resp.get("answer_key"),
-                    "reference_solution": resp.get("reference_solution"),
-                    "tests": resp.get("tests", []),
-                    "criteria": resp.get("criteria", [{"kind": "exact_match", "weight": 1.0}]),
-                    "reference_seconds": float(resp.get("reference_seconds", 35.0)),
-                    "hints": resp.get("hints", []),
-                    "version": "llm-generated-v1",
-                }
-                # Fix up hints structure if necessary
-                raw_hints = cand_task.get("hints")
-                if not isinstance(raw_hints, list) or len(raw_hints) < 3:
-                    cand_task["hints"] = [
-                        {"level": 1, "kind": "conceptual", "text": "Carefully review the syntax rule."},
-                        {"level": 2, "kind": "targeted", "text": "Trace variables step by step."},
-                        {"level": 3, "kind": "scaffold", "text": "Check your boundary or operator precedence."},
-                    ]
-                else:
-                    norm_hints = []
-                    for idx, h in enumerate(raw_hints):
-                        default_kind = ("conceptual", "targeted", "scaffold")[min(idx, 2)]
-                        if isinstance(h, str) and h.strip():
-                            norm_hints.append({"level": idx + 1, "kind": default_kind, "text": h.strip()})
-                        elif isinstance(h, dict):
-                            raw_lvl = h.get("level")
-                            lvl = raw_lvl if isinstance(raw_lvl, int) and not isinstance(raw_lvl, bool) else (idx + 1)
-                            norm_hints.append(
-                                {
-                                    "level": lvl,
-                                    "kind": h.get("kind") if h.get("kind") in ("conceptual", "targeted", "scaffold") else default_kind,
-                                    "text": str(h.get("text", "")).strip() or "Review the step.",
-                                }
-                            )
-                    cand_task["hints"] = norm_hints
-                # Validate against schema
-                is_valid, _ = validate_task_schema(cand_task)
-                if is_valid:
+                cand_task = self._normalize_candidate_task(
+                    resp,
+                    skill=skill,
+                    difficulty=difficulty,
+                    task_format=task_format,
+                    pool=pool,
+                    guardrail=guardrail,
+                )
+                errors = self._validate_with_guardrails(
+                    cand_task,
+                    difficulty=difficulty,
+                    exemplar_texts=exemplar_texts,
+                )
+                if errors and self.llm.is_live():
+                    repair_attempted = True
+                    repair_payload = {
+                        "intent": "repair_question_schema",
+                        "required_skill": skill,
+                        "required_difficulty": difficulty,
+                        "required_format": task_format,
+                        "validation_errors": errors,
+                        "invalid_candidate": resp,
+                        "difficulty_guardrail": guardrail,
+                    }
+                    repaired_resp = self.llm.complete_json(
+                        system_prompt + " Fix every item in validation_errors and return valid JSON only.",
+                        json.dumps(repair_payload, ensure_ascii=False),
+                        schema_name="question_repair",
+                    )
+                    if isinstance(repaired_resp, dict) and "prompt" in repaired_resp:
+                        cand_task = self._normalize_candidate_task(
+                            repaired_resp,
+                            skill=skill,
+                            difficulty=difficulty,
+                            task_format=task_format,
+                            pool=pool,
+                            guardrail=guardrail,
+                        )
+                        errors = self._validate_with_guardrails(
+                            cand_task,
+                            difficulty=difficulty,
+                            exemplar_texts=exemplar_texts,
+                        )
+
+                if not errors:
+                    cand_task["rag_citations"] = citations
+                    cand_task["difficulty_guardrail"] = guardrail["rules"]
+                    cand_task["repair_attempted"] = repair_attempted
+                    if rag_audit is not None:
+                        cand_task["rag_audit"] = rag_audit
                     return cand_task
         except LLMClientError:
             pass
 
         # Safe fallback: sample unseen task from v2.2 catalog or synthesize clean item
-        v22_item = sample_v22_task(skill=skill, difficulty=difficulty, task_format=task_format, pool=pool)
+        v22_item = sample_v22_task(
+            skill=skill,
+            difficulty=difficulty,
+            task_format=task_format,
+            pool=pool,
+            exclude_ids=exclude_task_ids,
+        )
         if v22_item is not None:
             cloned = copy.deepcopy(v22_item)
             cloned["task_id"] = f"llm.clone.{cloned['task_id']}.{uuid.uuid4().hex[:6]}"
             cloned["difficulty_source"] = "llm_pedagogy_fallback"
+            if citations:
+                cloned["rag_citations"] = citations
+            cloned["difficulty_guardrail"] = guardrail["rules"]
+            cloned["repair_attempted"] = repair_attempted
             return cloned
 
         # Deterministic synthetic template
@@ -663,6 +1007,9 @@ class PedagogyRealizer:
                 {"level": 2, "kind": "targeted", "text": "Stop at 7 is strictly excluded."},
                 {"level": 3, "kind": "scaffold", "text": "The sequence contains 2, 4, and 6."},
             ],
+            "rag_citations": citations,
+            "difficulty_guardrail": guardrail["rules"],
+            "repair_attempted": repair_attempted,
             "version": "synth-v1",
         }
 
@@ -674,6 +1021,8 @@ class PedagogyRealizer:
         learner_answer: Any,
         hint_level: int,
         prior_hints: list[dict[str, Any]] | None = None,
+        *,
+        learner: str | None = None,
     ) -> dict[str, Any]:
         """Generate an adaptive 3-tier progressive hint with measured leakage l_t in [0, 1]."""
         level = max(1, min(3, int(hint_level)))
@@ -686,9 +1035,27 @@ class PedagogyRealizer:
                     authored_text = str(h.get("text", ""))
                     break
 
+        citations: list[dict[str, Any]] = []
+        rag_passages: list[dict[str, str]] = []
+        skill = task.get("skill_id")
+        if self.rag is not None and skill in PPO_SKILLS_ORDER:
+            rag_res = self.rag.retrieve(
+                f"{task.get('prompt', '')} {authored_text}",
+                purpose="hint",
+                skill=skill,
+                learner=learner,
+                source_types=("curriculum", "episodic"),
+                top_k=2,
+            )
+            citations = rag_res["citations"]
+            rag_passages = [
+                {"section": ch["section"], "excerpt": ch["content"][:320]}
+                for ch in rag_res["chunks"]
+            ]
+
         system_prompt = (
             "You are a Socratic tutor giving a hint on a Python problem. "
-            f"Provide a level {level} ({kind}) hint. "
+            f"Provide a level {level} ({kind}) hint WITHOUT revealing the final answer or exact solution line. "
             "Output JSON with keys: hint_level (int), hint_kind (string), text (string), leakage_l_t (float between 0.0 and 1.0)."
         )
         context_payload = {
@@ -699,6 +1066,7 @@ class PedagogyRealizer:
             "hint_kind": kind,
             "learner_answer": learner_answer,
             "prior_hints": prior_hints or [],
+            "rag_curriculum_context": rag_passages,
         }
 
         try:
@@ -711,6 +1079,7 @@ class PedagogyRealizer:
                     "hint_kind": kind,
                     "text": str(resp["text"]),
                     "leakage_l_t": leak,
+                    "citations": citations,
                     "source": "llm" if self.llm.is_live() else "deterministic_double",
                 }
         except LLMClientError:
@@ -726,6 +1095,7 @@ class PedagogyRealizer:
             "hint_kind": kind,
             "text": text,
             "leakage_l_t": leakage,
+            "citations": citations,
             "source": "deterministic_double",
         }
 
@@ -863,6 +1233,129 @@ class PedagogyRealizer:
             "task": task,
         }
 
+    @staticmethod
+    def _extract_active_answers(active_question: dict[str, Any] | None) -> list[str]:
+        if not isinstance(active_question, dict):
+            return []
+        raw_task = active_question.get("raw_task") or active_question.get("question") or {}
+        if not isinstance(raw_task, dict):
+            return []
+        secrets: list[str] = []
+        ak = raw_task.get("answer_key")
+        opt_map = {
+            str(o.get("id")): str(o.get("text"))
+            for o in (raw_task.get("options") or [])
+            if isinstance(o, dict) and o.get("id") and o.get("text")
+        }
+        if isinstance(ak, str) and ak.strip():
+            secrets.append(ak.strip())
+            if ak.strip() in opt_map:
+                secrets.append(opt_map[ak.strip()].strip())
+        elif isinstance(ak, list):
+            for item in ak:
+                s = str(item).strip()
+                if s:
+                    secrets.append(s)
+                    if s in opt_map:
+                        secrets.append(opt_map[s].strip())
+        ref_sol = raw_task.get("reference_solution")
+        if isinstance(ref_sol, str) and ref_sol.strip():
+            secrets.append(ref_sol.strip())
+        # Deduplicate while preserving order
+        seen: set[str] = set()
+        out: list[str] = []
+        for s in secrets:
+            if s and s not in seen:
+                seen.add(s)
+                out.append(s)
+        return out
+
+    @classmethod
+    def _is_pasted_active_question(cls, question: str, active_question: dict[str, Any] | None) -> bool:
+        if not isinstance(active_question, dict):
+            return False
+        raw_task = active_question.get("raw_task") or active_question.get("question") or {}
+        if not isinstance(raw_task, dict):
+            return False
+        q_low = (question or "").lower()
+        if "__blank_" in q_low and raw_task.get("task_type") == "fill_in_the_blank":
+            return True
+        active_text = f"{raw_task.get('prompt', '')} {' '.join(str(s) for s in (raw_task.get('snippets') or []))}".strip()
+        if not active_text:
+            return False
+        return max_text_similarity(question, [active_text]) >= 0.35
+
+    @classmethod
+    def _enforce_eduguard(
+        cls,
+        *,
+        question: str,
+        reply: str,
+        code_example: str,
+        active_question: dict[str, Any] | None,
+        mastery_info: dict[str, Any],
+        rag_chunks: list[dict[str, Any]],
+        skill_title: str,
+    ) -> tuple[str, str, str]:
+        has_open_unpassed = bool(
+            isinstance(active_question, dict)
+            and active_question.get("status") == "open"
+            and not any(r.get("full_success") for r in (active_question.get("results") or []))
+        )
+        if not has_open_unpassed:
+            return reply, code_example, "grounded_open"
+
+        secrets = cls._extract_active_answers(active_question)
+        combined_resp = f"{reply}\n{code_example}".strip()
+        low_resp = combined_resp.lower()
+        leaked = bool(_ANSWER_FISHING_RE.search(question or "")) or cls._is_pasted_active_question(
+            question, active_question
+        )
+
+        if not leaked:
+            for ans in secrets:
+                ans_low = ans.lower()
+                if len(ans_low) <= 2:
+                    if re.search(
+                        rf"(?:\b(?:answer|output|prints|returns|result|equals|option|choice|blank|fill|put|missing|replace|use)\s*(?:is|with|:|=|be)?\s*{re.escape(ans_low)}\b|^\s*{re.escape(ans_low)}\s*$)",
+                        low_resp,
+                        flags=re.MULTILINE,
+                    ):
+                        leaked = True
+                        break
+                elif len(ans_low) >= 3:
+                    if ans_low in low_resp:
+                        leaked = True
+                        break
+
+        if not leaked:
+            return reply, code_example, "grounded_protected"
+
+        # Pull conceptual grounding strictly from curriculum chunks (never echo episodic "Learner asked: ...")
+        curriculum_only = [ch for ch in rag_chunks if ch.get("source_type") == "curriculum"]
+        top_excerpt = _clean_excerpt(curriculum_only[0]["content"], 200) if curriculum_only else ""
+        tier = mastery_info["mastery_tier"]
+        if tier in ("unassessed", "lacking"):
+            lines = [
+                f"**EduGuard Active — Let's Solve {skill_title} Step by Step**",
+                "",
+                "Since you have an unpassed exercise open on this topic, I'll guide your reasoning without giving away the answer:",
+                "1. **Identify the rule:** Check each bound, operator, or parameter in order.",
+                "2. **Trace concrete values:** Track every variable before the step runs, during each pass, and at exit/return.",
+                "3. **Test your hypothesis:** Plug your candidate value back into the code and verify the condition.",
+            ]
+        else:
+            lines = [
+                f"**EduGuard Active — Socratic Check ({skill_title})**",
+                "",
+                "An active problem is still open, so I'm keeping the solution hidden:",
+                "1. Check edge boundaries (`<` vs `<=`, exclusive `stop`, negative indices, or early `return`).",
+                "2. Trace operator precedence and line-by-line execution with a small test input.",
+            ]
+        if top_excerpt:
+            lines.extend(["", f"**Key Concept to Apply:** {top_excerpt}"])
+        return "\n".join(lines).strip(), "", "socratic_redirect"
+
     def answer_learner_doubt(
         self,
         skill: str,
@@ -870,8 +1363,11 @@ class PedagogyRealizer:
         *,
         history: list[dict[str, str]] | None = None,
         course_material: dict[str, Any] | None = None,
+        learner: str | None = None,
+        memory_summary: dict[str, Any] | None = None,
+        active_question: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
-        """Answer a learner's question/doubt about a skill's reference lesson or worked example."""
+        """Answer a learner's question adaptively by mastery level, grounded by Hybrid RAG + EduGuard."""
         if skill not in PPO_SKILLS_ORDER:
             raise ValueError(f"Unknown skill {skill!r}")
         cleaned_q = (question or "").strip()
@@ -889,12 +1385,63 @@ class PedagogyRealizer:
             "worked_example": def_lesson.get("worked_example", {}),
         }
 
+        mastery_info = _resolve_mastery_tier(memory_summary)
+        mastery_tier = mastery_info["mastery_tier"]
+        has_open_unpassed = bool(
+            isinstance(active_question, dict)
+            and active_question.get("status") == "open"
+            and not any(r.get("full_success") for r in (active_question.get("results") or []))
+        )
+        active_preview = ""
+        if isinstance(active_question, dict):
+            q_obj = active_question.get("question") or {}
+            if isinstance(q_obj, dict):
+                active_preview = f"{q_obj.get('prompt', '')} {' '.join(q_obj.get('snippets') or [])}"[:220]
+
+        citations: list[dict[str, Any]] = []
+        rag_chunks: list[dict[str, Any]] = []
+        rag_audit: dict[str, Any] | None = None
+        if self.rag is not None:
+            rag_res = self.rag.retrieve(
+                cleaned_q,
+                purpose="tutor_chat",
+                skill=skill,
+                learner=learner,
+                source_types=("curriculum", "episodic"),
+                include_prerequisites=(mastery_tier in ("unassessed", "lacking")),
+                mastery_tier=mastery_tier,
+                extra_context=active_preview,
+                top_k=4,
+            )
+            rag_chunks = rag_res["chunks"]
+            citations = rag_res["citations"]
+            rag_audit = rag_res["audit"]
+
+        rag_context_for_llm = [
+            {
+                "citation": (ch.get("metadata") or {}).get("citation_label") or f"{ch['title']} — {ch['section']}",
+                "source_type": ch["source_type"],
+                "content": ch["content"][:550],
+            }
+            for ch in rag_chunks
+        ]
+
         if self.llm.is_live():
+            eduguard_rule = (
+                "EDUGUARD ANTI-LEAKAGE POLICY (ACTIVE): The student currently has an unpassed practice/assessment question open. "
+                "NEVER output the active question's exact answer, output line, option choice, missing blank, or solution code. "
+                "Guide via Socratic questions and a DIFFERENT small toy example."
+                if has_open_unpassed
+                else "No unpassed exercise is blocking explanation; answer clearly using concrete examples."
+            )
             system_prompt = (
-                "You are a supportive, clear Python tutor answering a student's question about the reference "
-                "lesson and worked example before they begin practice. Keep explanations concise, accurate, "
-                "and grounded in the current topic. Return ONLY a JSON object with keys:\n"
-                '{"reply": "Clear explanation answering the doubt", "code_example": "Optional short Python snippet or empty string"}'
+                "You are a supportive, clear Python tutor answering a student's doubt. "
+                f"Adapt your depth, tone, and scaffolding to the student's cognitive mastery level: {mastery_info['instruction']} "
+                "Format `reply` cleanly with Markdown headings/bold labels, short bullet or numbered steps (`1.`, `2.`), and inline code ticks. "
+                "Cite relevant curriculum sections or prior mistakes naturally. "
+                f"{eduguard_rule} "
+                "Return ONLY a JSON object with keys:\n"
+                '{"reply": "Well-formatted Markdown mastery-adapted explanation", "code_example": "Optional short toy Python snippet or empty string"}'
             )
             recent_history = []
             for turn in (history or [])[-6:]:
@@ -903,12 +1450,14 @@ class PedagogyRealizer:
             user_payload = {
                 "skill": skill,
                 "skill_title": skill_title,
+                "learner_mastery": mastery_info,
                 "lesson_summary": {
                     "concept_explanation": mat.get("concept_explanation", ""),
                     "mental_model": mat.get("mental_model", ""),
                     "pitfalls": mat.get("pitfalls", []),
                     "worked_example": mat.get("worked_example", {}),
                 },
+                "rag_context": rag_context_for_llm,
                 "history": recent_history,
                 "student_question": cleaned_q,
             }
@@ -918,44 +1467,106 @@ class PedagogyRealizer:
                     json.dumps(user_payload, ensure_ascii=False),
                     schema_name="tutor_chat",
                     temperature=0.3,
-                    max_tokens=700,
+                    max_tokens=750,
                 )
                 reply = str(raw.get("reply") or raw.get("answer") or "").strip()
                 code_ex = str(raw.get("code_example") or raw.get("code") or "").strip()
                 if reply:
+                    guarded_reply, guarded_code, guard_status = self._enforce_eduguard(
+                        question=cleaned_q,
+                        reply=reply,
+                        code_example=code_ex,
+                        active_question=active_question,
+                        mastery_info=mastery_info,
+                        rag_chunks=rag_chunks,
+                        skill_title=skill_title,
+                    )
                     return {
-                        "reply": reply,
-                        "code_example": code_ex,
+                        "reply": guarded_reply,
+                        "code_example": guarded_code,
                         "source": "llm",
+                        "citations": citations,
+                        "mastery_tier": mastery_tier,
+                        "guardrail_status": guard_status,
+                        "rag_audit": rag_audit,
                     }
             except LLMClientError:
                 pass
 
-        # Deterministic offline fallback grounded in the skill's lesson & worked example
+        # Mastery-adaptive + RAG-grounded deterministic offline fallback (clean Markdown formatting)
         we = mat.get("worked_example") or {}
         pitfalls = mat.get("pitfalls") or rich.get("pitfalls") or []
         ql = cleaned_q.lower()
+        episodic_chunks = [ch for ch in rag_chunks if ch.get("source_type") == "episodic"]
+        curriculum_chunks = [ch for ch in rag_chunks if ch.get("source_type") != "episodic"]
+        rag_note = ""
+        if curriculum_chunks:
+            cleaned_cur = _clean_excerpt(curriculum_chunks[0]["content"], 200)
+            if cleaned_cur:
+                rag_note = f"\n\n**From {curriculum_chunks[0]['section']}:** {cleaned_cur}"
+
+        if mastery_tier == "lacking":
+            header = f"**Remediation Guide ({mastery_info['p_med']:.0%} < 70% mastery on {skill_title})**"
+            intro = "Let's slow down and trace every variable cleanly before moving on:"
+        elif mastery_tier == "fragile":
+            header = f"**Retention Refresher ({skill_title} · P(Med) {mastery_info['p_med']:.0%}, 30d drop {mastery_info['fragility']:.0%})**"
+            intro = "Keep the core causal rule crisp so it holds after a gap:"
+        elif mastery_tier == "mastered":
+            header = f"**Precision Summary ({skill_title} · {mastery_info['p_med']:.0%} mastered)**"
+            intro = "Watch for subtle boundary and precedence cases:"
+        else:
+            header = f"**Core Mental Model ({skill_title})**"
+            intro = "Here is the step-by-step mental model to use:"
+
+        episodic_note = ""
+        if episodic_chunks and mastery_tier in ("unassessed", "lacking", "fragile"):
+            cleaned_ep = _clean_excerpt(episodic_chunks[0]["content"], 160)
+            if cleaned_ep and not cleaned_ep.lower().startswith("learner asked:"):
+                episodic_note = f"\n\n**Focus Area from Recent Practice:** {cleaned_ep}"
+
         if any(k in ql for k in ("example", "code", "trace", "step", "subgoal", "work")):
-            sub_text = " ".join(f"{sg.get('label')}: {sg.get('detail')}" for sg in (we.get("subgoals") or []))
-            reply = (
-                f"In the worked example for {skill_title} ({we.get('title', 'trace')}), "
-                f"follow the subgoals step by step: {sub_text or mat.get('mental_model', '')}"
+            subgoals = we.get("subgoals") or []
+            steps_md = "\n".join(
+                f"{idx}. **{sg.get('label', f'Step {idx}')}:** {sg.get('detail', '')}"
+                for idx, sg in enumerate(subgoals, start=1)
             )
-            code_ex = str(we.get("code") or "")
+            body = (
+                f"**Worked Example — {we.get('title', 'Trace')}:**\n"
+                f"{steps_md or mat.get('mental_model', '')}"
+            )
+            reply = f"{header}\n\n{intro}\n\n{body}{rag_note}{episodic_note}".strip()
+            code_ex = "" if has_open_unpassed else str(we.get("code") or "")
         elif any(k in ql for k in ("mistake", "pitfall", "wrong", "error", "bug", "watch", "careful")):
-            pit_str = " ".join(f"• {p}" for p in pitfalls[:3])
-            reply = f"Common pitfalls to watch out for in {skill_title}: {pit_str}"
+            pit_md = "\n".join(f"- {p}" for p in pitfalls[:3])
+            reply = f"{header}\n\n**Common Pitfalls to Avoid:**\n{pit_md}{rag_note}{episodic_note}".strip()
             code_ex = ""
         else:
-            reply = (
-                f"For {skill_title}: {mat.get('concept_explanation', '')} "
-                f"Mental model: {mat.get('mental_model', '')}"
-            ).strip()
-            code_ex = str(we.get("code") or "")
+            core_expl = str(mat.get("concept_explanation", "")).strip()
+            if mastery_tier == "mastered" and curriculum_chunks:
+                core_expl = _clean_excerpt(curriculum_chunks[0]["content"], 240)
+            mental = _clean_excerpt(str(mat.get("mental_model", "")), 220)
+            lines = [header, "", core_expl]
+            if mental:
+                lines.extend(["", f"**Mental Model:** {mental}"])
+            reply = ("".join([]) + "\n".join(lines) + f"{rag_note}{episodic_note}").strip()
+            code_ex = "" if (has_open_unpassed or mastery_tier == "mastered") else str(we.get("code") or "")
 
+        guarded_reply, guarded_code, guard_status = self._enforce_eduguard(
+            question=cleaned_q,
+            reply=reply,
+            code_example=code_ex,
+            active_question=active_question,
+            mastery_info=mastery_info,
+            rag_chunks=rag_chunks,
+            skill_title=skill_title,
+        )
         return {
-            "reply": reply,
-            "code_example": code_ex,
+            "reply": guarded_reply,
+            "code_example": guarded_code,
             "source": "fallback",
+            "citations": citations,
+            "mastery_tier": mastery_tier,
+            "guardrail_status": guard_status,
+            "rag_audit": rag_audit,
         }
 

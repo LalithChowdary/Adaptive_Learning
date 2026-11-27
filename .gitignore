@@ -26,3 +26,8 @@ env/
 .vscode/
 .idea/
 
+
+# Runtime SQLite session databases
+adaptive_web/data/*.sqlite3
+adaptive_web/data/*.sqlite3-shm
+adaptive_web/data/*.sqlite3-wal
