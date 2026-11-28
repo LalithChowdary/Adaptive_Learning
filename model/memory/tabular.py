@@ -41,7 +41,7 @@ def fit_tabular(name, train, validation, masks, *, seed, balanced=False):
             trials.append({"parameters": parameters, **losses})
             if score < best_loss:
                 best_model, best_loss, best_metrics = candidate, score, losses
-    return best_model, {"device": "cpu", **best_metrics, "trials": trials}
+    return best_model, {"device": "cpu", "seed": seed, **best_metrics, "trials": trials}
 
 
 def predict_tabular(name, model, partition):

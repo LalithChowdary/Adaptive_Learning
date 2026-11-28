@@ -9,7 +9,7 @@ from pathlib import Path
 import re
 import threading
 import time
-from typing import Any, Iterable
+from typing import Any, Iterable, Protocol, Sequence, runtime_checkable
 
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -59,6 +59,157 @@ class KnowledgeChunk:
     def searchable_text(self) -> str:
         parts = [self.skill, self.difficulty, self.task_type, self.title, self.section, self.content]
         return " ".join(p for p in parts if p)
+
+
+BENCHMARK_ARMS: tuple[str, ...] = ("bm25_alone", "hybrid_tfidf", "dense", "bm25_dense")
+DENSE_QUERY_MODES: tuple[str, ...] = ("raw_meta", "rewrite_query")
+
+
+@runtime_checkable
+class DenseEncoder(Protocol):
+    """Protocol for real pretrained dense bi-encoders (e.g., BAAI/bge-small-en-v1.5, all-MiniLM-L6-v2)."""
+
+    model_name: str
+
+    def encode_documents(self, texts: Sequence[str]) -> np.ndarray:
+        """Return L2-normalized float32 embeddings of shape (len(texts), dim)."""
+        ...
+
+    def encode_queries(self, texts: Sequence[str]) -> np.ndarray:
+        """Return L2-normalized float32 embeddings of shape (len(texts), dim)."""
+        ...
+
+
+def _require_dense_encoder(dense_encoder: Any) -> DenseEncoder:
+    if (
+        dense_encoder is None
+        or not callable(getattr(dense_encoder, "encode_documents", None))
+        or not callable(getattr(dense_encoder, "encode_queries", None))
+    ):
+        raise RuntimeError(
+            "Dense retrieval requires an explicit DenseEncoder instance; TF-IDF, SVD, and hash fallbacks are prohibited."
+        )
+    return dense_encoder
+
+
+def _l2_normalize_rows(mat: Any) -> np.ndarray:
+    arr = np.asarray(mat, dtype=np.float32)
+    if arr.ndim == 1:
+        arr = arr.reshape(1, -1)
+    if arr.shape[0] == 0:
+        return arr
+    norms = np.linalg.norm(arr, axis=1, keepdims=True)
+    return arr / np.maximum(norms, 1e-12)
+
+
+def _validate_dense_matrix(
+    raw_mat: Any,
+    *,
+    expected_rows: int,
+    expected_dim: int | None = None,
+    label: str = "documents",
+) -> np.ndarray:
+    try:
+        arr = np.asarray(raw_mat, dtype=np.float32)
+    except (TypeError, ValueError) as exc:
+        raise RuntimeError(
+            f"DenseEncoder {label} embeddings could not be converted to float32 array: {exc}"
+        ) from exc
+    if arr.ndim != 2:
+        raise RuntimeError(
+            f"DenseEncoder {label} embeddings must be 2D with {expected_rows} rows; got shape {arr.shape}."
+        )
+    if arr.shape[0] != expected_rows:
+        raise RuntimeError(
+            f"DenseEncoder {label} row count mismatch: expected {expected_rows}, got {arr.shape[0]}."
+        )
+    if arr.shape[1] <= 0:
+        raise RuntimeError(
+            f"DenseEncoder {label} embedding dimension must be positive; got shape {arr.shape}."
+        )
+    if expected_dim is not None and arr.shape[1] != expected_dim:
+        raise RuntimeError(
+            f"DenseEncoder {label} embedding dim mismatch: expected {expected_dim}, got {arr.shape[1]}."
+        )
+    if not np.isfinite(arr).all():
+        raise RuntimeError(f"DenseEncoder {label} embeddings contain NaN or Inf values.")
+    return _l2_normalize_rows(arr)
+
+
+def format_dense_raw_meta_query(
+    query: str,
+    *,
+    skill: str | None = None,
+    difficulty: str | None = None,
+    task_type: str | None = None,
+    extra_context: str = "",
+) -> str:
+    """Build clean natural-language + structured metadata input for pretrained dense bi-encoders."""
+    parts: list[str] = []
+    raw = str(query or "").strip()
+    if raw:
+        parts.append(raw)
+    if skill and skill in catalogue_bridge.SKILL_META:
+        meta = catalogue_bridge.SKILL_META[skill]
+        parts.append(f"Skill: {meta['name']} ({meta['summary']})")
+    if difficulty and difficulty != "mixed":
+        parts.append(f"Difficulty: {difficulty}")
+    if task_type and task_type != "mixed":
+        parts.append(f"Format: {task_type}")
+    if extra_context:
+        ctx = " ".join(_tokenize_alnum(extra_context)[:20])
+        if ctx:
+            parts.append(f"Context: {ctx}")
+    return " | ".join(parts) or (skill or "python")
+
+
+def check_cross_learner_episodic_violations(
+    chunks: Iterable[dict[str, Any]],
+    *,
+    expected_learner: str | None,
+) -> int:
+    """Count retrieved episodic chunks belonging to any learner other than expected_learner."""
+    violations = 0
+    for ch in chunks:
+        if ch.get("source_type") == "episodic":
+            if not expected_learner or ch.get("learner") != expected_learner:
+                violations += 1
+    return violations
+
+
+def compute_metadata_match_rate(
+    chunks: Iterable[dict[str, Any]],
+    *,
+    skill: str | None,
+    difficulty: str | None,
+    task_type: str | None,
+    include_prerequisites: bool = False,
+) -> float:
+    """Compute fraction of retrieved chunks satisfying requested skill and exemplar metadata constraints."""
+    allowed_skills: list[str] | None = None
+    if skill and skill in catalogue_bridge.PPO_SKILLS_ORDER:
+        allowed_skills = [skill]
+        if include_prerequisites:
+            for pre in catalogue_bridge.PREREQUISITES.get(skill, ()):
+                if pre not in allowed_skills:
+                    allowed_skills.append(pre)
+
+    items = list(chunks)
+    if not items:
+        return 1.0
+    matched = 0
+    for ch in items:
+        ok = True
+        if allowed_skills is not None and ch.get("skill") not in allowed_skills:
+            ok = False
+        if ch.get("source_type") == "v22_exemplar":
+            if difficulty and difficulty != "mixed" and ch.get("difficulty") != difficulty:
+                ok = False
+            if task_type and task_type != "mixed" and ch.get("task_type") != task_type:
+                ok = False
+        if ok:
+            matched += 1
+    return round(matched / len(items), 4)
 
 
 def _tokenize_alnum(text: str) -> list[str]:
@@ -313,6 +464,7 @@ class HybridRAGEngine:
         self._cache = _load_static_corpus_cache()
         self._recent_audits: list[dict[str, Any]] = []
         self._audits_by_learner: dict[str, dict[str, Any]] = {}
+        self._dense_static_cache: dict[tuple[str, str], np.ndarray] = {}
         self._init_schema_and_seed()
 
     def _init_schema_and_seed(self) -> None:
@@ -1035,3 +1187,736 @@ class HybridRAGEngine:
                 "last_retrieval": dict(entry) if entry is not None else None,
                 "recent_count": len(self._recent_audits),
             }
+
+    # ---- Shared Benchmark Helpers & 4-Arm Evaluation Harness (§9 #2) ----
+
+    def _fts_candidates(
+        self,
+        *,
+        rewritten: str,
+        source_list: tuple[str, ...],
+        source_set: set[str],
+        learner: str | None,
+        allowed_skills: list[str] | None,
+        difficulty: str | None,
+        task_type: str | None,
+        exclude_doc_ids: set[str],
+        top_k: int,
+    ) -> tuple[dict[str, int], dict[str, dict[str, Any]]]:
+        fts_ranks: dict[str, int] = {}
+        fts_docs: dict[str, dict[str, Any]] = {}
+        fts_query = _build_safe_fts_query(rewritten)
+        if not fts_query:
+            return fts_ranks, fts_docs
+
+        sql_parts = [
+            "SELECT c.doc_id, c.source_type, c.learner, c.skill, c.difficulty, c.task_type, "
+            "c.title, c.section, c.content, c.metadata_json, c.created, "
+            "bm25(rag_chunks_fts, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 1.5, 1.0) AS rank_score "
+            "FROM rag_chunks_fts f JOIN rag_chunks c ON c.doc_id = f.doc_id "
+            "WHERE rag_chunks_fts MATCH ?"
+        ]
+        params: list[Any] = [fts_query]
+        placeholders_src = ",".join("?" for _ in source_list)
+        sql_parts.append(f"AND c.source_type IN ({placeholders_src})")
+        params.extend(source_list)
+        if allowed_skills is not None:
+            placeholders_sk = ",".join("?" for _ in allowed_skills)
+            sql_parts.append(f"AND c.skill IN ({placeholders_sk})")
+            params.extend(allowed_skills)
+        if difficulty and difficulty != "mixed" and "v22_exemplar" in source_set:
+            sql_parts.append("AND (c.source_type != 'v22_exemplar' OR c.difficulty = ?)")
+            params.append(difficulty)
+        if task_type and task_type != "mixed" and "v22_exemplar" in source_set:
+            sql_parts.append("AND (c.source_type != 'v22_exemplar' OR c.task_type = ?)")
+            params.append(task_type)
+        if "episodic" in source_set:
+            if learner:
+                sql_parts.append("AND (c.source_type != 'episodic' OR c.learner = ?)")
+                params.append(learner)
+            else:
+                sql_parts.append("AND c.source_type != 'episodic'")
+        sql_parts.append("ORDER BY rank_score ASC LIMIT ?")
+        params.append(max(48, top_k * 12))
+
+        with self.store._lock:
+            rows = self.store.db.execute(" ".join(sql_parts), params).fetchall()
+        rank = 1
+        for r in rows:
+            doc_id = r["doc_id"]
+            if not self._passes_metadata_filter(
+                doc_source=r["source_type"],
+                doc_learner=r["learner"],
+                doc_skill=r["skill"],
+                doc_diff=r["difficulty"],
+                doc_fmt=r["task_type"],
+                source_set=source_set,
+                learner=learner,
+                allowed_skills=allowed_skills,
+                difficulty=difficulty,
+                task_type=task_type,
+                exclude_doc_ids=exclude_doc_ids,
+                doc_id=doc_id,
+            ):
+                continue
+            fts_ranks[doc_id] = rank
+            rank += 1
+            fts_docs[doc_id] = {
+                "doc_id": doc_id,
+                "source_type": r["source_type"],
+                "learner": r["learner"],
+                "skill": r["skill"],
+                "difficulty": r["difficulty"],
+                "task_type": r["task_type"],
+                "title": r["title"],
+                "section": r["section"],
+                "content": r["content"],
+                "metadata": json.loads(r["metadata_json"] or "{}"),
+                "created": float(r["created"]),
+            }
+        return fts_ranks, fts_docs
+
+    def _fetch_dynamic_rows(
+        self,
+        *,
+        source_set: set[str],
+        learner: str | None,
+    ) -> list[Any]:
+        dyn_rows: list[Any] = []
+        if "episodic" in source_set and learner:
+            with self.store._lock:
+                dyn_rows.extend(
+                    self.store.db.execute(
+                        "SELECT doc_id, source_type, learner, skill, difficulty, task_type, "
+                        "title, section, content, metadata_json, created "
+                        "FROM rag_chunks WHERE source_type='episodic' AND learner=?",
+                        (learner,),
+                    ).fetchall()
+                )
+        if "curriculum" in source_set:
+            with self.store._lock:
+                dyn_rows.extend(
+                    self.store.db.execute(
+                        "SELECT doc_id, source_type, learner, skill, difficulty, task_type, "
+                        "title, section, content, metadata_json, created "
+                        "FROM rag_chunks WHERE source_type='curriculum' AND doc_id LIKE 'inst.%'"
+                    ).fetchall()
+                )
+        return dyn_rows
+
+    def _tfidf_candidates(
+        self,
+        *,
+        query_text: str,
+        skill: str | None,
+        learner: str | None,
+        difficulty: str | None,
+        task_type: str | None,
+        source_set: set[str],
+        allowed_skills: list[str] | None,
+        exclude_doc_ids: set[str],
+        top_k: int,
+    ) -> tuple[dict[str, int], dict[str, dict[str, Any]]]:
+        vec_ranks: dict[str, int] = {}
+        vec_docs: dict[str, dict[str, Any]] = {}
+        vectorizer: TfidfVectorizer = self._cache["vectorizer"]
+        static_mat = self._cache["matrix"]
+        static_chunks: list[KnowledgeChunk] = self._cache["chunks"]
+        q_vec = vectorizer.transform([query_text])
+
+        scored_vec: list[tuple[float, str, dict[str, Any]]] = []
+        if static_mat is not None and static_chunks:
+            sims = (static_mat @ q_vec.T).toarray().ravel()
+            for idx, score in enumerate(sims):
+                ch = static_chunks[idx]
+                if not self._passes_metadata_filter(
+                    doc_source=ch.source_type,
+                    doc_learner=ch.learner,
+                    doc_skill=ch.skill,
+                    doc_diff=ch.difficulty,
+                    doc_fmt=ch.task_type,
+                    source_set=source_set,
+                    learner=learner,
+                    allowed_skills=allowed_skills,
+                    difficulty=difficulty,
+                    task_type=task_type,
+                    exclude_doc_ids=exclude_doc_ids,
+                    doc_id=ch.doc_id,
+                ):
+                    continue
+                if score > 0.0 or (ch.source_type == "curriculum" and ch.skill == skill):
+                    scored_vec.append(
+                        (
+                            float(score),
+                            ch.doc_id,
+                            {
+                                "doc_id": ch.doc_id,
+                                "source_type": ch.source_type,
+                                "learner": ch.learner,
+                                "skill": ch.skill,
+                                "difficulty": ch.difficulty,
+                                "task_type": ch.task_type,
+                                "title": ch.title,
+                                "section": ch.section,
+                                "content": ch.content,
+                                "metadata": dict(ch.metadata),
+                                "created": ch.created,
+                            },
+                        )
+                    )
+
+        dyn_rows = self._fetch_dynamic_rows(source_set=source_set, learner=learner)
+        if dyn_rows:
+            dyn_texts = [
+                " ".join(
+                    p
+                    for p in (r["skill"], r["difficulty"], r["task_type"], r["title"], r["section"], r["content"])
+                    if p
+                )
+                for r in dyn_rows
+            ]
+            dyn_mat = vectorizer.transform(dyn_texts)
+            dyn_sims = (dyn_mat @ q_vec.T).toarray().ravel()
+            for r, score in zip(dyn_rows, dyn_sims):
+                if not self._passes_metadata_filter(
+                    doc_source=r["source_type"],
+                    doc_learner=r["learner"],
+                    doc_skill=r["skill"],
+                    doc_diff=r["difficulty"],
+                    doc_fmt=r["task_type"],
+                    source_set=source_set,
+                    learner=learner,
+                    allowed_skills=allowed_skills,
+                    difficulty=difficulty,
+                    task_type=task_type,
+                    exclude_doc_ids=exclude_doc_ids,
+                    doc_id=r["doc_id"],
+                ):
+                    continue
+                scored_vec.append(
+                    (
+                        float(score) + (0.015 if r["source_type"] == "episodic" else 0.01),
+                        r["doc_id"],
+                        {
+                            "doc_id": r["doc_id"],
+                            "source_type": r["source_type"],
+                            "learner": r["learner"],
+                            "skill": r["skill"],
+                            "difficulty": r["difficulty"],
+                            "task_type": r["task_type"],
+                            "title": r["title"],
+                            "section": r["section"],
+                            "content": r["content"],
+                            "metadata": json.loads(r["metadata_json"] or "{}"),
+                            "created": float(r["created"]),
+                        },
+                    )
+                )
+
+        scored_vec.sort(key=lambda item: item[0], reverse=True)
+        for rank_idx, (sim_score, doc_id, doc_obj) in enumerate(scored_vec[: max(24, top_k * 8)], start=1):
+            vec_ranks[doc_id] = rank_idx
+            doc_obj["vector_score"] = round(sim_score, 4)
+            vec_docs[doc_id] = doc_obj
+        return vec_ranks, vec_docs
+
+    def _get_dense_static_embeddings(self, dense_encoder: DenseEncoder) -> np.ndarray:
+        cache_key = (
+            str(getattr(dense_encoder, "model_name", type(dense_encoder).__name__)),
+            str(self._cache["signature"]),
+        )
+        with self._lock:
+            cached = self._dense_static_cache.get(cache_key)
+        if cached is not None:
+            return cached
+
+        static_chunks: list[KnowledgeChunk] = self._cache["chunks"]
+        texts = [c.searchable_text for c in static_chunks]
+        if texts:
+            embs = _validate_dense_matrix(
+                dense_encoder.encode_documents(texts),
+                expected_rows=len(texts),
+                label="static_documents",
+            )
+        else:
+            embs = np.zeros((0, 0), dtype=np.float32)
+        with self._lock:
+            self._dense_static_cache[cache_key] = embs
+        return embs
+
+    def _dense_candidates(
+        self,
+        dense_encoder: DenseEncoder,
+        *,
+        query_text: str,
+        skill: str | None,
+        learner: str | None,
+        difficulty: str | None,
+        task_type: str | None,
+        source_set: set[str],
+        allowed_skills: list[str] | None,
+        exclude_doc_ids: set[str],
+        top_k: int,
+    ) -> tuple[dict[str, int], dict[str, dict[str, Any]]]:
+        vec_ranks: dict[str, int] = {}
+        vec_docs: dict[str, dict[str, Any]] = {}
+        static_chunks: list[KnowledgeChunk] = self._cache["chunks"]
+        static_embs = self._get_dense_static_embeddings(dense_encoder)
+        expected_dim = int(static_embs.shape[1]) if len(static_chunks) > 0 and static_embs.ndim == 2 else None
+        q_mat = _validate_dense_matrix(
+            dense_encoder.encode_queries([query_text]),
+            expected_rows=1,
+            expected_dim=expected_dim,
+            label="queries",
+        )
+        q_emb = q_mat[0]
+
+        scored_vec: list[tuple[float, str, dict[str, Any]]] = []
+        if len(static_chunks) > 0:
+            if (
+                static_embs.ndim != 2
+                or static_embs.shape[0] != len(static_chunks)
+                or static_embs.shape[1] != q_emb.shape[0]
+                or not np.isfinite(static_embs).all()
+            ):
+                raise RuntimeError(
+                    f"DenseEncoder static embeddings shape/finiteness mismatch: {static_embs.shape} "
+                    f"for {len(static_chunks)} chunks and query dim {q_emb.shape[0]}."
+                )
+            sims = (static_embs @ q_emb).astype(float)
+            for idx, score in enumerate(sims):
+                ch = static_chunks[idx]
+                if not self._passes_metadata_filter(
+                    doc_source=ch.source_type,
+                    doc_learner=ch.learner,
+                    doc_skill=ch.skill,
+                    doc_diff=ch.difficulty,
+                    doc_fmt=ch.task_type,
+                    source_set=source_set,
+                    learner=learner,
+                    allowed_skills=allowed_skills,
+                    difficulty=difficulty,
+                    task_type=task_type,
+                    exclude_doc_ids=exclude_doc_ids,
+                    doc_id=ch.doc_id,
+                ):
+                    continue
+                if score > 0.0 or (ch.source_type == "curriculum" and ch.skill == skill):
+                    scored_vec.append(
+                        (
+                            float(score),
+                            ch.doc_id,
+                            {
+                                "doc_id": ch.doc_id,
+                                "source_type": ch.source_type,
+                                "learner": ch.learner,
+                                "skill": ch.skill,
+                                "difficulty": ch.difficulty,
+                                "task_type": ch.task_type,
+                                "title": ch.title,
+                                "section": ch.section,
+                                "content": ch.content,
+                                "metadata": dict(ch.metadata),
+                                "created": ch.created,
+                            },
+                        )
+                    )
+
+        dyn_rows = self._fetch_dynamic_rows(source_set=source_set, learner=learner)
+        if dyn_rows:
+            dyn_texts = [
+                " ".join(
+                    p
+                    for p in (r["skill"], r["difficulty"], r["task_type"], r["title"], r["section"], r["content"])
+                    if p
+                )
+                for r in dyn_rows
+            ]
+            dyn_embs = _validate_dense_matrix(
+                dense_encoder.encode_documents(dyn_texts),
+                expected_rows=len(dyn_rows),
+                expected_dim=int(q_emb.shape[0]),
+                label="dynamic_documents",
+            )
+            dyn_sims = (dyn_embs @ q_emb).astype(float)
+            for r, score in zip(dyn_rows, dyn_sims):
+                if not self._passes_metadata_filter(
+                    doc_source=r["source_type"],
+                    doc_learner=r["learner"],
+                    doc_skill=r["skill"],
+                    doc_diff=r["difficulty"],
+                    doc_fmt=r["task_type"],
+                    source_set=source_set,
+                    learner=learner,
+                    allowed_skills=allowed_skills,
+                    difficulty=difficulty,
+                    task_type=task_type,
+                    exclude_doc_ids=exclude_doc_ids,
+                    doc_id=r["doc_id"],
+                ):
+                    continue
+                scored_vec.append(
+                    (
+                        float(score) + (0.015 if r["source_type"] == "episodic" else 0.01),
+                        r["doc_id"],
+                        {
+                            "doc_id": r["doc_id"],
+                            "source_type": r["source_type"],
+                            "learner": r["learner"],
+                            "skill": r["skill"],
+                            "difficulty": r["difficulty"],
+                            "task_type": r["task_type"],
+                            "title": r["title"],
+                            "section": r["section"],
+                            "content": r["content"],
+                            "metadata": json.loads(r["metadata_json"] or "{}"),
+                            "created": float(r["created"]),
+                        },
+                    )
+                )
+
+        scored_vec.sort(key=lambda item: item[0], reverse=True)
+        for rank_idx, (sim_score, doc_id, doc_obj) in enumerate(scored_vec[: max(24, top_k * 8)], start=1):
+            vec_ranks[doc_id] = rank_idx
+            doc_obj["vector_score"] = round(sim_score, 4)
+            vec_docs[doc_id] = doc_obj
+        return vec_ranks, vec_docs
+
+    @staticmethod
+    def _compute_rerank_boost(
+        doc: dict[str, Any],
+        *,
+        orig_tokens: set[str],
+        skill: str | None,
+        difficulty: str | None,
+        task_type: str | None,
+        mastery_tier: str | None,
+    ) -> float:
+        rerank_boost = 0.0
+        if skill and doc["skill"] == skill:
+            rerank_boost += 0.012
+        if difficulty and difficulty != "mixed" and doc["difficulty"] == difficulty:
+            rerank_boost += 0.008
+        if task_type and task_type != "mixed" and doc["task_type"] == task_type:
+            rerank_boost += 0.006
+        if orig_tokens:
+            doc_tokens = {
+                t.lower()
+                for t in _tokenize_alnum(f"{doc['title']} {doc['section']} {doc['content']}")
+            }
+            if doc_tokens:
+                rerank_boost += 0.030 * (len(orig_tokens & doc_tokens) / len(orig_tokens))
+
+        sec_low = doc["section"].lower()
+        if mastery_tier in ("lacking", "unassessed"):
+            if any(w in sec_low for w in ("core", "misconception", "pitfall", "learner history", "prereq")):
+                rerank_boost += 0.010
+            if doc["source_type"] == "episodic":
+                rerank_boost += 0.009
+        elif mastery_tier == "mastered":
+            if any(w in sec_low for w in ("hard", "difficulty", "progression", "edge")):
+                rerank_boost += 0.008
+        return rerank_boost
+
+    @staticmethod
+    def _build_citations(selected: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        citations: list[dict[str, Any]] = []
+        for item in selected:
+            meta = item.get("metadata") or {}
+            if item["source_type"] == "episodic":
+                ev_kind = str(meta.get("event_kind") or "history").replace("_", " ")
+                short_label = f"Prior {ev_kind}"
+                raw_excerpt = str(item.get("content") or "")
+            elif item["source_type"] == "v22_exemplar":
+                short_label = f"v2.2 {item['difficulty']} {item['task_type'].replace('_', ' ')}"
+                raw_excerpt = str(meta.get("prompt") or "")
+            else:
+                short_label = item["section"] or item["title"]
+                raw_excerpt = str(item.get("content") or "")
+            citations.append(
+                {
+                    "doc_id": item["doc_id"],
+                    "source_type": item["source_type"],
+                    "skill": item["skill"],
+                    "title": item["title"],
+                    "section": item["section"],
+                    "label": meta.get("citation_label") or f"{item['title']} — {item['section']}",
+                    "short_label": short_label,
+                    "excerpt": _clean_citation_excerpt(raw_excerpt),
+                    "score": item["final_score"],
+                }
+            )
+        return citations
+
+    def retrieve_benchmark_arm(
+        self,
+        query: str,
+        *,
+        arm: str,
+        purpose: str = "general",
+        skill: str | None = None,
+        learner: str | None = None,
+        difficulty: str | None = None,
+        task_type: str | None = None,
+        source_types: Iterable[str] | None = ("curriculum",),
+        include_prerequisites: bool = False,
+        mastery_tier: str | None = None,
+        extra_context: str = "",
+        top_k: int = 4,
+        exclude_task_ids: Iterable[str] = (),
+        dense_encoder: DenseEncoder | None = None,
+        dense_query_mode: str = "raw_meta",
+        record_audit: bool = False,
+    ) -> dict[str, Any]:
+        """Run one of the 4 matched Tier-2 retrieval benchmark arms with reranked & un-reranked outputs."""
+        if arm not in BENCHMARK_ARMS:
+            raise ValueError(f"Unknown benchmark arm {arm!r}; expected one of {BENCHMARK_ARMS}")
+        if dense_query_mode not in DENSE_QUERY_MODES:
+            raise ValueError(f"Unknown dense_query_mode {dense_query_mode!r}; expected one of {DENSE_QUERY_MODES}")
+
+        if arm in ("dense", "bm25_dense"):
+            dense_encoder = _require_dense_encoder(dense_encoder)
+
+        t0 = time.perf_counter()
+        top_k = max(1, min(int(top_k), 20))
+        rewritten = self.rewrite_query(
+            query,
+            skill=skill,
+            difficulty=difficulty,
+            task_type=task_type,
+            extra_context=extra_context,
+        )
+        source_list = tuple(source_types) if source_types is not None else ("curriculum", "v22_exemplar", "episodic")
+        source_set = set(source_list)
+        allowed_skills = self._allowed_skills(skill, include_prerequisites=include_prerequisites)
+        exclude_doc_ids = {f"ex.{tid}" if not str(tid).startswith("ex.") else str(tid) for tid in exclude_task_ids}
+
+        fts_ranks: dict[str, int] = {}
+        fts_docs: dict[str, dict[str, Any]] = {}
+        vec_ranks: dict[str, int] = {}
+        vec_docs: dict[str, dict[str, Any]] = {}
+
+        if arm in ("bm25_alone", "hybrid_tfidf", "bm25_dense"):
+            fts_ranks, fts_docs = self._fts_candidates(
+                rewritten=rewritten,
+                source_list=source_list,
+                source_set=source_set,
+                learner=learner,
+                allowed_skills=allowed_skills,
+                difficulty=difficulty,
+                task_type=task_type,
+                exclude_doc_ids=exclude_doc_ids,
+                top_k=top_k,
+            )
+
+        if arm == "hybrid_tfidf":
+            vec_ranks, vec_docs = self._tfidf_candidates(
+                query_text=rewritten or query or skill or "python",
+                skill=skill,
+                learner=learner,
+                difficulty=difficulty,
+                task_type=task_type,
+                source_set=source_set,
+                allowed_skills=allowed_skills,
+                exclude_doc_ids=exclude_doc_ids,
+                top_k=top_k,
+            )
+            query_input_mode = "rewrite_query"
+            bm25_query_input_mode: str | None = "rewrite_query"
+            dense_q_mode_used: str | None = None
+        elif arm == "bm25_alone":
+            query_input_mode = "rewrite_query"
+            bm25_query_input_mode = "rewrite_query"
+            dense_q_mode_used = None
+        else:
+            assert dense_encoder is not None
+            dense_q = (
+                format_dense_raw_meta_query(
+                    query,
+                    skill=skill,
+                    difficulty=difficulty,
+                    task_type=task_type,
+                    extra_context=extra_context,
+                )
+                if dense_query_mode == "raw_meta"
+                else (rewritten or query or skill or "python")
+            )
+            vec_ranks, vec_docs = self._dense_candidates(
+                dense_encoder,
+                query_text=dense_q,
+                skill=skill,
+                learner=learner,
+                difficulty=difficulty,
+                task_type=task_type,
+                source_set=source_set,
+                allowed_skills=allowed_skills,
+                exclude_doc_ids=exclude_doc_ids,
+                top_k=top_k,
+            )
+            query_input_mode = dense_query_mode
+            bm25_query_input_mode = "rewrite_query" if arm == "bm25_dense" else None
+            dense_q_mode_used = dense_query_mode
+
+        orig_tokens = {t.lower() for t in _tokenize_alnum(query) if len(t) >= 3}
+        all_ids = sorted(set(fts_ranks.keys()) | set(vec_ranks.keys()))
+        fused: list[dict[str, Any]] = []
+        for doc_id in all_ids:
+            doc = dict(vec_docs.get(doc_id) or fts_docs[doc_id])
+            if arm == "bm25_alone":
+                base_score = 2.0 / (RRF_K + fts_ranks[doc_id])
+            elif arm == "dense":
+                base_score = 2.0 / (RRF_K + vec_ranks[doc_id])
+            else:
+                base_score = 0.0
+                if doc_id in fts_ranks:
+                    base_score += 1.0 / (RRF_K + fts_ranks[doc_id])
+                if doc_id in vec_ranks:
+                    base_score += 1.0 / (RRF_K + vec_ranks[doc_id])
+
+            rerank_boost = self._compute_rerank_boost(
+                doc,
+                orig_tokens=orig_tokens,
+                skill=skill,
+                difficulty=difficulty,
+                task_type=task_type,
+                mastery_tier=mastery_tier,
+            )
+            doc["fts_rank"] = fts_ranks.get(doc_id)
+            doc["vector_rank"] = vec_ranks.get(doc_id)
+            doc["rrf_score"] = round(base_score, 6)
+            doc["final_score"] = round(base_score + rerank_boost, 6)
+            fused.append(doc)
+
+        reranked = sorted(fused, key=lambda d: (d["final_score"], d["rrf_score"], d["doc_id"]), reverse=True)
+        selected = reranked[:top_k]
+
+        if arm == "bm25_alone":
+            unreranked = sorted(
+                (dict(d) for d in fused),
+                key=lambda d: (d["rrf_score"], -fts_ranks[d["doc_id"]], d["doc_id"]),
+                reverse=True,
+            )
+        elif arm == "dense":
+            unreranked = sorted(
+                (dict(d) for d in fused),
+                key=lambda d: (float(d.get("vector_score", 0.0)), -vec_ranks[d["doc_id"]], d["doc_id"]),
+                reverse=True,
+            )
+        else:
+            unreranked = sorted(
+                (dict(d) for d in fused),
+                key=lambda d: (
+                    d["rrf_score"],
+                    -fts_ranks.get(d["doc_id"], 10**6),
+                    -vec_ranks.get(d["doc_id"], 10**6),
+                    d["doc_id"],
+                ),
+                reverse=True,
+            )
+        unreranked_selected = unreranked[:top_k]
+
+        citations = self._build_citations(selected)
+        metadata_match_rate = compute_metadata_match_rate(
+            selected,
+            skill=skill,
+            difficulty=difficulty,
+            task_type=task_type,
+            include_prerequisites=include_prerequisites,
+        )
+        cross_learner_violation = check_cross_learner_episodic_violations(
+            selected,
+            expected_learner=learner,
+        )
+        latency_ms = round((time.perf_counter() - t0) * 1000.0, 2)
+
+        audit_entry = {
+            "arm": arm,
+            "purpose": purpose,
+            "skill": skill,
+            "learner": learner,
+            "difficulty": difficulty,
+            "task_type": task_type,
+            "mastery_tier": mastery_tier,
+            "query_input_mode": query_input_mode,
+            "original_query": str(query or "")[:200],
+            "rewritten_query": rewritten[:280],
+            "source_types": list(source_list),
+            "fts_hits": len(fts_ranks),
+            "vector_hits": len(vec_ranks),
+            "fused_candidates": len(all_ids),
+            "returned": len(selected),
+            "citations": citations,
+            "latency_ms": latency_ms,
+            "timestamp": time.time(),
+        }
+        if record_audit:
+            with self._lock:
+                self._recent_audits.append(audit_entry)
+                if len(self._recent_audits) > 25:
+                    self._recent_audits = self._recent_audits[-25:]
+                if learner:
+                    self._audits_by_learner[learner] = audit_entry
+
+        return {
+            "arm": arm,
+            "query_input_mode": query_input_mode,
+            "bm25_query_input_mode": bm25_query_input_mode,
+            "dense_query_input_mode": dense_q_mode_used,
+            "chunks": selected,
+            "retrieved_doc_ids": [c["doc_id"] for c in selected],
+            "unreranked_chunks": unreranked_selected,
+            "unreranked_doc_ids": [c["doc_id"] for c in unreranked_selected],
+            "citations": citations,
+            "bm25_underfilled": len(selected) < top_k,
+            "metadata_match_rate": metadata_match_rate,
+            "cross_learner_violation": cross_learner_violation,
+            "latency_ms": latency_ms,
+            "audit": audit_entry,
+        }
+
+    def retrieve_all_arms(
+        self,
+        query: str,
+        *,
+        arms: Iterable[str] | None = None,
+        purpose: str = "general",
+        skill: str | None = None,
+        learner: str | None = None,
+        difficulty: str | None = None,
+        task_type: str | None = None,
+        source_types: Iterable[str] | None = ("curriculum",),
+        include_prerequisites: bool = False,
+        mastery_tier: str | None = None,
+        extra_context: str = "",
+        top_k: int = 4,
+        exclude_task_ids: Iterable[str] = (),
+        dense_encoder: DenseEncoder | None = None,
+        dense_query_mode: str = "raw_meta",
+    ) -> dict[str, dict[str, Any]]:
+        """Run all requested benchmark arms for a single query."""
+        target_arms = (
+            tuple(arms)
+            if arms is not None
+            else (BENCHMARK_ARMS if dense_encoder is not None else ("bm25_alone", "hybrid_tfidf"))
+        )
+        results: dict[str, dict[str, Any]] = {}
+        for arm_name in target_arms:
+            results[arm_name] = self.retrieve_benchmark_arm(
+                query,
+                arm=arm_name,
+                purpose=purpose,
+                skill=skill,
+                learner=learner,
+                difficulty=difficulty,
+                task_type=task_type,
+                source_types=source_types,
+                include_prerequisites=include_prerequisites,
+                mastery_tier=mastery_tier,
+                extra_context=extra_context,
+                top_k=top_k,
+                exclude_task_ids=exclude_task_ids,
+                dense_encoder=dense_encoder,
+                dense_query_mode=dense_query_mode,
+                record_audit=False,
+            )
+        return results

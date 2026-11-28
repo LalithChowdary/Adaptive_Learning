@@ -15,7 +15,7 @@ import torch
 
 from memory.behavioral import evaluate_behavioral_suite
 from memory.data import DATA_ROOT_V22, digest, load_partition
-from memory.evaluation import groups, paired_intervals, probability_report
+from memory.evaluation import calibration_bins, groups, paired_intervals, probability_report
 from memory.recurrent import LearnerGRU
 from memory.tabular import TABULAR, fit_tabular, predict_tabular
 from memory.training import fit_recurrent, make_batches, predict_recurrent, training_device
@@ -33,34 +33,66 @@ RECURRENT_V22 = (
     "monotonic_transformer",
 )
 MODELS_V22 = (*TABULAR, *RECURRENT_V22)
+MULTI_SEED_TABULAR = ("history_boosting",)
+CALIBRATION_GROUPS = ("ordinary", "assessment")
 HORIZON_GROUPS = ("day_1", "day_7", "day_30")
-METRICS = ("log_loss", "brier", "ece_10", "accuracy_05")
+METRICS = ("log_loss", "roc_auc", "brier", "ece_10", "accuracy_05")
 
 
 def summarize(values):
-    return {"mean": float(np.mean(values)), "sd": float(np.std(values, ddof=1)) if len(values) > 1 else None}
+    valid = [float(v) for v in values if v is not None]
+    if not valid:
+        return {"mean": None, "sd": None, "min": None, "max": None}
+    return {
+        "mean": float(np.mean(valid)),
+        "sd": float(np.std(valid, ddof=1)) if len(valid) > 1 else None,
+        "min": float(np.min(valid)),
+        "max": float(np.max(valid)),
+    }
 
 
 def fit_models(args, run, train, validation, device):
     masks = groups(validation.queries)
     models = {}
     for name in TABULAR:
-        folder = args.output / name
-        folder.mkdir()
-        reused_model = args.reuse_from / name / "model.joblib" if args.reuse_from else None
-        reused_fit = args.reuse_from / name / "fit.json" if args.reuse_from else None
-        if reused_model and reused_model.exists() and reused_fit.exists():
-            print(f"Reusing {name} from {args.reuse_from}", flush=True)
-            shutil.copy2(reused_model, folder / "model.joblib")
-            shutil.copy2(reused_fit, folder / "fit.json")
-            model = joblib.load(folder / "model.joblib")
-            fit = json.loads((folder / "fit.json").read_text())
+        if name in MULTI_SEED_TABULAR:
+            models[name], run["models"][name] = [], []
+            for seed in args.seeds:
+                folder = args.output / name / f"seed_{seed}"
+                folder.mkdir(parents=True)
+                reused_model = args.reuse_from / name / f"seed_{seed}" / "model.joblib" if args.reuse_from else None
+                reused_fit = args.reuse_from / name / f"seed_{seed}" / "fit.json" if args.reuse_from else None
+                if reused_model and reused_model.exists() and reused_fit.exists():
+                    print(f"Reusing {name} seed {seed} from {args.reuse_from}", flush=True)
+                    shutil.copy2(reused_model, folder / "model.joblib")
+                    shutil.copy2(reused_fit, folder / "fit.json")
+                    model = joblib.load(folder / "model.joblib")
+                    fit = json.loads((folder / "fit.json").read_text())
+                else:
+                    print(f"Fitting {name} on CPU, seed {seed}", flush=True)
+                    model, fit = fit_tabular(name, train, validation, masks, seed=seed, balanced=True)
+                    joblib.dump(model, folder / "model.joblib")
+                    write_json(folder / "fit.json", fit)
+                models[name].append(model)
+                run["models"][name].append(fit)
+                write_json(args.output / "run.json", run)
         else:
-            print(f"Fitting {name} on CPU", flush=True)
-            model, fit = fit_tabular(name, train, validation, masks, seed=args.seeds[0], balanced=True)
-            joblib.dump(model, folder / "model.joblib")
-            write_json(folder / "fit.json", fit)
-        models[name], run["models"][name] = [model], [fit]
+            folder = args.output / name
+            folder.mkdir()
+            reused_model = args.reuse_from / name / "model.joblib" if args.reuse_from else None
+            reused_fit = args.reuse_from / name / "fit.json" if args.reuse_from else None
+            if reused_model and reused_model.exists() and reused_fit.exists():
+                print(f"Reusing {name} from {args.reuse_from}", flush=True)
+                shutil.copy2(reused_model, folder / "model.joblib")
+                shutil.copy2(reused_fit, folder / "fit.json")
+                model = joblib.load(folder / "model.joblib")
+                fit = json.loads((folder / "fit.json").read_text())
+            else:
+                print(f"Fitting {name} on CPU", flush=True)
+                model, fit = fit_tabular(name, train, validation, masks, seed=args.seeds[0], balanced=True)
+                joblib.dump(model, folder / "model.joblib")
+                write_json(folder / "fit.json", fit)
+            models[name], run["models"][name] = [model], [fit]
 
     training_batches = None
     validation_batches = make_batches(validation, args.batch_size, device)
@@ -123,7 +155,11 @@ def select_model(run):
     candidates = eligible if eligible else list(MODELS_V22)
     selected = min(candidates, key=lambda name: scores[name]["mean"])
     if selected in TABULAR:
-        checkpoint = f"{selected}/model.joblib"
+        if selected in MULTI_SEED_TABULAR:
+            ranked = sorted(run["models"][selected], key=lambda fit: fit[key])
+            checkpoint = f"{selected}/seed_{ranked[len(ranked) // 2]['seed']}/model.joblib"
+        else:
+            checkpoint = f"{selected}/model.joblib"
     else:
         ranked = sorted(run["models"][selected], key=lambda fit: fit[key])
         checkpoint = f"{selected}/seed_{ranked[len(ranked) // 2]['seed']}/model.pt"
@@ -133,14 +169,24 @@ def select_model(run):
     return selected
 
 
-def evaluation_summary(reports):
+def evaluation_summary(reports, *, partition=None, scores=None, masks=None):
     combined = {
         group: {
             "queries": reports[0][group]["queries"],
+            "learners": reports[0][group]["learners"],
             **{metric: summarize([report[group][metric] for report in reports]) for metric in METRICS},
         }
         for group in reports[0]
     }
+    if partition is not None and scores is not None and masks is not None:
+        mean_probabilities = np.mean(np.atleast_2d(scores), axis=0)
+        for group in CALIBRATION_GROUPS:
+            if group in combined and group in masks and masks[group].any():
+                _, bins = calibration_bins(
+                    partition.labels[masks[group]],
+                    mean_probabilities[masks[group]],
+                )
+                combined[group]["calibration"] = bins
     combined["delayed_equal_horizon_log_loss"] = summarize([
         np.mean([report[horizon]["log_loss"] for horizon in HORIZON_GROUPS]) for report in reports
     ])
@@ -165,12 +211,18 @@ def evaluate(args, run, models, partition, batches, cohort, split):
 
     metrics, summary, exported = {}, {}, {}
     for name, scores in predictions.items():
-        names = [f"{name}_seed_{seed}" for seed in args.seeds] if name in RECURRENT_V22 else [name]
+        names = (
+            [f"{name}_seed_{seed}" for seed in args.seeds]
+            if (name in RECURRENT_V22 or name in MULTI_SEED_TABULAR)
+            else [name]
+        )
         metrics[name] = {
             identifier: probability_report(partition, probabilities, masks)
             for identifier, probabilities in zip(names, scores, strict=True)
         }
-        summary[name] = evaluation_summary(list(metrics[name].values()))
+        summary[name] = evaluation_summary(
+            list(metrics[name].values()), partition=partition, scores=scores, masks=masks,
+        )
         exported.update(zip(names, scores, strict=True))
 
     best_tabular = min(TABULAR, key=lambda name: run["validation_selection"][name]["mean"])
@@ -184,7 +236,10 @@ def evaluate(args, run, models, partition, batches, cohort, split):
         ("monotonic_transformer", "monotonic_gru"),
         ("monotonic_gru", best_tabular),
     ]
-    paired = paired_intervals(partition, predictions, contrasts, masks, seed=args.seeds[0])
+    paired = paired_intervals(
+        partition, predictions, contrasts, masks,
+        seed=args.seeds[0], draws=args.bootstrap_draws,
+    )
     signal_fraction = {}
     for group in ("ordinary", "followup", *HORIZON_GROUPS, "delayed_equal_horizon_log_loss"):
         losses = {
@@ -206,6 +261,8 @@ def evaluate(args, run, models, partition, batches, cohort, split):
 
 def show(score):
     mean, sd = score["mean"], score["sd"]
+    if mean is None:
+        return "—"
     return f"{mean:.5f}" if sd is None else f"{mean:.5f} ± {sd:.5f}"
 
 
@@ -294,7 +351,7 @@ def experiment(args, device, run):
             write_json(args.output / "run.json", run)
 
 
-def main():
+def parse_args(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--dataset", type=Path, default=DATA_ROOT_V22)
@@ -303,10 +360,29 @@ def main():
     parser.add_argument("--epochs", type=int)
     parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--reuse-from", type=Path, default=None)
-    args = parser.parse_args()
+    parser.add_argument("--seeds", type=int, nargs="+", default=None)
+    parser.add_argument("--bootstrap-draws", type=int, default=2000)
+    parser.add_argument(
+        "--run-classification",
+        choices=("pre_registered", "retrospective"),
+        default="pre_registered",
+    )
+    args = parser.parse_args(argv)
     if args.epochs is None:
         args.epochs = 1 if args.mode == "smoke" else 35
-    args.seeds = SEEDS[:1] if args.mode == "smoke" else SEEDS
+    if args.seeds is None:
+        args.seeds = list(SEEDS[:1] if args.mode == "smoke" else SEEDS)
+    else:
+        args.seeds = list(args.seeds)
+    if args.epochs < 1 or args.batch_size < 1 or args.bootstrap_draws < 1:
+        parser.error("epochs, batch-size, and bootstrap-draws must be positive")
+    if any(not 0 <= seed < 2**32 for seed in args.seeds):
+        parser.error("seeds must be uint32 values in [0, 2**32)")
+    return args
+
+
+def main():
+    args = parse_args()
     args.dataset, args.output = args.dataset.resolve(), args.output.resolve()
     if args.reuse_from is not None:
         args.reuse_from = args.reuse_from.resolve()
@@ -314,10 +390,12 @@ def main():
     device = training_device(args.device)
     cohorts = ("pilot",) if args.mode == "smoke" else ("main", "power_law", "long_gap")
     run = {
-        "status": "running", "mode": args.mode, "dataset_version": VERSION,
+        "status": "running", "mode": args.mode, "run_classification": args.run_classification,
+        "dataset_version": VERSION,
         "reused_from": str(args.reuse_from) if args.reuse_from is not None else None,
         "recurrent_device": str(device), "mps_cpu_fallback_enabled": os.environ.get("PYTORCH_ENABLE_MPS_FALLBACK") == "1",
         "seeds": args.seeds, "epochs": args.epochs, "batch_size": args.batch_size,
+        "bootstrap_draws": args.bootstrap_draws,
         "selection_tolerance": TIE_TOLERANCE, "dataset": str(args.dataset),
         "dataset_manifests": {cohort: digest(args.dataset / cohort / "manifest.json") for cohort in cohorts},
         "implementation_sha256": {

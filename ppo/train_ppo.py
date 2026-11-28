@@ -20,29 +20,47 @@ from ppo.agent import (  # noqa: E402
     compute_gae,
     ppo_update,
 )
-from ppo.env import ACTIONS, AdaptiveTutorEnv, FrozenMemoryTracker  # noqa: E402
+from ppo.env import (  # noqa: E402
+    ABLATED_OBS_DIM,
+    ACTIONS,
+    AdaptiveTutorEnv,
+    CHECKPOINT,
+    FrozenMemoryTracker,
+    OBS_DIM,
+    SKILLS_ORDER,
+    TOTAL_BUDGET,
+)
 
 SEEDS = (20261120, 20261121, 20261122)
 TRAIN_SEED_START = 10_000
 TRAIN_LEARNER_POOL = 10_000
 VAL_SEED_START = 20_000
 TEST_SEED_START = 30_000
+TEST_SEED_START_PREREG = 40_000
 
 
 def _summarize(values):
     return {
         "mean": float(np.mean(values)),
         "sd": float(np.std(values, ddof=1)) if len(values) > 1 else None,
+        "min": float(np.min(values)),
+        "max": float(np.max(values)),
     }
 
 
-def _bootstrap_diff(cand_scores, ref_scores, *, seed, draws=1000):
+def _bootstrap_diff(cand_scores, ref_scores, *, seed, draws=2000):
     diff = np.asarray(cand_scores, dtype=np.float64) - np.asarray(ref_scores, dtype=np.float64)
     rng = np.random.default_rng(seed)
     idx = rng.integers(len(diff), size=(draws, len(diff)))
     means = diff[idx].mean(axis=1)
     lo, hi = np.quantile(means, [0.025, 0.975])
-    return {"delta": float(diff.mean()), "lower_95": float(lo), "upper_95": float(hi)}
+    return {
+        "delta": float(diff.mean()),
+        "lower_95": float(lo),
+        "upper_95": float(hi),
+        "bootstrap_draws": int(draws),
+        "bootstrap_seed": int(seed),
+    }
 
 
 def evaluate_policy(env, policy, learner_seeds, *, mechanism="exponential", long_gaps=False, rng_seed=0):
@@ -82,8 +100,17 @@ def evaluate_policy(env, policy, learner_seeds, *, mechanism="exponential", long
     metrics["action_shares"] = {
         ACTIONS[i]: float(action_counts[i] / total_actions) for i in range(len(ACTIONS))
     }
+    per_skill_d30 = {
+        skill: float(np.mean([ep["per_skill_day_30"][skill] for ep in episodes]))
+        for skill in SKILLS_ORDER
+    }
+    lowest_skill = min(SKILLS_ORDER, key=lambda s: per_skill_d30[s])
+    metrics["per_skill_day_30"] = per_skill_d30
+    metrics["min_skill_day_30"] = float(per_skill_d30[lowest_skill])
+    metrics["lowest_skill_name"] = lowest_skill
     metrics["per_learner_delayed_expected"] = [float(ep["delayed_expected_mean"]) for ep in episodes]
     metrics["per_learner_delayed_observed"] = [float(ep["delayed_mean"]) for ep in episodes]
+    metrics["per_learner_day_30_observed"] = [float(ep["day_30"]) for ep in episodes]
     return metrics
 
 
@@ -97,13 +124,15 @@ def train_rl_policy(
     val_learners,
     lr=2.5e-3,
 ):
-    assert mode in ("delayed_retention_ppo", "myopic_rl_bandit")
+    assert mode in ("delayed_retention_ppo", "myopic_rl_bandit", "ppo_no_longterm_state")
     torch.manual_seed(seed)
     np.random.seed(seed)
     rng = np.random.default_rng(seed)
 
-    env = AdaptiveTutorEnv(tracker=tracker)
-    model = MaskedActorCritic()
+    ablate = mode == "ppo_no_longterm_state"
+    obs_dim = ABLATED_OBS_DIM if ablate else OBS_DIM
+    env = AdaptiveTutorEnv(tracker=tracker, no_longterm_state=ablate)
+    model = MaskedActorCritic(obs_dim=obs_dim)
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-4)
     myopic = mode == "myopic_rl_bandit"
     gamma = 0.0 if myopic else 0.99
@@ -267,14 +296,29 @@ def _aggregate_seed_reports(reports):
     summary["action_shares"] = {
         act: float(np.mean([r["action_shares"][act] for r in reports])) for act in ACTIONS
     }
+    per_skill_d30 = {
+        skill: _summarize([r["per_skill_day_30"][skill] for r in reports])
+        for skill in SKILLS_ORDER
+    }
+    lowest_skill = min(SKILLS_ORDER, key=lambda s: per_skill_d30[s]["mean"])
+    per_seed_mins = [r["min_skill_day_30"] for r in reports]
+    summary["per_skill_day_30"] = per_skill_d30
+    summary["min_skill_day_30"] = {
+        "skill": lowest_skill,
+        "rate": float(per_skill_d30[lowest_skill]["mean"]),
+        **_summarize(per_seed_mins),
+        "per_seed_lowest_skills": [r["lowest_skill_name"] for r in reports],
+    }
+    summary["lowest_skill_name"] = lowest_skill
     return summary
 
 
 def write_report(output_dir, run):
+    budget = run.get("primary_budget", TOTAL_BUDGET)
     lines = [
         "# PPO Adaptive Teaching Policy Benchmark (`v2.2` Frozen `monotonic_gru`)",
         "",
-        f"Mode: `{run['mode']}` · Seeds: `{run['seeds']}` · Test learners per cohort: `{run['test_learners']}` · Budget: `32.0`.",
+        f"Mode: `{run['mode']}` · Seeds: `{run['seeds']}` · Test learners per cohort: `{run['test_learners']}` · Budget: `{budget}`.",
         "",
     ]
     for cohort in run["evaluation"]:
@@ -322,27 +366,119 @@ def write_report(output_dir, run):
     (output_dir / "REPORT.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def _evaluate_cohort_policies(
+    tracker,
+    policies,
+    test_learners,
+    *,
+    mech,
+    lg,
+    rng_seed,
+    total_budget,
+    bootstrap_draws,
+    include_ablation3=False,
+):
+    eval_env = AdaptiveTutorEnv(tracker=tracker, total_budget=total_budget, no_longterm_state=False)
+    ablate_env = (
+        AdaptiveTutorEnv(tracker=tracker, total_budget=total_budget, no_longterm_state=True)
+        if include_ablation3
+        else None
+    )
+    by_seed = {}
+    summary = {}
+    for pname, pmodels in policies.items():
+        target_env = ablate_env if pname == "ppo_no_longterm_state" else eval_env
+        by_seed[pname] = [
+            evaluate_policy(target_env, m, test_learners, mechanism=mech, long_gaps=lg, rng_seed=rng_seed)
+            for m in pmodels
+        ]
+        summary[pname] = _aggregate_seed_reports(by_seed[pname])
+
+    ppo_exp = np.mean([r["per_learner_delayed_expected"] for r in by_seed["delayed_retention_ppo"]], axis=0)
+    ppo_obs = np.mean([r["per_learner_delayed_observed"] for r in by_seed["delayed_retention_ppo"]], axis=0)
+    ppo_d30 = np.mean([r["per_learner_day_30_observed"] for r in by_seed["delayed_retention_ppo"]], axis=0)
+    paired = {}
+    ref_names = ["random_valid", "fixed_curriculum", "threshold_heuristic", "myopic_rl_bandit"]
+    if include_ablation3 and "ppo_no_longterm_state" in by_seed:
+        ref_names.append("ppo_no_longterm_state")
+    for ref in ref_names:
+        ref_exp = np.mean([r["per_learner_delayed_expected"] for r in by_seed[ref]], axis=0)
+        ref_obs = np.mean([r["per_learner_delayed_observed"] for r in by_seed[ref]], axis=0)
+        ref_d30 = np.mean([r["per_learner_day_30_observed"] for r in by_seed[ref]], axis=0)
+        paired[f"delayed_retention_ppo minus {ref}"] = {
+            "expected_delayed": _bootstrap_diff(ppo_exp, ref_exp, seed=rng_seed, draws=bootstrap_draws),
+            "observed_delayed": _bootstrap_diff(ppo_obs, ref_obs, seed=rng_seed, draws=bootstrap_draws),
+            "observed_day_30": _bootstrap_diff(ppo_d30, ref_d30, seed=rng_seed, draws=bootstrap_draws),
+        }
+
+    th_exp = np.mean([r["per_learner_delayed_expected"] for r in by_seed["threshold_heuristic"]], axis=0)
+    th_obs = np.mean([r["per_learner_delayed_observed"] for r in by_seed["threshold_heuristic"]], axis=0)
+    th_d30 = np.mean([r["per_learner_day_30_observed"] for r in by_seed["threshold_heuristic"]], axis=0)
+    for cand in ("myopic_rl_bandit", "ppo_no_longterm_state", "fixed_curriculum", "random_valid"):
+        if cand not in by_seed:
+            continue
+        c_exp = np.mean([r["per_learner_delayed_expected"] for r in by_seed[cand]], axis=0)
+        c_obs = np.mean([r["per_learner_delayed_observed"] for r in by_seed[cand]], axis=0)
+        c_d30 = np.mean([r["per_learner_day_30_observed"] for r in by_seed[cand]], axis=0)
+        paired[f"{cand} minus threshold_heuristic"] = {
+            "expected_delayed": _bootstrap_diff(c_exp, th_exp, seed=rng_seed, draws=bootstrap_draws),
+            "observed_delayed": _bootstrap_diff(c_obs, th_obs, seed=rng_seed, draws=bootstrap_draws),
+            "observed_day_30": _bootstrap_diff(c_d30, th_d30, seed=rng_seed, draws=bootstrap_draws),
+        }
+
+    clean_by_seed = {
+        pname: [
+            {k: v for k, v in rep.items() if not k.startswith("per_learner_")}
+            for rep in reps
+        ]
+        for pname, reps in by_seed.items()
+    }
+    behavioral_by_seed = [
+        evaluate_ppo_behavioral_suite(rep, summary)
+        for rep in by_seed["delayed_retention_ppo"]
+    ]
+    return {
+        "total_budget": float(total_budget),
+        "summary": summary,
+        "by_seed": clean_by_seed,
+        "paired_intervals": paired,
+        "behavioral_by_seed": behavioral_by_seed,
+        "all_seeds_passed_behavioral": all(b["all_passed"] for b in behavioral_by_seed),
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--mode", choices=("full", "smoke"), default="full")
     parser.add_argument("--updates", type=int)
     parser.add_argument("--episodes-per-update", type=int)
+    parser.add_argument("--seeds", type=int, nargs="+")
+    parser.add_argument("--test-seed-start", type=int)
+    parser.add_argument("--test-learners", type=int)
+    parser.add_argument("--bootstrap-draws", type=int, default=2000)
+    parser.add_argument("--budgets", type=float, nargs="+", default=[TOTAL_BUDGET])
+    parser.add_argument("--run-ablation3", "--include-ablation3", dest="include_ablation3", action="store_true")
+    parser.add_argument("--run-classification", default="retrospective")
     args = parser.parse_args()
 
     if args.mode == "smoke":
-        seeds = SEEDS[:1]
+        seeds = tuple(args.seeds) if args.seeds else SEEDS[:1]
         updates = args.updates or 4
         ep_per_upd = args.episodes_per_update or 4
         val_learners = list(range(VAL_SEED_START, VAL_SEED_START + 8))
-        test_learners = list(range(TEST_SEED_START, TEST_SEED_START + 10))
+        test_start = args.test_seed_start if args.test_seed_start is not None else TEST_SEED_START
+        n_test = args.test_learners or 10
+        test_learners = list(range(test_start, test_start + n_test))
         cohorts = (("main_test", "exponential", False),)
     else:
-        seeds = SEEDS
+        seeds = tuple(args.seeds) if args.seeds else SEEDS
         updates = args.updates or 100
         ep_per_upd = args.episodes_per_update or 24
         val_learners = list(range(VAL_SEED_START, VAL_SEED_START + 50))
-        test_learners = list(range(TEST_SEED_START, TEST_SEED_START + 200))
+        test_start = args.test_seed_start if args.test_seed_start is not None else TEST_SEED_START
+        n_test = args.test_learners or 200
+        test_learners = list(range(test_start, test_start + n_test))
         cohorts = (
             ("main_test", "exponential", False),
             ("power_law_test", "power_law", False),
@@ -353,7 +489,6 @@ def main():
     args.output.mkdir(parents=True, exist_ok=True)
 
     tracker = FrozenMemoryTracker()
-    eval_env = AdaptiveTutorEnv(tracker=tracker)
     started = time.monotonic()
 
     policies = {
@@ -363,23 +498,47 @@ def main():
         "myopic_rl_bandit": [],
         "delayed_retention_ppo": [],
     }
+    rl_modes = ["myopic_rl_bandit", "delayed_retention_ppo"]
+    if args.include_ablation3:
+        policies["ppo_no_longterm_state"] = []
+        rl_modes.append("ppo_no_longterm_state")
     fit_logs = {}
 
-    for rl_name in ("myopic_rl_bandit", "delayed_retention_ppo"):
+    prior_training = {}
+    run_json_path = args.output / "run.json"
+    if run_json_path.exists():
+        try:
+            prior_run = json.loads(run_json_path.read_text(encoding="utf-8"))
+            prior_training = prior_run.get("training", {})
+        except Exception:
+            prior_training = {}
+
+    for rl_name in rl_modes:
         fit_logs[rl_name] = []
+        prior_by_seed = {
+            int(entry["seed"]): entry
+            for entry in prior_training.get(rl_name, [])
+            if isinstance(entry, dict) and "seed" in entry
+        }
         folder = args.output / rl_name
         folder.mkdir(exist_ok=True)
+        obs_dim = ABLATED_OBS_DIM if rl_name == "ppo_no_longterm_state" else OBS_DIM
         for seed in seeds:
             ckpt_path = folder / f"seed_{seed}.pt"
             if ckpt_path.exists():
                 print(f"Loading existing {rl_name} seed={seed} from {ckpt_path}", flush=True)
                 payload = torch.load(ckpt_path, map_location="cpu", weights_only=True)
-                model = MaskedActorCritic()
+                model = MaskedActorCritic(obs_dim=int(payload.get("obs_dim", obs_dim)))
                 model.load_state_dict(payload["weights"])
                 model.eval()
-                log = {"mode": rl_name, "seed": seed, "reused": True}
+                prev = prior_by_seed.get(int(seed))
+                if prev and not prev.get("reused"):
+                    log = dict(prev)
+                    log["obs_dim"] = model.obs_dim
+                else:
+                    log = {"mode": rl_name, "seed": seed, "obs_dim": model.obs_dim, "reused": True}
             else:
-                print(f"Training {rl_name} seed={seed}", flush=True)
+                print(f"Training {rl_name} seed={seed} (obs_dim={obs_dim})", flush=True)
                 model, log = train_rl_policy(
                     tracker,
                     mode=rl_name,
@@ -388,69 +547,105 @@ def main():
                     episodes_per_update=ep_per_upd,
                     val_learners=val_learners,
                 )
+                log["obs_dim"] = obs_dim
                 torch.save(
-                    {"mode": rl_name, "seed": seed, "weights": model.state_dict()},
+                    {"mode": rl_name, "seed": seed, "obs_dim": obs_dim, "weights": model.state_dict()},
                     ckpt_path,
                 )
             fit_logs[rl_name].append(log)
             policies[rl_name].append(model)
 
+    primary_budget = float(TOTAL_BUDGET if TOTAL_BUDGET in args.budgets else args.budgets[0])
     evaluation = {}
     for cohort_name, mech, lg in cohorts:
-        print(f"Evaluating all 5 policies on {cohort_name} ({len(test_learners)} learners)", flush=True)
-        by_seed = {}
-        summary = {}
-        for pname, pmodels in policies.items():
-            by_seed[pname] = [
-                evaluate_policy(eval_env, m, test_learners, mechanism=mech, long_gaps=lg, rng_seed=seeds[0])
-                for m in pmodels
-            ]
-            summary[pname] = _aggregate_seed_reports(by_seed[pname])
+        print(f"Evaluating all policies on {cohort_name} ({len(test_learners)} learners, budget={primary_budget})", flush=True)
+        evaluation[cohort_name] = _evaluate_cohort_policies(
+            tracker,
+            policies,
+            test_learners,
+            mech=mech,
+            lg=lg,
+            rng_seed=seeds[0],
+            total_budget=primary_budget,
+            bootstrap_draws=args.bootstrap_draws,
+            include_ablation3=args.include_ablation3,
+        )
 
-        # Paired learner-level bootstrap CIs comparing delayed_retention_ppo against every baseline
-        ppo_exp = np.mean([r["per_learner_delayed_expected"] for r in by_seed["delayed_retention_ppo"]], axis=0)
-        ppo_obs = np.mean([r["per_learner_delayed_observed"] for r in by_seed["delayed_retention_ppo"]], axis=0)
-        paired = {}
-        for ref in ("random_valid", "fixed_curriculum", "threshold_heuristic", "myopic_rl_bandit"):
-            ref_exp = np.mean([r["per_learner_delayed_expected"] for r in by_seed[ref]], axis=0)
-            ref_obs = np.mean([r["per_learner_delayed_observed"] for r in by_seed[ref]], axis=0)
-            paired[f"delayed_retention_ppo minus {ref}"] = {
-                "expected_delayed": _bootstrap_diff(ppo_exp, ref_exp, seed=seeds[0]),
-                "observed_delayed": _bootstrap_diff(ppo_obs, ref_obs, seed=seeds[0]),
-            }
-
-        # Strip per-learner vectors from saved run.json summary to keep JSON clean
-        clean_by_seed = {
-            pname: [
-                {k: v for k, v in rep.items() if not k.startswith("per_learner_")}
-                for rep in reps
-            ]
-            for pname, reps in by_seed.items()
-        }
-        behavioral_by_seed = [
-            evaluate_ppo_behavioral_suite(rep, summary)
-            for rep in by_seed["delayed_retention_ppo"]
-        ]
-        evaluation[cohort_name] = {
-            "summary": summary,
-            "by_seed": clean_by_seed,
-            "paired_intervals": paired,
-            "behavioral_by_seed": behavioral_by_seed,
-            "all_seeds_passed_behavioral": all(b["all_passed"] for b in behavioral_by_seed),
-        }
+    budget_curves = {}
+    extra_budgets = [float(b) for b in args.budgets]
+    if len(extra_budgets) > 1 or extra_budgets[0] != primary_budget:
+        curve_policies = dict(policies)
+        for b in extra_budgets:
+            b_key = f"budget_{b:g}"
+            budget_curves[b_key] = {}
+            for cohort_name, mech, lg in cohorts:
+                if b == primary_budget and cohort_name in evaluation:
+                    src = evaluation[cohort_name]
+                    budget_curves[b_key][cohort_name] = {
+                        "total_budget": float(b),
+                        "summary": src["summary"],
+                        "paired_intervals": src["paired_intervals"],
+                    }
+                else:
+                    print(f"Evaluating budget curve B={b:g} on {cohort_name} ({len(test_learners)} learners)", flush=True)
+                    res_b = _evaluate_cohort_policies(
+                        tracker,
+                        curve_policies,
+                        test_learners,
+                        mech=mech,
+                        lg=lg,
+                        rng_seed=seeds[0],
+                        total_budget=b,
+                        bootstrap_draws=args.bootstrap_draws,
+                        include_ablation3=args.include_ablation3,
+                    )
+                    budget_curves[b_key][cohort_name] = {
+                        "total_budget": float(b),
+                        "summary": res_b["summary"],
+                        "paired_intervals": res_b["paired_intervals"],
+                    }
+                b_label = f"{b:.1f}"
+                b_data = budget_curves[b_key][cohort_name]
+                for pname, psum in evaluation[cohort_name]["summary"].items():
+                    if pname not in b_data["summary"]:
+                        continue
+                    curve_entry = psum.setdefault("budget_curve", {})
+                    b_psum = b_data["summary"][pname]
+                    diff_key = f"{pname} minus threshold_heuristic"
+                    curve_entry[b_label] = {
+                        "delayed_mean": b_psum["delayed_mean"],
+                        "day_30": b_psum["day_30"],
+                        "latent_mean_floor": b_psum["latent_mean_floor"],
+                        "paired_diff_vs_threshold_heuristic": (
+                            b_data["paired_intervals"][diff_key]
+                            if diff_key in b_data["paired_intervals"]
+                            else None
+                        ),
+                    }
 
     run = {
         "status": "completed",
+        "run_classification": args.run_classification,
+        "frozen_memory_checkpoint": str(CHECKPOINT),
         "mode": args.mode,
         "seeds": list(seeds),
         "updates": updates,
         "episodes_per_update": ep_per_upd,
+        "val_learners": len(val_learners),
+        "test_seed_start": test_start,
         "test_learners": len(test_learners),
+        "test_learner_seed_range": [test_start, test_start + len(test_learners) - 1],
+        "bootstrap_draws": args.bootstrap_draws,
+        "budget": primary_budget,
+        "primary_budget": primary_budget,
+        "budgets": extra_budgets,
+        "include_ablation3": bool(args.include_ablation3),
         "elapsed_seconds": round(time.monotonic() - started, 2),
         "training": fit_logs,
         "evaluation": evaluation,
+        "budget_curves": budget_curves,
     }
-    (args.output / "run.json").write_text(json.dumps(run, indent=2) + "\n", encoding="utf-8")
+    (args.output / "run.json").write_text(json.dumps(run, indent=2, allow_nan=False) + "\n", encoding="utf-8")
     write_report(args.output, run)
     print(f"Completed PPO benchmark in {run['elapsed_seconds']}s -> {args.output / 'REPORT.md'}", flush=True)
 

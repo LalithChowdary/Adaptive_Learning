@@ -1,5 +1,6 @@
 """Probability metrics, subgroup reporting, and paired learner bootstrap."""
 import numpy as np
+from sklearn.metrics import roc_auc_score
 
 
 HORIZONS = (1, 7, 30)
@@ -49,6 +50,29 @@ def validation_losses(labels, probabilities, masks, *, balanced=False):
     }
 
 
+def calibration_bins(labels, probabilities):
+    scores = np.asarray(probabilities, dtype=np.float64)
+    outcome = np.asarray(labels, dtype=np.float64)
+    bins = np.minimum((scores * 10).astype(int), 9)
+    calibration = []
+    ece = 0.0
+    for index in range(10):
+        in_bin = bins == index
+        count = int(in_bin.sum())
+        if count:
+            confidence = float(scores[in_bin].mean())
+            observed = float(outcome[in_bin].mean())
+            ece += count / len(scores) * abs(confidence - observed)
+        else:
+            confidence = None
+            observed = None
+        calibration.append({
+            "lower": index / 10, "upper": (index + 1) / 10,
+            "queries": count, "mean_prediction": confidence, "observed_rate": observed,
+        })
+    return ece, calibration
+
+
 def probability_report(partition, probabilities, masks):
     labels = partition.labels
     losses = loss_per_query(labels, probabilities)
@@ -59,24 +83,12 @@ def probability_report(partition, probabilities, masks):
         if not mask.any():
             continue
         scores, outcome = probabilities[mask], labels[mask]
-        bins = np.minimum((scores * 10).astype(int), 9)
-        calibration = []
-        ece = 0.0
-        for index in range(10):
-            in_bin = bins == index
-            count = int(in_bin.sum())
-            if not count:
-                continue
-            confidence = float(scores[in_bin].mean())
-            observed = float(outcome[in_bin].mean())
-            ece += count / len(scores) * abs(confidence - observed)
-            calibration.append({
-                "lower": index / 10, "upper": (index + 1) / 10,
-                "queries": count, "mean_prediction": confidence, "observed_rate": observed,
-            })
+        ece, calibration = calibration_bins(outcome, scores)
+        roc_auc = float(roc_auc_score(outcome, scores)) if len(np.unique(outcome)) > 1 else None
         report[name] = {
             "queries": int(mask.sum()), "learners": int(len(np.unique(learners[mask]))),
             "log_loss": float(losses[mask].mean()),
+            "roc_auc": roc_auc,
             "brier": float(np.mean((scores - outcome) ** 2)),
             "accuracy_05": float(np.mean((scores >= 0.5) == outcome)),
             "ece_10": ece, "calibration": calibration,
@@ -84,7 +96,7 @@ def probability_report(partition, probabilities, masks):
     return report
 
 
-def paired_intervals(partition, predictions, contrasts, masks, *, seed, draws=1000):
+def paired_intervals(partition, predictions, contrasts, masks, *, seed, draws=2000):
     """Bootstrap whole learners with both models evaluated on the same queries."""
     learners = np.asarray([query.learner for query in partition.queries])
     losses = {
@@ -110,5 +122,6 @@ def paired_intervals(partition, predictions, contrasts, masks, *, seed, draws=10
             result[group][f"{candidate} minus {reference}"] = {
                 "delta_log_loss": float(diff.mean()),
                 "lower_95": float(lower), "upper_95": float(upper),
+                "bootstrap_draws": int(draws), "bootstrap_seed": int(seed),
             }
     return result
