@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
 import math
 import os
+from pathlib import Path
 import secrets
 import threading
 import time
@@ -24,24 +26,69 @@ class InvalidActionError(ValueError):
     """Raised when a requested PPO action is masked or out of bounds."""
 
 
+SELF_EXPLANATION_PROMPT_BANK: dict[str, tuple[str, ...]] = {
+    "range_boundaries": (
+        "Explain in your own words how start and stop boundaries work in Python range(start, stop).",
+        "Explain what happens when step is negative in range(start, stop, step) and how you find the last element.",
+        "Explain why range(n) produces n items and why stop is never included.",
+    ),
+    "loop_tracing": (
+        "Explain in your own words how a loop iterates over a sequence.",
+        "Explain how to track a variable that is updated multiple times inside one loop iteration.",
+        "Explain what value a loop variable holds immediately after a for-loop finishes.",
+    ),
+    "accumulator_initialization": (
+        "Explain in your own words how to initialize and update an accumulator variable.",
+        "Explain why initializing a product accumulator to 0 breaks multiplication loops.",
+        "Explain what goes wrong if an accumulator is initialized inside the loop body instead of before it.",
+    ),
+    "conditional_evaluation": (
+        "Explain in your own words how an if/elif/else condition is evaluated.",
+        "Explain the difference between an if/elif/else chain and two separate if statements.",
+        "Explain why strict (<, >) vs inclusive (<=, >=) operators matter at exact boundary values.",
+    ),
+    "list_indexing": (
+        "Explain in your own words how zero-based list indexing works in Python.",
+        "Explain how negative indices (-1, -2) map to elements in a list of length n.",
+        "Explain why accessing lst[len(lst)] raises an IndexError.",
+    ),
+    "function_returns": (
+        "Explain in your own words how a return statement exits a function and produces a value.",
+        "Explain the difference between print(x) and return x inside a Python function.",
+        "Explain how arguments bind to parameters and how operator precedence applies in return expressions.",
+    ),
+}
+
+
 class AdaptiveLearningApp:
     """Thread-safe domain application for the adaptive Python learning website."""
 
-    def __init__(self, settings: Settings) -> None:
+    def __init__(
+        self,
+        settings: Settings,
+        *,
+        store: AdaptiveStore | None = None,
+        memory: MemoryAdapter | None = None,
+        ppo: PPOEngine | None = None,
+        llm_client: LLMClient | None = None,
+    ) -> None:
         self.settings = settings
-        self.store = AdaptiveStore(settings.adaptive_web_db)
-        ckpt = (
-            getattr(settings, "memory_model_path", None)
-            or getattr(settings, "model_path", None)
-            or getattr(settings, "checkpoint_path", None)
-            or os.environ.get("MEMORY_MODEL_PATH")
-        )
-        if ckpt is not None:
-            self.memory = MemoryAdapter(device=settings.device, checkpoint_path=ckpt)
+        self.store = store if store is not None else AdaptiveStore(settings.adaptive_web_db)
+        if memory is not None:
+            self.memory = memory
         else:
-            self.memory = MemoryAdapter(device=settings.device)
-        self.ppo = PPOEngine(self.memory)
-        self.llm_client = LLMClient(settings)
+            ckpt = (
+                getattr(settings, "memory_model_path", None)
+                or getattr(settings, "model_path", None)
+                or getattr(settings, "checkpoint_path", None)
+                or os.environ.get("MEMORY_MODEL_PATH")
+            )
+            if ckpt is not None:
+                self.memory = MemoryAdapter(device=settings.device, checkpoint_path=ckpt)
+            else:
+                self.memory = MemoryAdapter(device=settings.device)
+        self.ppo = ppo if ppo is not None else PPOEngine(self.memory)
+        self.llm_client = llm_client if llm_client is not None else LLMClient(settings)
         self.rag = HybridRAGEngine(self.store)
         self.pedagogy = PedagogyRealizer(self.llm_client, rag=self.rag)
         self.csrf_token = secrets.token_hex(16)
@@ -50,6 +97,24 @@ class AdaptiveLearningApp:
     def close(self) -> None:
         """Close underlying database connections."""
         self.store.close()
+
+    def clone_snapshot(
+        self,
+        dest_db_path: str | Path = ":memory:",
+        *,
+        reuse_models: bool = True,
+        llm_client: LLMClient | None = None,
+    ) -> "AdaptiveLearningApp":
+        """Create an isolated AdaptiveLearningApp on a sqlite3.Connection.backup() snapshot."""
+        cloned_store = self.store.backup_to(dest_db_path)
+        snap_settings = replace(self.settings, adaptive_web_db=Path(str(dest_db_path)))
+        return AdaptiveLearningApp(
+            snap_settings,
+            store=cloned_store,
+            memory=self.memory if reuse_models else None,
+            ppo=self.ppo if reuse_models else None,
+            llm_client=llm_client if llm_client is not None else self.llm_client,
+        )
 
     # ---- Validation Helpers ----
 
@@ -420,41 +485,11 @@ class AdaptiveLearningApp:
         # Self-explanation: 5 (request_self_explanation)
         if chosen_id == 5:
             iid = f"se-{uuid.uuid4().hex[:12]}"
-            se_prompt_bank = {
-                "range_boundaries": [
-                    "Explain in your own words how start and stop boundaries work in Python range(start, stop).",
-                    "Explain what happens when step is negative in range(start, stop, step) and how you find the last element.",
-                    "Explain why range(n) produces n items and why stop is never included.",
-                ],
-                "loop_tracing": [
-                    "Explain in your own words how a loop iterates over a sequence.",
-                    "Explain how to track a variable that is updated multiple times inside one loop iteration.",
-                    "Explain what value a loop variable holds immediately after a for-loop finishes.",
-                ],
-                "accumulator_initialization": [
-                    "Explain in your own words how to initialize and update an accumulator variable.",
-                    "Explain why initializing a product accumulator to 0 breaks multiplication loops.",
-                    "Explain what goes wrong if an accumulator is initialized inside the loop body instead of before it.",
-                ],
-                "conditional_evaluation": [
-                    "Explain in your own words how an if/elif/else condition is evaluated.",
-                    "Explain the difference between an if/elif/else chain and two separate if statements.",
-                    "Explain why strict (<, >) vs inclusive (<=, >=) operators matter at exact boundary values.",
-                ],
-                "list_indexing": [
-                    "Explain in your own words how zero-based list indexing works in Python.",
-                    "Explain how negative indices (-1, -2) map to elements in a list of length n.",
-                    "Explain why accessing lst[len(lst)] raises an IndexError.",
-                ],
-                "function_returns": [
-                    "Explain in your own words how a return statement exits a function and produces a value.",
-                    "Explain the difference between print(x) and return x inside a Python function.",
-                    "Explain how arguments bind to parameters and how operator precedence applies in return expressions.",
-                ],
-            }
-            variants = se_prompt_bank.get(
-                target_skill,
-                [catalogue_bridge.DEFAULT_LESSONS[target_skill]["self_explanation_prompt"]],
+            variants = list(
+                SELF_EXPLANATION_PROMPT_BANK.get(
+                    target_skill,
+                    (catalogue_bridge.DEFAULT_LESSONS[target_skill]["self_explanation_prompt"],),
+                )
             )
             se_count = sum(
                 1
@@ -1160,6 +1195,7 @@ class AdaptiveLearningApp:
         *,
         history: list[dict[str, str]] | None = None,
         request_id: str | None = None,
+        eduguard_enabled: bool = True,
     ) -> dict[str, Any]:
         """Answer a learner's question adaptively by mastery level, grounded with RAG + EduGuard."""
         self._require_skill(skill)
@@ -1209,6 +1245,7 @@ class AdaptiveLearningApp:
             learner=learner,
             memory_summary=memory_summary,
             active_question=active_question,
+            eduguard_enabled=eduguard_enabled,
         )
         mastery_tier = ans.get("mastery_tier", "unassessed")
         guardrail_status = ans.get("guardrail_status", "grounded_open")

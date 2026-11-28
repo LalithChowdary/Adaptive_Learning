@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import copy
 import json
+import math
 import random
 import re
 from typing import TYPE_CHECKING, Any, Iterable
@@ -364,6 +365,15 @@ class PedagogyRealizer:
     ) -> None:
         self.llm = llm_client or LLMClient()
         self.rag = rag
+
+    def _is_true_live_call(self) -> bool:
+        if not self.llm.is_live():
+            return False
+        if hasattr(self.llm, "last_call_info"):
+            info = self.llm.last_call_info() or {}
+            if info.get("provider") in ("mock", "deterministic_double"):
+                return False
+        return True
 
     # ---- 1. Curate Learning Path ----
 
@@ -957,6 +967,7 @@ class PedagogyRealizer:
                     cand_task["rag_citations"] = citations
                     cand_task["difficulty_guardrail"] = guardrail["rules"]
                     cand_task["repair_attempted"] = repair_attempted
+                    cand_task["source"] = "llm" if self._is_true_live_call() else "deterministic_double"
                     if rag_audit is not None:
                         cand_task["rag_audit"] = rag_audit
                     return cand_task
@@ -975,6 +986,7 @@ class PedagogyRealizer:
             cloned = copy.deepcopy(v22_item)
             cloned["task_id"] = f"llm.clone.{cloned['task_id']}.{uuid.uuid4().hex[:6]}"
             cloned["difficulty_source"] = "llm_pedagogy_fallback"
+            cloned["source"] = "v22_clone"
             if citations:
                 cloned["rag_citations"] = citations
             cloned["difficulty_guardrail"] = guardrail["rules"]
@@ -1010,6 +1022,7 @@ class PedagogyRealizer:
             "rag_citations": citations,
             "difficulty_guardrail": guardrail["rules"],
             "repair_attempted": repair_attempted,
+            "source": "synth",
             "version": "synth-v1",
         }
 
@@ -1132,22 +1145,33 @@ class PedagogyRealizer:
                 system_prompt, json.dumps(context_payload), schema_name="self_explanation_eval"
             )
             if isinstance(resp, dict) and "feedback" in resp:
+                raw_conf = resp.get("grader_confidence")
+                try:
+                    grader_conf = det_grade["grader_confidence"] if raw_conf is None else float(raw_conf)
+                except (TypeError, ValueError):
+                    grader_conf = det_grade["grader_confidence"]
+                if not math.isfinite(grader_conf):
+                    grader_conf = det_grade["grader_confidence"]
+                hits = resp.get("key_concepts_hit")
+                missing = resp.get("missing_concepts")
                 return {
                     "score": det_grade["score"],
                     "full_success": det_grade["full_success"],
-                    "grading_status": "resolved",
-                    "grader_confidence": float(resp.get("grader_confidence", det_grade["grader_confidence"])),
-                    "key_concepts_hit": resp.get("key_concepts_hit", det_grade["key_concepts_hit"]),
-                    "missing_concepts": resp.get("missing_concepts", det_grade["missing_concepts"]),
+                    "grading_status": det_grade["grading_status"],
+                    "det_confidence": det_grade["grader_confidence"],
+                    "grader_confidence": grader_conf,
+                    "key_concepts_hit": hits if isinstance(hits, list) else det_grade["key_concepts_hit"],
+                    "missing_concepts": missing if isinstance(missing, list) else det_grade["missing_concepts"],
                     "feedback": str(resp["feedback"]),
-                    "next_tip": str(resp.get("next_tip", "Continue to the next practice task.")),
-                    "source": "llm" if self.llm.is_live() else "deterministic_double",
+                    "next_tip": str(resp.get("next_tip") or "Continue to the next practice task."),
+                    "source": "llm" if self._is_true_live_call() else "deterministic_double",
                 }
         except LLMClientError:
             pass
 
         return {
             **det_grade,
+            "det_confidence": det_grade["grader_confidence"],
             "next_tip": "Keep connecting the rule to concrete variable traces.",
             "source": "deterministic_double",
         }
@@ -1366,6 +1390,7 @@ class PedagogyRealizer:
         learner: str | None = None,
         memory_summary: dict[str, Any] | None = None,
         active_question: dict[str, Any] | None = None,
+        eduguard_enabled: bool = True,
     ) -> dict[str, Any]:
         """Answer a learner's question adaptively by mastery level, grounded by Hybrid RAG + EduGuard."""
         if skill not in PPO_SKILLS_ORDER:
@@ -1431,7 +1456,7 @@ class PedagogyRealizer:
                 "EDUGUARD ANTI-LEAKAGE POLICY (ACTIVE): The student currently has an unpassed practice/assessment question open. "
                 "NEVER output the active question's exact answer, output line, option choice, missing blank, or solution code. "
                 "Guide via Socratic questions and a DIFFERENT small toy example."
-                if has_open_unpassed
+                if (has_open_unpassed and eduguard_enabled)
                 else "No unpassed exercise is blocking explanation; answer clearly using concrete examples."
             )
             system_prompt = (
@@ -1472,19 +1497,22 @@ class PedagogyRealizer:
                 reply = str(raw.get("reply") or raw.get("answer") or "").strip()
                 code_ex = str(raw.get("code_example") or raw.get("code") or "").strip()
                 if reply:
-                    guarded_reply, guarded_code, guard_status = self._enforce_eduguard(
-                        question=cleaned_q,
-                        reply=reply,
-                        code_example=code_ex,
-                        active_question=active_question,
-                        mastery_info=mastery_info,
-                        rag_chunks=rag_chunks,
-                        skill_title=skill_title,
-                    )
+                    if eduguard_enabled:
+                        guarded_reply, guarded_code, guard_status = self._enforce_eduguard(
+                            question=cleaned_q,
+                            reply=reply,
+                            code_example=code_ex,
+                            active_question=active_question,
+                            mastery_info=mastery_info,
+                            rag_chunks=rag_chunks,
+                            skill_title=skill_title,
+                        )
+                    else:
+                        guarded_reply, guarded_code, guard_status = reply, code_ex, "disabled"
                     return {
                         "reply": guarded_reply,
                         "code_example": guarded_code,
-                        "source": "llm",
+                        "source": "llm" if self._is_true_live_call() else "deterministic_double",
                         "citations": citations,
                         "mastery_tier": mastery_tier,
                         "guardrail_status": guard_status,
@@ -1535,7 +1563,7 @@ class PedagogyRealizer:
                 f"{steps_md or mat.get('mental_model', '')}"
             )
             reply = f"{header}\n\n{intro}\n\n{body}{rag_note}{episodic_note}".strip()
-            code_ex = "" if has_open_unpassed else str(we.get("code") or "")
+            code_ex = "" if (has_open_unpassed and eduguard_enabled) else str(we.get("code") or "")
         elif any(k in ql for k in ("mistake", "pitfall", "wrong", "error", "bug", "watch", "careful")):
             pit_md = "\n".join(f"- {p}" for p in pitfalls[:3])
             reply = f"{header}\n\n**Common Pitfalls to Avoid:**\n{pit_md}{rag_note}{episodic_note}".strip()
@@ -1549,17 +1577,20 @@ class PedagogyRealizer:
             if mental:
                 lines.extend(["", f"**Mental Model:** {mental}"])
             reply = ("".join([]) + "\n".join(lines) + f"{rag_note}{episodic_note}").strip()
-            code_ex = "" if (has_open_unpassed or mastery_tier == "mastered") else str(we.get("code") or "")
+            code_ex = "" if ((has_open_unpassed and eduguard_enabled) or mastery_tier == "mastered") else str(we.get("code") or "")
 
-        guarded_reply, guarded_code, guard_status = self._enforce_eduguard(
-            question=cleaned_q,
-            reply=reply,
-            code_example=code_ex,
-            active_question=active_question,
-            mastery_info=mastery_info,
-            rag_chunks=rag_chunks,
-            skill_title=skill_title,
-        )
+        if eduguard_enabled:
+            guarded_reply, guarded_code, guard_status = self._enforce_eduguard(
+                question=cleaned_q,
+                reply=reply,
+                code_example=code_ex,
+                active_question=active_question,
+                mastery_info=mastery_info,
+                rag_chunks=rag_chunks,
+                skill_title=skill_title,
+            )
+        else:
+            guarded_reply, guarded_code, guard_status = reply, code_ex, "disabled"
         return {
             "reply": guarded_reply,
             "code_example": guarded_code,

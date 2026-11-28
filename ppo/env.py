@@ -78,6 +78,8 @@ ACTION_COSTS = {
 TOTAL_BUDGET = 32.0
 SESSION_BUDGET = 8.0
 OBS_DIM = 36
+ABLATED_OBS_INDICES = (0, 1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 30, 31, 32, 33, 34, 35)
+ABLATED_OBS_DIM = len(ABLATED_OBS_INDICES)
 
 
 def _task_model_features(task):
@@ -214,10 +216,23 @@ def _leakage_to_hint_kind(leakage):
 class AdaptiveTutorEnv:
     """Closed-loop 8-action pedagogical environment using Gated Option B and frozen monotonic_gru."""
 
-    def __init__(self, tracker=None, mechanism="exponential", long_gaps=False):
+    def __init__(
+        self,
+        tracker=None,
+        mechanism="exponential",
+        long_gaps=False,
+        *,
+        total_budget: float = TOTAL_BUDGET,
+        no_longterm_state: bool = False,
+        ablate_longterm_state: bool = False,
+    ):
         self.tracker = tracker or FrozenMemoryTracker()
         self.mechanism = mechanism
         self.long_gaps = long_gaps
+        self.total_budget = float(total_budget)
+        self.no_longterm_state = bool(no_longterm_state or ablate_longterm_state)
+        self.ablate_longterm_state = self.no_longterm_state
+        self.obs_dim = ABLATED_OBS_DIM if self.no_longterm_state else OBS_DIM
         self.pools = _build_pools(self.tracker.catalog_tasks)
         self.student_seed = 0
         self.rng = random.Random(0)
@@ -344,6 +359,17 @@ class AdaptiveTutorEnv:
             self._refresh_metrics(skill)
 
     def _weak_prereqs_or_decayed(self, skill):
+        if self.no_longterm_state:
+            prereqs = [
+                p for p in PREREQUISITES[skill]
+                if self.metrics_cache[p]["p_med"] < 0.60
+            ]
+            if prereqs:
+                return prereqs
+            return [
+                s for s in self.visited_topics
+                if s != skill and self.metrics_cache[s]["p_med"] < 0.55
+            ]
         prereqs = [
             p for p in PREREQUISITES[skill]
             if self.metrics_cache[p]["p_30d"] < 0.56 or self.metrics_cache[p]["floor_b"] < 0.40
@@ -420,12 +446,14 @@ class AdaptiveTutorEnv:
             *diff_one_hot,
             pre_med,
             pre_floor,
-            max(0.0, (TOTAL_BUDGET - self.budget_used) / TOTAL_BUDGET),
+            max(0.0, (self.total_budget - self.budget_used) / self.total_budget),
             min(p30_all),
             float(np.mean(p30_all)),
             *p30_all,
             *topic_one_hot,
         ], dtype=np.float32)
+        if self.no_longterm_state:
+            return vec[list(ABLATED_OBS_INDICES)]
         return vec
 
     def _pick_task(self, skill, difficulty, pool="practice"):
@@ -769,7 +797,8 @@ class AdaptiveTutorEnv:
                 cleared_unverified = True
         elif action == 6:
             candidates = self._weak_prereqs_or_decayed(skill)
-            target = min(candidates, key=lambda s: self.metrics_cache[s]["p_30d"])
+            route_key = "p_med" if self.no_longterm_state else "p_30d"
+            target = min(candidates, key=lambda s: self.metrics_cache[s][route_key])
             self.topic_idx = SKILLS_ORDER.index(target)
             self.visited_topics.add(target)
             self.difficulty_idx = 0 if self.metrics_cache[target]["p_med"] < 0.48 else 1
@@ -786,7 +815,8 @@ class AdaptiveTutorEnv:
                 next_skill = unvisited[0]
             else:
                 others = [s for s in SKILLS_ORDER if s != skill]
-                next_skill = min(others, key=lambda s: self.metrics_cache[s]["p_30d"])
+                route_key = "p_med" if self.no_longterm_state else "p_30d"
+                next_skill = min(others, key=lambda s: self.metrics_cache[s][route_key])
             self.topic_idx = SKILLS_ORDER.index(next_skill)
             self.visited_topics.add(next_skill)
             self.difficulty_idx = 0
@@ -794,7 +824,7 @@ class AdaptiveTutorEnv:
             self.awaiting_question = False
 
         self.budget_used += ACTION_COSTS[action]
-        if self.budget_used >= self.next_session_threshold and self.budget_used < TOTAL_BUDGET:
+        if self.budget_used >= self.next_session_threshold and self.budget_used < self.total_budget:
             gap_days = 4.0 if self.long_gaps else 1.5
             self.clock += gap_days * DAY
             self.session += 1
@@ -812,7 +842,7 @@ class AdaptiveTutorEnv:
             - (0.04 if premature_advance else 0.0)
         )
 
-        self.done = self.budget_used >= TOTAL_BUDGET - 1e-6
+        self.done = self.budget_used >= self.total_budget - 1e-6
         info = {
             "action_name": ACTIONS[action],
             "immediate_score": immediate_score,
@@ -831,6 +861,7 @@ class AdaptiveTutorEnv:
         eval_rng = random.Random(self.student_seed * 100003 + seed_offset)
         horizon_scores = {}
         horizon_expected = {}
+        skill_day30_scores = {skill: [] for skill in SKILLS_ORDER}
         latent_floors = [min(self._latent_strength_at(s, self.clock), self.latent[s]["floor"]) for s in SKILLS_ORDER]
         latent_strengths = [self._latent_strength_at(s, self.clock) for s in SKILLS_ORDER]
 
@@ -851,7 +882,10 @@ class AdaptiveTutorEnv:
                     demand = (0.25, 0.45, 0.65)[diff_idx]
                     p_pass = _SIM.sigmoid(5.0 * (k_eff - demand) + 0.65)
                     expected_probs.append(p_pass)
-                    scores.append(1.0 if eval_rng.random() < p_pass else 0.0)
+                    obs_val = 1.0 if eval_rng.random() < p_pass else 0.0
+                    scores.append(obs_val)
+                    if delay == 30:
+                        skill_day30_scores[skill].append(obs_val)
             horizon_scores[f"day_{delay}"] = float(np.mean(scores))
             horizon_expected[f"day_{delay}_expected"] = float(np.mean(expected_probs))
 
@@ -860,6 +894,7 @@ class AdaptiveTutorEnv:
             **horizon_expected,
             "delayed_mean": float(np.mean([horizon_scores[f"day_{d}"] for d in (1, 7, 30)])),
             "delayed_expected_mean": float(np.mean([horizon_expected[f"day_{d}_expected"] for d in (1, 7, 30)])),
+            "per_skill_day_30": {skill: float(np.mean(skill_day30_scores[skill])) for skill in SKILLS_ORDER},
             "latent_mean_floor": float(np.mean(latent_floors)),
             "latent_mean_strength": float(np.mean(latent_strengths)),
         }

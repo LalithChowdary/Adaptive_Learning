@@ -155,6 +155,30 @@ class AdaptiveStore:
         with self._lock:
             self.db.close()
 
+    def backup_to(self, dest_path: str | Path = ":memory:") -> "AdaptiveStore":
+        """Atomically clone this store (including WAL + FTS5 tables) via sqlite3.Connection.backup()."""
+        target = str(dest_path)
+        if target == ":memory:":
+            dst_store = AdaptiveStore(":memory:")
+            with self._lock, dst_store._lock:
+                self.db.backup(dst_store.db)
+            return dst_store
+
+        out_path = Path(target)
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        dst_conn = sqlite3.connect(
+            str(out_path),
+            check_same_thread=False,
+            timeout=15.0,
+            isolation_level=None,
+        )
+        try:
+            with self._lock:
+                self.db.backup(dst_conn)
+        finally:
+            dst_conn.close()
+        return AdaptiveStore(out_path)
+
     # --- Profiles ---
 
     def list_profiles(self) -> list[dict[str, Any]]:

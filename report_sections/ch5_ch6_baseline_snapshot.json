@@ -1,0 +1,2943 @@
+{
+  "ch5_title": "Chapter 5 — Evaluation Protocol",
+  "ch6_title": "Chapter 6 — Results and Performance Analysis",
+  "counts": {
+    "elements": 88,
+    "paragraphs": 76,
+    "tables": 12,
+    "figures": 5
+  },
+  "sections_geometry": [
+    {
+      "page_width_in": 8.5,
+      "page_height_in": 11.0,
+      "top_margin_in": 0.85,
+      "bottom_margin_in": 0.85,
+      "left_margin_in": 0.85,
+      "right_margin_in": 0.85
+    }
+  ],
+  "elements": [
+    {
+      "type": "p",
+      "index": 0
+    },
+    {
+      "type": "p",
+      "index": 1
+    },
+    {
+      "type": "p",
+      "index": 2
+    },
+    {
+      "type": "p",
+      "index": 3
+    },
+    {
+      "type": "p",
+      "index": 4
+    },
+    {
+      "type": "p",
+      "index": 5
+    },
+    {
+      "type": "p",
+      "index": 6
+    },
+    {
+      "type": "p",
+      "index": 7
+    },
+    {
+      "type": "tbl",
+      "index": 0
+    },
+    {
+      "type": "p",
+      "index": 8
+    },
+    {
+      "type": "p",
+      "index": 9
+    },
+    {
+      "type": "p",
+      "index": 10
+    },
+    {
+      "type": "p",
+      "index": 11
+    },
+    {
+      "type": "tbl",
+      "index": 1
+    },
+    {
+      "type": "p",
+      "index": 12
+    },
+    {
+      "type": "p",
+      "index": 13
+    },
+    {
+      "type": "p",
+      "index": 14
+    },
+    {
+      "type": "p",
+      "index": 15
+    },
+    {
+      "type": "p",
+      "index": 16
+    },
+    {
+      "type": "p",
+      "index": 17
+    },
+    {
+      "type": "p",
+      "index": 18
+    },
+    {
+      "type": "p",
+      "index": 19
+    },
+    {
+      "type": "p",
+      "index": 20
+    },
+    {
+      "type": "p",
+      "index": 21
+    },
+    {
+      "type": "tbl",
+      "index": 2
+    },
+    {
+      "type": "p",
+      "index": 22
+    },
+    {
+      "type": "p",
+      "index": 23
+    },
+    {
+      "type": "p",
+      "index": 24
+    },
+    {
+      "type": "p",
+      "index": 25
+    },
+    {
+      "type": "tbl",
+      "index": 3
+    },
+    {
+      "type": "p",
+      "index": 26
+    },
+    {
+      "type": "p",
+      "index": 27
+    },
+    {
+      "type": "p",
+      "index": 28
+    },
+    {
+      "type": "p",
+      "index": 29
+    },
+    {
+      "type": "tbl",
+      "index": 4
+    },
+    {
+      "type": "p",
+      "index": 30
+    },
+    {
+      "type": "p",
+      "index": 31
+    },
+    {
+      "type": "p",
+      "index": 32
+    },
+    {
+      "type": "p",
+      "index": 33
+    },
+    {
+      "type": "p",
+      "index": 34
+    },
+    {
+      "type": "p",
+      "index": 35
+    },
+    {
+      "type": "tbl",
+      "index": 5
+    },
+    {
+      "type": "p",
+      "index": 36
+    },
+    {
+      "type": "p",
+      "index": 37
+    },
+    {
+      "type": "p",
+      "index": 38
+    },
+    {
+      "type": "p",
+      "index": 39
+    },
+    {
+      "type": "p",
+      "index": 40
+    },
+    {
+      "type": "tbl",
+      "index": 6
+    },
+    {
+      "type": "p",
+      "index": 41
+    },
+    {
+      "type": "p",
+      "index": 42
+    },
+    {
+      "type": "p",
+      "index": 43
+    },
+    {
+      "type": "p",
+      "index": 44
+    },
+    {
+      "type": "p",
+      "index": 45
+    },
+    {
+      "type": "tbl",
+      "index": 7
+    },
+    {
+      "type": "p",
+      "index": 46
+    },
+    {
+      "type": "p",
+      "index": 47
+    },
+    {
+      "type": "p",
+      "index": 48
+    },
+    {
+      "type": "p",
+      "index": 49
+    },
+    {
+      "type": "p",
+      "index": 50
+    },
+    {
+      "type": "p",
+      "index": 51
+    },
+    {
+      "type": "p",
+      "index": 52
+    },
+    {
+      "type": "p",
+      "index": 53
+    },
+    {
+      "type": "tbl",
+      "index": 8
+    },
+    {
+      "type": "p",
+      "index": 54
+    },
+    {
+      "type": "p",
+      "index": 55
+    },
+    {
+      "type": "p",
+      "index": 56
+    },
+    {
+      "type": "p",
+      "index": 57
+    },
+    {
+      "type": "tbl",
+      "index": 9
+    },
+    {
+      "type": "p",
+      "index": 58
+    },
+    {
+      "type": "p",
+      "index": 59
+    },
+    {
+      "type": "p",
+      "index": 60
+    },
+    {
+      "type": "p",
+      "index": 61
+    },
+    {
+      "type": "p",
+      "index": 62
+    },
+    {
+      "type": "tbl",
+      "index": 10
+    },
+    {
+      "type": "p",
+      "index": 63
+    },
+    {
+      "type": "p",
+      "index": 64
+    },
+    {
+      "type": "p",
+      "index": 65
+    },
+    {
+      "type": "p",
+      "index": 66
+    },
+    {
+      "type": "p",
+      "index": 67
+    },
+    {
+      "type": "tbl",
+      "index": 11
+    },
+    {
+      "type": "p",
+      "index": 68
+    },
+    {
+      "type": "p",
+      "index": 69
+    },
+    {
+      "type": "p",
+      "index": 70
+    },
+    {
+      "type": "p",
+      "index": 71
+    },
+    {
+      "type": "p",
+      "index": 72
+    },
+    {
+      "type": "p",
+      "index": 73
+    },
+    {
+      "type": "p",
+      "index": 74
+    },
+    {
+      "type": "p",
+      "index": 75
+    }
+  ],
+  "paragraphs": [
+    {
+      "text": "Chapter 5 — Evaluation Protocol",
+      "style": "Normal",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "Chapter 5 — Evaluation Protocol",
+          "font_name": "Times New Roman",
+          "font_size_pt": 15.0,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "122A4C"
+        }
+      ]
+    },
+    {
+      "text": "5.1 What We Are Testing and Our Main Goal",
+      "style": "Normal",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "5.1 What We Are Testing and Our Main Goal",
+          "font_name": "Times New Roman",
+          "font_size_pt": 12.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "183862"
+        }
+      ]
+    },
+    {
+      "text": "Imagine a student learning Python with an AI tutor. They only have a small amount of study time—a fixed study budget of B = 32.0 points (about four short lessons spaced days apart). Anyone can look smart right after reading an answer with hints. The real test of a good teacher is: when the student comes back weeks later with zero hints, do they still remember how to solve the problem?",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Imagine a student learning Python with an AI tutor. They only have a small amount of study time—a fixed study budget of B = 32.0 points (about four short lessons spaced days apart). Anyone can look smart right after reading an answer with hints. The real test of a good teacher is: when the student comes back weeks later with zero hints, do they still remember how to solve the problem?",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "Main Outcome (Primary Metric): After studying ends, we give the simulated student fresh tests without any hints at 1 day, 7 days, and 30 days later (18 questions per day across 6 Python skills and 3 difficulty levels = 54 questions per student). Our main score is the mean delayed unaided pass rate (the average of Day 1, Day 7, and Day 30), and we highlight Day-30 retention separately because 30 days tests true lasting memory rather than short-term cramming. We compare our AI teacher against a standard rule-based teacher (Threshold Heuristic) using the exact same study budget and the exact same simulated students.",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Main Outcome (Primary Metric): ",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": "After studying ends, we give the simulated student fresh tests without any hints at ",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": "1 day, 7 days, and 30 days later",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": " (18 questions per day across 6 Python skills and 3 difficulty levels = 54 questions per student). Our main score is the ",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": "mean delayed unaided pass rate",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": " (the average of Day 1, Day 7, and Day 30), and we highlight ",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": "Day-30 retention",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": " separately because 30 days tests true lasting memory rather than short-term cramming. We compare our AI teacher against a standard rule-based teacher (Threshold Heuristic) using the exact same study budget and the exact same simulated students.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "Important Scope Note: Tier 1 and Tier 4 test the memory model and teaching policy inside a computer simulator. They prove our system works in simulation, not yet in a live human classroom (which belongs to a future IRB-approved Tier 5 study).",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Important Scope Note: ",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": "Tier 1 and Tier 4 test the memory model and teaching policy inside a computer simulator. They prove our system works in simulation, not yet in a live human classroom (which belongs to a future IRB-approved Tier 5 study).",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": false,
+          "italic": true,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "5.2 Simple Guide to Every Symbol, Variable, and Metric",
+      "style": "Normal",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "5.2 Simple Guide to Every Symbol, Variable, and Metric",
+          "font_name": "Times New Roman",
+          "font_size_pt": 12.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "183862"
+        }
+      ]
+    },
+    {
+      "text": "Table 5.1 explains every symbol, variable, and test score in plain, everyday words so anyone reading this report for the first time can follow every number.",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Table 5.1 explains every symbol, variable, and test score in plain, everyday words so anyone reading this report for the first time can follow every number.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "Table 5.1 — Plain-English dictionary of every symbol, variable, and metric used in Chapters 5 and 6.",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Table 5.1 — Plain-English dictionary of every symbol, variable, and metric used in Chapters 5 and 6.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 9.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "283038"
+        }
+      ]
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": []
+    },
+    {
+      "text": "5.3 The Four-Tier Test Plan and Ablations",
+      "style": "Normal",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "5.3 The Four-Tier Test Plan and Ablations",
+          "font_name": "Times New Roman",
+          "font_size_pt": 12.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "183862"
+        }
+      ]
+    },
+    {
+      "text": "Because our tutor has four connected parts—a Memory Brain, a Search Engine, an LLM Teacher/Grader, and an RL Policy Planner—we test each part on its own and test them together in four tiers, plus three focused ablation (remove-one-piece) tests:",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Because our tutor has four connected parts—a Memory Brain, a Search Engine, an LLM Teacher/Grader, and an RL Policy Planner—we test each part on its own and test them together in four tiers, plus three focused ablation (remove-one-piece) tests:",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "Table 5.2 — Summary of the four evaluation tiers, three ablations, and optional human pilot.",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Table 5.2 — Summary of the four evaluation tiers, three ablations, and optional human pilot.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 9.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "283038"
+        }
+      ]
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": []
+    },
+    {
+      "text": "5.4 Fair Testing Rules",
+      "style": "Normal",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "5.4 Fair Testing Rules",
+          "font_name": "Times New Roman",
+          "font_size_pt": 12.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "183862"
+        }
+      ]
+    },
+    {
+      "text": "Same Students & Same Prompts (Paired Testing): Every competing model is tested on the exact same simulated students or exact same questions so differences come from the model, not lucky draws.",
+      "style": "List Bullet",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "Same Students & Same Prompts (Paired Testing): ",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": "Every competing model is tested on the exact same simulated students or exact same questions so differences come from the model, not lucky draws.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "Honest Labels (Retrospective vs. Pre-Registered): Our earlier 3-seed runs are clearly labeled Retrospective. Fresh 5-seed (Tier 1) and 10-seed (Tier 4, 400 new students) runs with locked rules are labeled Pre-Registered.",
+      "style": "List Bullet",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "Honest Labels (Retrospective vs. Pre-Registered): ",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": "Our earlier 3-seed runs are clearly labeled Retrospective. Fresh 5-seed (Tier 1) and 10-seed (Tier 4, 400 new students) runs with locked rules are labeled Pre-Registered.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "No Cherry-Picking & No Software Test Mixing: We report all 3 test cohorts (main, power-law forgetting, and 4-day long-gap breaks) and all 6 Python skills. Software engineering unit tests are never mixed into research metrics.",
+      "style": "List Bullet",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "No Cherry-Picking & No Software Test Mixing: ",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": "We report all 3 test cohorts (main, power-law forgetting, and 4-day long-gap breaks) and all 6 Python skills. Software engineering unit tests are never mixed into research metrics.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "",
+          "font_name": null,
+          "font_size_pt": null,
+          "bold": null,
+          "italic": null,
+          "color_rgb": null
+        }
+      ]
+    },
+    {
+      "text": "Chapter 6 — Results and Performance Analysis",
+      "style": "Normal",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "Chapter 6 — Results and Performance Analysis",
+          "font_name": "Times New Roman",
+          "font_size_pt": 15.0,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "122A4C"
+        }
+      ]
+    },
+    {
+      "text": "6.1 Tier 1 — Does the Brain Guess Accurately and Obey Common Sense?",
+      "style": "Normal",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "6.1 Tier 1 — Does the Brain Guess Accurately and Obey Common Sense?",
+          "font_name": "Times New Roman",
+          "font_size_pt": 12.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "183862"
+        }
+      ]
+    },
+    {
+      "text": "Before an AI teacher can plan good lessons, its memory brain must predict how likely a student is to pass a new question today (Ordinary Practice) and 1, 7, or 30 days later (Delayed Assessment). We trained all 9 models across 5 pre-registered seeds on 1,600 training students and tested them on 200 unseen students per cohort.",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Before an AI teacher can plan good lessons, its memory brain must predict how likely a student is to pass a new question today (Ordinary Practice) and 1, 7, or 30 days later (Delayed Assessment). We trained all 9 models across 5 pre-registered seeds on 1,600 training students and tested them on 200 unseen students per cohort.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "Table 6.1 — Tier 1 Memory Benchmark on main_test (Pre-Registered, 5 Seeds, N=200 Held-Out Students).",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Table 6.1 — Tier 1 Memory Benchmark on main_test (Pre-Registered, 5 Seeds, N=200 Held-Out Students).",
+          "font_name": "Times New Roman",
+          "font_size_pt": 9.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "283038"
+        }
+      ]
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": []
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": "CENTER (1)",
+      "runs": [
+        {
+          "text": "",
+          "font_name": null,
+          "font_size_pt": null,
+          "bold": null,
+          "italic": null,
+          "color_rgb": null
+        }
+      ]
+    },
+    {
+      "text": "Figure 6.1 — Tier 1 Log Loss (lower is better) and ROC-AUC (higher is better) on main_test (5 seeds).",
+      "style": "Normal",
+      "alignment": "CENTER (1)",
+      "runs": [
+        {
+          "text": "Figure 6.1 — Tier 1 Log Loss (lower is better) and ROC-AUC (higher is better) on main_test (5 seeds).",
+          "font_name": "Times New Roman",
+          "font_size_pt": 9.5,
+          "bold": false,
+          "italic": true,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "Table 6.2 — Tier 1 Stress-Cohort Generalization (Power-Law Forgetting and 4-Day Long-Gap Breaks, 5 Seeds).",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Table 6.2 — Tier 1 Stress-Cohort Generalization (Power-Law Forgetting and 4-Day Long-Gap Breaks, 5 Seeds).",
+          "font_name": "Times New Roman",
+          "font_size_pt": 9.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "283038"
+        }
+      ]
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": []
+    },
+    {
+      "text": "Why the 6/6 Sanity Gate Matters: In 5-seed validation, time_decay_gru got a slightly lower raw Log Loss (0.55173), but it FAILED the 6/6 sanity gate (5/6) because its predictions drifted upward over 0–60 days after a mistake. Our gate automatically rejected it.",
+      "style": "List Bullet",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "Why the 6/6 Sanity Gate Matters: ",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": "In 5-seed validation, time_decay_gru got a slightly lower raw Log Loss (0.55173), but it FAILED the 6/6 sanity gate (5/6) because its predictions drifted upward over 0–60 days after a mistake. Our gate automatically rejected it.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "Monotonic GRU vs. Transformers & Time-Input GRU: In the earlier Retrospective (3-seed) run, monotonic_gru ranked #1 on validation selection (0.55175 vs. 0.55177 for time_input_gru). In the fresh Pre-Registered (5-seed) run, both models are statistically tied within 0.00008 on validation (0.55175 vs. 0.55183), while monotonic_gru has the smallest seed-to-seed spread (±0.00011), beats time_aware_transformer on Ordinary Log Loss (-0.00158 [-0.00291, -0.00020]), beats history_boosting (-0.00317 [-0.00490, -0.00154]), and uniquely exposes the explicit permastore floor b_t and half-life h_t in a tiny 32-float Markov state needed by PPO.",
+      "style": "List Bullet",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "Monotonic GRU vs. Transformers & Time-Input GRU: ",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": "In the earlier Retrospective (3-seed) run, monotonic_gru ranked #1 on validation selection (0.55175 vs. 0.55177 for time_input_gru). In the fresh Pre-Registered (5-seed) run, both models are statistically tied within 0.00008 on validation (0.55175 vs. 0.55183), while monotonic_gru has the smallest seed-to-seed spread (±0.00011), beats time_aware_transformer on Ordinary Log Loss (-0.00158 [-0.00291, -0.00020]), beats history_boosting (-0.00317 [-0.00490, -0.00154]), and uniquely exposes the explicit permastore floor b_t and half-life h_t in a tiny 32-float Markov state needed by PPO.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "Table 6.3 — Reliability (Calibration) Check for monotonic_gru on main_test (5-Seed Average). Guesses match reality closely.",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Table 6.3 — Reliability (Calibration) Check for monotonic_gru on main_test (5-Seed Average). Guesses match reality closely.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 9.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "283038"
+        }
+      ]
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": []
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": "CENTER (1)",
+      "runs": [
+        {
+          "text": "",
+          "font_name": null,
+          "font_size_pt": null,
+          "bold": null,
+          "italic": null,
+          "color_rgb": null
+        }
+      ]
+    },
+    {
+      "text": "Figure 6.2 — Reliability diagram for monotonic_gru on main_test (Pre-Registered 5-seed average).",
+      "style": "Normal",
+      "alignment": "CENTER (1)",
+      "runs": [
+        {
+          "text": "Figure 6.2 — Reliability diagram for monotonic_gru on main_test (Pre-Registered 5-seed average).",
+          "font_name": "Times New Roman",
+          "font_size_pt": 9.5,
+          "bold": false,
+          "italic": true,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "6.2 Tier 2 — Can the Search Engine Find the Right Lessons Fast?",
+      "style": "Normal",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "6.2 Tier 2 — Can the Search Engine Find the Right Lessons Fast?",
+          "font_name": "Times New Roman",
+          "font_size_pt": 12.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "183862"
+        }
+      ]
+    },
+    {
+      "text": "When a student asks a doubt (k=4 chunks) or the tutor creates a new question (k=3 examples + k=2 lesson chunks), the search engine must be fast, pick the right topic/difficulty, and never mix up different students' private mistakes. Offline checks ran on 66 Dev and 132 Held-Out Test queries (192 test retrieval tasks + 24 cross-learner leakage probes).",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "When a student asks a doubt (k=4 chunks) or the tutor creates a new question (k=3 examples + k=2 lesson chunks), the search engine must be fast, pick the right topic/difficulty, and never mix up different students' private mistakes. Offline checks ran on 66 Dev and 132 Held-Out Test queries (192 test retrieval tasks + 24 cross-learner leakage probes).",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "Table 6.4 — Tier 2 Held-Out Retrieval Diagnostics (N=132 Queries / 192 Tasks, plus 24-Query Cross-Learner Probe = 0 Leaks).",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Table 6.4 — Tier 2 Held-Out Retrieval Diagnostics (N=132 Queries / 192 Tasks, plus 24-Query Cross-Learner Probe = 0 Leaks).",
+          "font_name": "Times New Roman",
+          "font_size_pt": 9.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "283038"
+        }
+      ]
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": []
+    },
+    {
+      "text": "Both offline search arms run in under 5.1 ms (p95), match the exact requested skill/difficulty/format 100.0% of the time, and show 0 cross-learner privacy leaks. Human relevance labels (1,090 query-document pairs exported) and dense weights are pending.",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Both offline search arms run in under 5.1 ms (p95), match the exact requested skill/difficulty/format 100.0% of the time, and show 0 cross-learner privacy leaks. Human relevance labels (1,090 query-document pairs exported) and dense weights are pending.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "6.3 Tier 3 — Tutor Replies, Safety Guard, Questions, and Grading (Pending Live LLM)",
+      "style": "Normal",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "6.3 Tier 3 — Tutor Replies, Safety Guard, Questions, and Grading (Pending Live LLM)",
+          "font_name": "Times New Roman",
+          "font_size_pt": 12.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "183862"
+        }
+      ]
+    },
+    {
+      "text": "Zero live LLM API calls or fake human scores were run in this offline phase. Instead, all blinded prompt packets and isolated database test hooks are prepared and ready for the live-LLM + 2-reviewer human grading phase:",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Zero live LLM API calls or fake human scores were run in this offline phase. Instead, all blinded prompt packets and isolated database test hooks are prepared and ready for the live-LLM + 2-reviewer human grading phase:",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "Table 6.5 — Tier 3 and Ablation 1–2 blinded evaluation packs (ready to execute with live LLM + 2 human reviewers).",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Table 6.5 — Tier 3 and Ablation 1–2 blinded evaluation packs (ready to execute with live LLM + 2 human reviewers).",
+          "font_name": "Times New Roman",
+          "font_size_pt": 9.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "283038"
+        }
+      ]
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": []
+    },
+    {
+      "text": "6.4 Tier 4 — Does the AI Teacher Actually Help Students Remember 30 Days Later?",
+      "style": "Normal",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "6.4 Tier 4 — Does the AI Teacher Actually Help Students Remember 30 Days Later?",
+          "font_name": "Times New Roman",
+          "font_size_pt": 12.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "183862"
+        }
+      ]
+    },
+    {
+      "text": "6.4.1 Main Result (Primary Outcome & Day-30 Retention)",
+      "style": "Normal",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "6.4.1 Main Result (Primary Outcome & Day-30 Retention)",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "283038"
+        }
+      ]
+    },
+    {
+      "text": "We trained our RL teacher (Delayed PPO) across 10 brand-new seeds and tested it on 400 brand-new simulated students (seeds 40000–40399) across all three environments at budget B = 32.0. We also keep our earlier 3-seed Retrospective run (200 students) cleanly separated in Table 6.6.",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "We trained our RL teacher (Delayed PPO) across 10 brand-new seeds and tested it on 400 brand-new simulated students (seeds 40000–40399) across all three environments at budget B = 32.0. We also keep our earlier 3-seed Retrospective run (200 students) cleanly separated in Table 6.6.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "Table 6.6 — Tier 4 Primary Outcome: Unaided Delayed Pass Rates at Study Budget B = 32.0 (Pre-Registered vs. Retrospective).",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Table 6.6 — Tier 4 Primary Outcome: Unaided Delayed Pass Rates at Study Budget B = 32.0 (Pre-Registered vs. Retrospective).",
+          "font_name": "Times New Roman",
+          "font_size_pt": 9.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "283038"
+        }
+      ]
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": []
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": "CENTER (1)",
+      "runs": [
+        {
+          "text": "",
+          "font_name": null,
+          "font_size_pt": null,
+          "bold": null,
+          "italic": null,
+          "color_rgb": null
+        }
+      ]
+    },
+    {
+      "text": "Figure 6.3 — Pre-Registered (10 seeds, N=400) Mean Delayed Pass Rate and Day-30 Pass Rate across all 3 cohorts.",
+      "style": "Normal",
+      "alignment": "CENTER (1)",
+      "runs": [
+        {
+          "text": "Figure 6.3 — Pre-Registered (10 seeds, N=400) Mean Delayed Pass Rate and Day-30 Pass Rate across all 3 cohorts.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 9.5,
+          "bold": false,
+          "italic": true,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "Clear Winner at 30 Days: On Main Test (N=400), Delayed PPO beats the Threshold Heuristic by +2.50 pp on overall delayed pass rate (62.77% vs. 60.27%) and by +5.69 pp [+5.05, +6.30] on Day 30. Under harsh 4-day gaps (Long-Gap Test), the Day-30 lead stays strong at +5.39 pp [+4.79, +6.01].",
+      "style": "List Bullet",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "Clear Winner at 30 Days: ",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": "On Main Test (N=400), Delayed PPO beats the Threshold Heuristic by +2.50 pp on overall delayed pass rate (62.77% vs. 60.27%) and by +5.69 pp [+5.05, +6.30] on Day 30. Under harsh 4-day gaps (Long-Gap Test), the Day-30 lead stays strong at +5.39 pp [+4.79, +6.01].",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "Why Short-Term Greedy AI Fails: Myopic RL Bandit only cares about the very next turn (no future planning). It gets stuck drilling easy questions forever, scoring ~10 percentage points worse than Delayed PPO at Day 30.",
+      "style": "List Bullet",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "Why Short-Term Greedy AI Fails: ",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": "Myopic RL Bandit only cares about the very next turn (no future planning). It gets stuck drilling easy questions forever, scoring ~10 percentage points worse than Delayed PPO at Day 30.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "6.4.2 Fairness Across All 6 Python Skills (Day-30 Per-Skill Pass Rates)",
+      "style": "Normal",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "6.4.2 Fairness Across All 6 Python Skills (Day-30 Per-Skill Pass Rates)",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "283038"
+        }
+      ]
+    },
+    {
+      "text": "We checked all 6 individual Python skills at Day 30 on Main Test (N=400) to verify our AI teacher does not ignore hard topics just to boost its average score.",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "We checked all 6 individual Python skills at Day 30 on Main Test (N=400) to verify our AI teacher does not ignore hard topics just to boost its average score.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "Table 6.7 — Main Test Day-30 Unaided Pass Rates Across All 6 Python Skills (Pre-Registered, 10 Seeds, N=400). Lowest skill is function_returns for all policies.",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Table 6.7 — Main Test Day-30 Unaided Pass Rates Across All 6 Python Skills (Pre-Registered, 10 Seeds, N=400). Lowest skill is function_returns for all policies.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 9.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "283038"
+        }
+      ]
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": []
+    },
+    {
+      "text": "6.4.3 Ablation 3 — Do Long-Term Memory Features Actually Cause the Gain?",
+      "style": "Normal",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "6.4.3 Ablation 3 — Do Long-Term Memory Features Actually Cause the Gain?",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "283038"
+        }
+      ]
+    },
+    {
+      "text": "In Ablation 3, we retrained a clean 23-dim PPO (ppo_no_longterm_state) across all 10 seeds with all 13 long-term features (7d/30d predictions and floor b_t) removed from its input, its action mask, and its topic routing—leaving only short-term 'today' predictions (p_med).",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "In Ablation 3, we retrained a clean 23-dim PPO (ppo_no_longterm_state) across all 10 seeds with all 13 long-term features (7d/30d predictions and floor b_t) removed from its input, its action mask, and its topic routing—leaving only short-term 'today' predictions (p_med).",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "Table 6.8 — Ablation 3 Results (10 Retrained Seeds, N=400). Hiding long-term memory cuts accuracy and triples seed instability.",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Table 6.8 — Ablation 3 Results (10 Retrained Seeds, N=400). Hiding long-term memory cuts accuracy and triples seed instability.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 9.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "283038"
+        }
+      ]
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": []
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": "CENTER (1)",
+      "runs": [
+        {
+          "text": "",
+          "font_name": null,
+          "font_size_pt": null,
+          "bold": null,
+          "italic": null,
+          "color_rgb": null
+        }
+      ]
+    },
+    {
+      "text": "Figure 6.4 — Ablation 3: Removing 30-day memory & floor b_t drops performance and makes training ~3x noisier (±1 SD bars).",
+      "style": "Normal",
+      "alignment": "CENTER (1)",
+      "runs": [
+        {
+          "text": "Figure 6.4 — Ablation 3: Removing 30-day memory & floor b_t drops performance and makes training ~3x noisier (±1 SD bars).",
+          "font_name": "Times New Roman",
+          "font_size_pt": 9.5,
+          "bold": false,
+          "italic": true,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "6.4.4 Study Budget Curves (Budget B = 16, 24, 32, and 40)",
+      "style": "Normal",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "6.4.4 Study Budget Curves (Budget B = 16, 24, 32, and 40)",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "283038"
+        }
+      ]
+    },
+    {
+      "text": "Table 6.9 — Main Test Budget Curves across B = 16 to 40 (Pre-Registered, 10 Seeds, N=400). PPO leads at every budget.",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Table 6.9 — Main Test Budget Curves across B = 16 to 40 (Pre-Registered, 10 Seeds, N=400). PPO leads at every budget.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 9.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "283038"
+        }
+      ]
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": []
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": "CENTER (1)",
+      "runs": [
+        {
+          "text": "",
+          "font_name": null,
+          "font_size_pt": null,
+          "bold": null,
+          "italic": null,
+          "color_rgb": null
+        }
+      ]
+    },
+    {
+      "text": "Figure 6.5 — Day-30 pass rate as study budget grows from 16 to 40 across all 3 test cohorts.",
+      "style": "Normal",
+      "alignment": "CENTER (1)",
+      "runs": [
+        {
+          "text": "Figure 6.5 — Day-30 pass rate as study budget grows from 16 to 40 across all 3 test cohorts.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 9.5,
+          "bold": false,
+          "italic": true,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "6.4.5 What Teaching Actions Does the AI Teacher Pick?",
+      "style": "Normal",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "6.4.5 What Teaching Actions Does the AI Teacher Pick?",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "283038"
+        }
+      ]
+    },
+    {
+      "text": "Table 6.10 — Share of each teaching action chosen on main_test (Pre-Registered, 10 Seeds, N=400).",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Table 6.10 — Share of each teaching action chosen on main_test (Pre-Registered, 10 Seeds, N=400).",
+          "font_name": "Times New Roman",
+          "font_size_pt": 9.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "283038"
+        }
+      ]
+    },
+    {
+      "text": "",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": []
+    },
+    {
+      "text": "Notice how Threshold Heuristic never uses worked examples (0%), self-explanations (0%), or prerequisite reviews (0%). Delayed PPO mixes worked examples (16.4%), self-explanations (16.9%), prerequisite reviews (8.1%), and harder questions (15.1%) to lock knowledge into durable memory. Across the 10 pre-registered seeds, 10/10 seeds beat all baselines on delayed retention and floor b_t, while 8/10 seeds pass all 5 behavioral action-balance checks on Main and Power-Law tests (7/10 on Long-Gap).",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Notice how Threshold Heuristic never uses worked examples (0%), self-explanations (0%), or prerequisite reviews (0%). Delayed PPO mixes worked examples (16.4%), self-explanations (16.9%), prerequisite reviews (8.1%), and harder questions (15.1%) to lock knowledge into durable memory. Across the 10 pre-registered seeds, 10/10 seeds beat all baselines on delayed retention and floor b_t, while 8/10 seeds pass all 5 behavioral action-balance checks on Main and Power-Law tests (7/10 on Long-Gap).",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "6.5 Key Takeaways and Pending Live-LLM Next Step",
+      "style": "Normal",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "6.5 Key Takeaways and Pending Live-LLM Next Step",
+          "font_name": "Times New Roman",
+          "font_size_pt": 12.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "183862"
+        }
+      ]
+    },
+    {
+      "text": "1. Delayed PPO Wins Where It Counts (30 Days Later): At equal study budget (32.0), Delayed PPO improves 30-day unaided pass rates by +5.69 pp on Main Test, +4.69 pp on Power-Law stress, and +5.40 pp on 4-day Long-Gap breaks over the rule-based tutor.",
+      "style": "List Bullet",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "1. Delayed PPO Wins Where It Counts (30 Days Later): ",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": "At equal study budget (32.0), Delayed PPO improves 30-day unaided pass rates by +5.69 pp on Main Test, +4.69 pp on Power-Law stress, and +5.40 pp on 4-day Long-Gap breaks over the rule-based tutor.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "2. Long-Term Memory Features Are Essential (Ablation 3): Hiding 30-day predictions and permastore floor b_t cuts retention across every cohort and roughly triples training variance across seeds.",
+      "style": "List Bullet",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "2. Long-Term Memory Features Are Essential (Ablation 3): ",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": "Hiding 30-day predictions and permastore floor b_t cuts retention across every cohort and roughly triples training variance across seeds.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "3. Common-Sense Memory Sanity Gate Protects Reliability: monotonic_gru passes all 6/6 behavioral sanity checks across all seeds, matches reality closely on 10-bin calibration (ECE-10 = 0.0108 ordinary, 0.0235 delayed), and gives PPO the explicit b_t signal it needs.",
+      "style": "List Bullet",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "3. Common-Sense Memory Sanity Gate Protects Reliability: ",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": "monotonic_gru passes all 6/6 behavioral sanity checks across all seeds, matches reality closely on 10-bin calibration (ECE-10 = 0.0108 ordinary, 0.0235 delayed), and gives PPO the explicit b_t signal it needs.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "4. Fast, Leak-Free Search Ready for Live Evaluation: Hybrid retrieval runs in ~5 ms p95 with 100% metadata match and zero cross-learner privacy leaks.",
+      "style": "List Bullet",
+      "alignment": null,
+      "runs": [
+        {
+          "text": "4. Fast, Leak-Free Search Ready for Live Evaluation: ",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": "Hybrid retrieval runs in ~5 ms p95 with 100% metadata match and zero cross-learner privacy leaks.",
+          "font_name": "Times New Roman",
+          "font_size_pt": 10.5,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    },
+    {
+      "text": "Pending Next Step (Live-LLM Reminder): All offline experiments (Tiers 1, 2-offline, 4, and Ablation 3) are finished. The next step is running the live-LLM evaluation with failover disabled and 2 blinded human reviewers on the prepared packs (Tier 2 dense/relevance, Ablation 1 downstream, Tier 3a + Ablation 2 EduGuard ON/OFF, Tier 3b question generation, and Tier 3c self-explanation grading).",
+      "style": "Normal",
+      "alignment": "LEFT (0)",
+      "runs": [
+        {
+          "text": "Pending Next Step (Live-LLM Reminder): ",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": true,
+          "italic": false,
+          "color_rgb": "000000"
+        },
+        {
+          "text": "All offline experiments (Tiers 1, 2-offline, 4, and Ablation 3) are finished. The next step is running the live-LLM evaluation with failover disabled and 2 blinded human reviewers on the prepared packs (Tier 2 dense/relevance, Ablation 1 downstream, Tier 3a + Ablation 2 EduGuard ON/OFF, Tier 3b question generation, and Tier 3c self-explanation grading).",
+          "font_name": "Times New Roman",
+          "font_size_pt": 11.0,
+          "bold": false,
+          "italic": false,
+          "color_rgb": "000000"
+        }
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "rows": 22,
+      "cols": 3,
+      "cells": [
+        [
+          "Symbol / Term",
+          "Plain-English Meaning (What It Is)",
+          "Good Value"
+        ],
+        [
+          "N",
+          "Number of students, questions, or test prompts in an experiment.",
+          "Larger = more reliable"
+        ],
+        [
+          "B (Budget = 32.0)",
+          "Total study coins a tutor may spend (1.0 per question, 0.6–0.9 per hint/lesson).",
+          "Equal across policies"
+        ],
+        [
+          "k (Context Slots)",
+          "Number of text chunks the search engine hands to the AI tutor (k=4 chat; k=3 examples + k=2 lessons for question making).",
+          "Matched per arm"
+        ],
+        [
+          "b_t (Permastore Floor)",
+          "Durable, long-lasting knowledge (from 0 to 1) that stays even after a 30-day break.",
+          "Higher is better"
+        ],
+        [
+          "k_t (Active Strength)",
+          "Short-term + long-term skill strength (from 0 to 1) right at the current time.",
+          "Higher is better"
+        ],
+        [
+          "s_t (Policy State)",
+          "The 36-number dashboard summary the RL teacher reads before picking the next action.",
+          "36 dims (23 in Abl. 3)"
+        ],
+        [
+          "Log Loss (LL)",
+          "Scores how accurate and honest a probability guess is. Punishes confident wrong guesses (0.693 = pure 50/50 coin flip).",
+          "Lower is better"
+        ],
+        [
+          "ROC-AUC",
+          "Pick one passing student and one failing student: how often did the model give the passing student a higher score? (0.5 = coin flip, 1.0 = perfect).",
+          "Higher is better"
+        ],
+        [
+          "Brier Score",
+          "Average squared gap between the model's 0–1 guess and the real 0/1 pass outcome.",
+          "Lower is better"
+        ],
+        [
+          "ECE-10 (Calibration)",
+          "Splits guesses into 10 buckets (0–10%, ..., 90–100%). Measures if a '70% guess' really passes ~70% of the time.",
+          "Lower is better (near 0)"
+        ],
+        [
+          "Signal %",
+          "How much of the gap between naive base-rate guessing (0%) and the hidden simulator Oracle ceiling (100%) a model captures.",
+          "Higher is better"
+        ],
+        [
+          "6 Behavioral Checks",
+          "Common-sense rules: getting 0% wrong must drop predictions; 0–60d forgetting curves must never drift upward without study.",
+          "Must be 6 / 6"
+        ],
+        [
+          "Delayed Mean / Day-30",
+          "Average unaided pass rate at 1, 7, and 30 days after study; Day-30 checks lasting memory one month later.",
+          "Higher is better"
+        ],
+        [
+          "Lowest-Skill Day-30",
+          "The Day-30 pass rate on the weakest of the 6 Python skills (makes sure hard topics like function_returns are not ignored).",
+          "Higher is better"
+        ],
+        [
+          "Delta (Δ) & 95% CI",
+          "Difference between two systems on the exact same students/queries, with a 95% Bootstrap interval from 2,000 resamples.",
+          "CI excludes 0 = consistent"
+        ],
+        [
+          "nDCG@k / Recall@k",
+          "Search quality: Recall@k checks if the right chunk is in the top k; nDCG@k rewards putting it at rank #1.",
+          "Higher is better (max 1)"
+        ],
+        [
+          "p95 Latency (ms)",
+          "Search speed: 95 out of 100 queries finish faster than this time in milliseconds.",
+          "Lower is faster"
+        ],
+        [
+          "Meta Match / Violations",
+          "Exemplar Meta Match checks exact skill/difficulty/format match (target 100%); Cross-Learner Violations checks student data leaks (must be 0).",
+          "100% match / 0 leaks"
+        ],
+        [
+          "Leakage / Over-Refusal",
+          "In EduGuard: Leakage = tutor gives away the answer on trick prompts; Over-Refusal = tutor wrongly blocks a genuine question.",
+          "Both near 0%"
+        ],
+        [
+          "Usable Question Rate",
+          "Share of AI-generated questions that are fresh, valid, solvable, and match the requested skill, format, and difficulty.",
+          "Higher is better"
+        ],
+        [
+          "MAE (Self-Explanation)",
+          "Mean Absolute Error between the automated grader's 0–1 score and human teacher scores.",
+          "Lower is better (near 0)"
+        ]
+      ]
+    },
+    {
+      "rows": 9,
+      "cols": 4,
+      "cells": [
+        [
+          "Tier / Test",
+          "What Part It Tests",
+          "How It Is Tested & Seeding",
+          "Status in This Report"
+        ],
+        [
+          "Tier 1\n(Memory)",
+          "9 memory models + Constant & Oracle anchors",
+          "Predicts first unaided pass/fail on 200 held-out students per cohort (main, power-law, long-gap). Retrospective: 3 seeds; Pre-Registered: 5 fresh seeds (20261201–20261205).",
+          "Executed\n(Complete)"
+        ],
+        [
+          "Tier 2\n(Retrieval)",
+          "BM25 alone vs. Deployed BM25+TF-IDF vs. Dense vs. BM25+Dense",
+          "Tests speed (p95), metadata match, cross-learner isolation, and ranking on 66 dev + 132 held-out test queries at exact slots (k=4 chat; k=3 + k=2 question gen).",
+          "Offline Diagnostics Done;\nDense & Human Labels Pending"
+        ],
+        [
+          "Tier 3a–3c\n(LLM & Grading)",
+          "Doubt Tutor, EduGuard, Question Maker (180 items), Self-Explanation Grader (120 items)",
+          "Blinded 2-reviewer human grading with live LLM failover turned off. Blind prompt/review packs exported.",
+          "Blind Packs Ready;\nLive LLM & Human Review Pending"
+        ],
+        [
+          "Tier 4\n(RL Policy)",
+          "Delayed PPO vs. Threshold Heuristic, Myopic Bandit, Fixed, Random",
+          "Retrospective: 3 seeds (N=200). Pre-Registered: 10 fresh seeds (20261201–20261210) tested on 400 brand-new students (40000–40399) across 3 cohorts & 4 budgets.",
+          "Executed\n(Complete)"
+        ],
+        [
+          "Ablation 1\n(Retrieval)",
+          "Deployed BM25+TF-IDF vs. BM25+Dense (fixed LLM)",
+          "Checks if better search improves live tutor Python correctness and question usability.",
+          "Pack Ready (Pending Live LLM)"
+        ],
+        [
+          "Ablation 2\n(EduGuard)",
+          "EduGuard ON vs. OFF on 120 paired prompts",
+          "Measures answer leakage vs. over-refusal on identical questions and DB snapshots.",
+          "Pack Ready (Pending Live LLM)"
+        ],
+        [
+          "Ablation 3\n(PPO State)",
+          "Full 36-dim PPO vs. 23-dim No-Long-Term PPO",
+          "Retrains 10 seeds from scratch after removing all 13 long-term (7d/30d/floor b_t) features and routing/mask leaks.",
+          "Executed\n(Complete)"
+        ],
+        [
+          "Tier 5 (Opt.)\n(Human Pilot)",
+          "Real classroom students (optional future step)",
+          "Unaided pretest -> study session -> 7-day delayed posttest, kept strictly separate from simulation.",
+          "Optional Outline Only"
+        ]
+      ]
+    },
+    {
+      "rows": 12,
+      "cols": 10,
+      "cells": [
+        [
+          "Model",
+          "6/6 Gate",
+          "Ord. LL",
+          "Ord. AUC",
+          "Ord. ECE",
+          "Ord. Sig%",
+          "Del. LL",
+          "Del. AUC",
+          "Del. ECE",
+          "Del. Sig%"
+        ],
+        [
+          "Constant (Base Rate)",
+          "—",
+          "0.6869",
+          "0.5000",
+          "0.0146",
+          "0.0%",
+          "0.6783",
+          "0.5000",
+          "0.0649",
+          "0.0%"
+        ],
+        [
+          "Task Logistic",
+          "Tabular",
+          "0.6095",
+          "0.7199",
+          "0.0198",
+          "50.0%",
+          "0.5981",
+          "0.7356",
+          "0.0779",
+          "51.4%"
+        ],
+        [
+          "History Logistic",
+          "Tabular",
+          "0.5742",
+          "0.7630",
+          "0.0147",
+          "72.7%",
+          "0.5528",
+          "0.7769",
+          "0.0476",
+          "80.5%"
+        ],
+        [
+          "History Boosting",
+          "Tabular",
+          "0.5712 ± 0.0001",
+          "0.7649 ± 0.0002",
+          "0.0115 ± 0.0012",
+          "74.6%",
+          "0.5504 ± 0.0007",
+          "0.7753 ± 0.0008",
+          "0.0289 ± 0.0008",
+          "82.0%"
+        ],
+        [
+          "KT Decay GRU",
+          "6/6 (Pass)",
+          "0.5707 ± 0.0002",
+          "0.7662 ± 0.0002",
+          "0.0124 ± 0.0009",
+          "75.0%",
+          "0.5486 ± 0.0004",
+          "0.7764 ± 0.0001",
+          "0.0267 ± 0.0018",
+          "83.2%"
+        ],
+        [
+          "Time-Aware Transformer",
+          "6/6 (Pass)",
+          "0.5696 ± 0.0003",
+          "0.7668 ± 0.0004",
+          "0.0117 ± 0.0023",
+          "75.7%",
+          "0.5452 ± 0.0016",
+          "0.7804 ± 0.0009",
+          "0.0273 ± 0.0049",
+          "85.3%"
+        ],
+        [
+          "Monotonic Transformer",
+          "6/6 (Pass)",
+          "0.5681 ± 0.0002",
+          "0.7686 ± 0.0002",
+          "0.0106 ± 0.0011",
+          "76.7%",
+          "0.5456 ± 0.0010",
+          "0.7801 ± 0.0005",
+          "0.0270 ± 0.0037",
+          "85.1%"
+        ],
+        [
+          "Monotonic GRU (Ours)",
+          "6/6 (Pass)",
+          "0.5681 ± 0.0003",
+          "0.7687 ± 0.0003",
+          "0.0108 ± 0.0008",
+          "76.7%",
+          "0.5447 ± 0.0007",
+          "0.7803 ± 0.0005",
+          "0.0234 ± 0.0022",
+          "85.6%"
+        ],
+        [
+          "Time-Input GRU",
+          "6/6 (Pass)",
+          "0.5678 ± 0.0003",
+          "0.7686 ± 0.0003",
+          "0.0110 ± 0.0009",
+          "76.8%",
+          "0.5435 ± 0.0009",
+          "0.7813 ± 0.0007",
+          "0.0201 ± 0.0030",
+          "86.4%"
+        ],
+        [
+          "Time-Decay GRU (Rejected)",
+          "5/6 (FAIL)",
+          "0.5678 ± 0.0002",
+          "0.7686 ± 0.0002",
+          "0.0106 ± 0.0005",
+          "76.8%",
+          "0.5438 ± 0.0006",
+          "0.7813 ± 0.0005",
+          "0.0219 ± 0.0009",
+          "86.3%"
+        ],
+        [
+          "Oracle (Hidden Ceiling)",
+          "—",
+          "0.5319",
+          "0.8032",
+          "0.0102",
+          "100.0%",
+          "0.5223",
+          "0.8007",
+          "0.0211",
+          "100.0%"
+        ]
+      ]
+    },
+    {
+      "rows": 13,
+      "cols": 9,
+      "cells": [
+        [
+          "Cohort",
+          "Model",
+          "Ord. LL",
+          "Ord. AUC",
+          "1d LL",
+          "7d LL",
+          "30d LL",
+          "Del. LL",
+          "Del. Sig%"
+        ],
+        [
+          "Power-Law Stress",
+          "History Boosting",
+          "0.5606 ± 0.0001",
+          "0.7806 ± 0.0002",
+          "0.5690 ± 0.0008",
+          "0.5766 ± 0.0007",
+          "0.5658 ± 0.0006",
+          "0.5705 ± 0.0005",
+          "83.0%"
+        ],
+        [
+          "Power-Law Stress",
+          "Time-Aware Transformer",
+          "0.5610 ± 0.0003",
+          "0.7807 ± 0.0003",
+          "0.5641 ± 0.0017",
+          "0.5726 ± 0.0012",
+          "0.5651 ± 0.0012",
+          "0.5673 ± 0.0011",
+          "85.3%"
+        ],
+        [
+          "Power-Law Stress",
+          "Monotonic Transformer",
+          "0.5590 ± 0.0002",
+          "0.7825 ± 0.0002",
+          "0.5664 ± 0.0008",
+          "0.5736 ± 0.0009",
+          "0.5653 ± 0.0004",
+          "0.5684 ± 0.0006",
+          "84.5%"
+        ],
+        [
+          "Power-Law Stress",
+          "Monotonic GRU (Ours)",
+          "0.5593 ± 0.0002",
+          "0.7822 ± 0.0003",
+          "0.5666 ± 0.0008",
+          "0.5736 ± 0.0005",
+          "0.5655 ± 0.0006",
+          "0.5686 ± 0.0005",
+          "84.4%"
+        ],
+        [
+          "Power-Law Stress",
+          "Time-Input GRU",
+          "0.5589 ± 0.0004",
+          "0.7825 ± 0.0003",
+          "0.5641 ± 0.0004",
+          "0.5716 ± 0.0014",
+          "0.5655 ± 0.0018",
+          "0.5670 ± 0.0009",
+          "85.4%"
+        ],
+        [
+          "Power-Law Stress",
+          "Oracle (Ceiling)",
+          "0.5248",
+          "0.8132",
+          "0.5509",
+          "0.5472",
+          "0.5412",
+          "0.5464",
+          "100.0%"
+        ],
+        [
+          "Long-Gap (4d) Stress",
+          "History Boosting",
+          "0.5723 ± 0.0003",
+          "0.7700 ± 0.0004",
+          "0.5553 ± 0.0016",
+          "0.5929 ± 0.0010",
+          "0.5783 ± 0.0016",
+          "0.5755 ± 0.0009",
+          "77.9%"
+        ],
+        [
+          "Long-Gap (4d) Stress",
+          "Time-Aware Transformer",
+          "0.5692 ± 0.0005",
+          "0.7737 ± 0.0004",
+          "0.5578 ± 0.0013",
+          "0.5904 ± 0.0010",
+          "0.5752 ± 0.0014",
+          "0.5745 ± 0.0006",
+          "78.6%"
+        ],
+        [
+          "Long-Gap (4d) Stress",
+          "Monotonic Transformer",
+          "0.5679 ± 0.0004",
+          "0.7748 ± 0.0002",
+          "0.5531 ± 0.0005",
+          "0.5883 ± 0.0004",
+          "0.5744 ± 0.0006",
+          "0.5719 ± 0.0003",
+          "80.4%"
+        ],
+        [
+          "Long-Gap (4d) Stress",
+          "Monotonic GRU (Ours)",
+          "0.5680 ± 0.0002",
+          "0.7749 ± 0.0003",
+          "0.5537 ± 0.0005",
+          "0.5887 ± 0.0007",
+          "0.5734 ± 0.0004",
+          "0.5719 ± 0.0005",
+          "80.4%"
+        ],
+        [
+          "Long-Gap (4d) Stress",
+          "Time-Input GRU",
+          "0.5673 ± 0.0005",
+          "0.7753 ± 0.0004",
+          "0.5534 ± 0.0013",
+          "0.5889 ± 0.0017",
+          "0.5742 ± 0.0017",
+          "0.5722 ± 0.0015",
+          "80.2%"
+        ],
+        [
+          "Long-Gap (4d) Stress",
+          "Oracle (Ceiling)",
+          "0.5297",
+          "0.8095",
+          "0.5143",
+          "0.5629",
+          "0.5540",
+          "0.5437",
+          "100.0%"
+        ]
+      ]
+    },
+    {
+      "rows": 11,
+      "cols": 7,
+      "cells": [
+        [
+          "Probability Bucket",
+          "Ordinary Count",
+          "Ord. Guess",
+          "Ord. Real Pass",
+          "Delayed Count",
+          "Del. Guess",
+          "Del. Real Pass"
+        ],
+        [
+          "[0.0, 0.1)",
+          "327",
+          "0.070",
+          "0.055",
+          "58",
+          "0.069",
+          "0.034"
+        ],
+        [
+          "[0.1, 0.2)",
+          "1178",
+          "0.154",
+          "0.134",
+          "173",
+          "0.155",
+          "0.185"
+        ],
+        [
+          "[0.2, 0.3)",
+          "1599",
+          "0.253",
+          "0.256",
+          "256",
+          "0.253",
+          "0.238"
+        ],
+        [
+          "[0.3, 0.4)",
+          "1784",
+          "0.350",
+          "0.359",
+          "330",
+          "0.350",
+          "0.403"
+        ],
+        [
+          "[0.4, 0.5)",
+          "1962",
+          "0.451",
+          "0.463",
+          "362",
+          "0.450",
+          "0.475"
+        ],
+        [
+          "[0.5, 0.6)",
+          "2191",
+          "0.551",
+          "0.549",
+          "374",
+          "0.552",
+          "0.561"
+        ],
+        [
+          "[0.6, 0.7)",
+          "2513",
+          "0.651",
+          "0.645",
+          "479",
+          "0.650",
+          "0.708"
+        ],
+        [
+          "[0.7, 0.8)",
+          "2671",
+          "0.750",
+          "0.728",
+          "535",
+          "0.751",
+          "0.755"
+        ],
+        [
+          "[0.8, 0.9)",
+          "2549",
+          "0.849",
+          "0.835",
+          "515",
+          "0.851",
+          "0.858"
+        ],
+        [
+          "[0.9, 1.0]",
+          "890",
+          "0.924",
+          "0.921",
+          "231",
+          "0.925",
+          "0.948"
+        ]
+      ]
+    },
+    {
+      "rows": 5,
+      "cols": 7,
+      "cells": [
+        [
+          "Search Arm",
+          "Chat (k=4) nDCG@4 / Recall@4",
+          "Q-Gen (k=3 / k=2) Relevance",
+          "Meta Match%",
+          "Student Leaks",
+          "Underfills",
+          "p95 Speed"
+        ],
+        [
+          "BM25 Alone (Keywords)",
+          "[Pending Human Labels]",
+          "[Pending Human Labels]",
+          "100.0%",
+          "0 / 192",
+          "0 / 192",
+          "3.55 ms"
+        ],
+        [
+          "Deployed BM25 + TF-IDF",
+          "[Pending Human Labels]",
+          "[Pending Human Labels]",
+          "100.0%",
+          "0 / 192",
+          "0 / 192",
+          "5.05 ms"
+        ],
+        [
+          "Dense Encoder (Dev-Sel.)",
+          "[Pending Dense Weights & Human]",
+          "[Pending Dense Weights & Human]",
+          "[Pending]",
+          "[Pending]",
+          "—",
+          "[Pending]"
+        ],
+        [
+          "BM25 + Dense (Abl. 1)",
+          "[Pending Dense Weights & Human]",
+          "[Pending Dense Weights & Human]",
+          "[Pending]",
+          "[Pending]",
+          "[Pending]",
+          "[Pending]"
+        ]
+      ]
+    },
+    {
+      "rows": 5,
+      "cols": 4,
+      "cells": [
+        [
+          "Tier / Test",
+          "What It Measures",
+          "Prepared Blind Pack Size",
+          "Status"
+        ],
+        [
+          "Tier 3a + Ablation 2\n(EduGuard ON/OFF)",
+          "Python correctness, faithfulness, 3 rubric scores, answer leakage vs. over-refusal",
+          "216 prompts (96 adaptation + 60 protected + 60 legit doubts)",
+          "[Pending Live LLM & Human]"
+        ],
+        [
+          "Tier 3b\n(Question Generator)",
+          "Usable fresh question rate, first-pass & post-repair validity, bank fallback rate",
+          "180 requests (6 skills × 5 formats × 3 difficulties × 2)",
+          "[Pending Live LLM & Human]"
+        ],
+        [
+          "Tier 3c\n(Explanation Grader)",
+          "MAE vs. human 0–1 scores, full-success P/R/F1, confidence-vs-error check",
+          "120 prompts across 18 production prompts (rubric=None)",
+          "[Pending Human Corpus & LLM]"
+        ],
+        [
+          "Ablation 1 Downstream\n(Fixed-LLM Check)",
+          "Does BM25+Dense improve real tutor replies & questions over BM25+TF-IDF?",
+          "132 items (72 chat + 60 question requests)",
+          "[Pending Live LLM & Human]"
+        ]
+      ]
+    },
+    {
+      "rows": 31,
+      "cols": 9,
+      "cells": [
+        [
+          "Run",
+          "Cohort",
+          "Policy",
+          "1-Day",
+          "7-Day",
+          "30-Day",
+          "Delayed Mean",
+          "Diff vs. Heuristic (95% CI)",
+          "Floor b_t"
+        ],
+        [
+          "Pre-Reg (10 seeds, N=400)",
+          "Main",
+          "Delayed PPO (Ours)",
+          "65.39% ± 0.69%",
+          "63.26% ± 1.02%",
+          "59.66% ± 1.92%",
+          "62.77% ± 1.12%",
+          "+2.50 pp [+2.12, +2.86]",
+          "0.427 ± 0.030"
+        ],
+        [
+          "",
+          "",
+          "Threshold Heuristic",
+          "65.17%",
+          "61.68%",
+          "53.97%",
+          "60.27%",
+          "0.00 pp (Ref)",
+          "0.324"
+        ],
+        [
+          "",
+          "",
+          "Random Valid",
+          "63.65%",
+          "60.32%",
+          "54.72%",
+          "59.56%",
+          "-0.71 pp",
+          "0.370"
+        ],
+        [
+          "",
+          "",
+          "Fixed Curriculum",
+          "62.39%",
+          "57.76%",
+          "49.64%",
+          "56.60%",
+          "-3.68 pp",
+          "0.313"
+        ],
+        [
+          "",
+          "",
+          "Myopic RL Bandit",
+          "57.60% ± 0.02%",
+          "55.05% ± 0.03%",
+          "49.28% ± 0.02%",
+          "53.98% ± 0.01%",
+          "-6.30 pp [-6.92, -5.73]",
+          "0.352 ± 0.001"
+        ],
+        [
+          "Pre-Reg (10 seeds, N=400)",
+          "Power-Law",
+          "Delayed PPO (Ours)",
+          "64.92% ± 0.68%",
+          "62.93% ± 0.94%",
+          "60.29% ± 1.58%",
+          "62.71% ± 1.01%",
+          "+2.30 pp [+1.96, +2.65]",
+          "0.425 ± 0.029"
+        ],
+        [
+          "",
+          "",
+          "Threshold Heuristic",
+          "64.46%",
+          "61.18%",
+          "55.60%",
+          "60.41%",
+          "0.00 pp (Ref)",
+          "0.324"
+        ],
+        [
+          "",
+          "",
+          "Random Valid",
+          "62.61%",
+          "59.75%",
+          "55.56%",
+          "59.31%",
+          "-1.11 pp",
+          "0.368"
+        ],
+        [
+          "",
+          "",
+          "Fixed Curriculum",
+          "61.47%",
+          "56.92%",
+          "51.15%",
+          "56.51%",
+          "-3.90 pp",
+          "0.312"
+        ],
+        [
+          "",
+          "",
+          "Myopic RL Bandit",
+          "57.21% ± 0.02%",
+          "55.08% ± 0.02%",
+          "50.64% ± 0.03%",
+          "54.31% ± 0.02%",
+          "-6.10 pp [-6.73, -5.52]",
+          "0.352 ± 0.001"
+        ],
+        [
+          "Pre-Reg (10 seeds, N=400)",
+          "Long-Gap",
+          "Delayed PPO (Ours)",
+          "62.82% ± 0.82%",
+          "61.04% ± 0.99%",
+          "58.37% ± 1.74%",
+          "60.74% ± 1.13%",
+          "+2.94 pp [+2.56, +3.33]",
+          "0.417 ± 0.026"
+        ],
+        [
+          "",
+          "",
+          "Threshold Heuristic",
+          "61.74%",
+          "58.69%",
+          "52.97%",
+          "57.80%",
+          "0.00 pp (Ref)",
+          "0.325"
+        ],
+        [
+          "",
+          "",
+          "Random Valid",
+          "60.18%",
+          "57.32%",
+          "53.36%",
+          "56.95%",
+          "-0.85 pp",
+          "0.363"
+        ],
+        [
+          "",
+          "",
+          "Fixed Curriculum",
+          "57.97%",
+          "54.50%",
+          "48.36%",
+          "53.61%",
+          "-4.19 pp",
+          "0.313"
+        ],
+        [
+          "",
+          "",
+          "Myopic RL Bandit",
+          "54.79% ± 0.02%",
+          "52.80% ± 0.03%",
+          "48.43% ± 0.04%",
+          "52.01% ± 0.02%",
+          "-5.79 pp [-6.40, -5.22]",
+          "0.350 ± 0.002"
+        ],
+        [
+          "Retro (3 seeds, N=200)",
+          "Main",
+          "Delayed PPO (Ours)",
+          "66.05% ± 0.30%",
+          "65.20% ± 0.75%",
+          "61.69% ± 1.49%",
+          "64.31% ± 0.78%",
+          "+2.93 pp [+2.33, +3.53]",
+          "0.465 ± 0.015"
+        ],
+        [
+          "",
+          "",
+          "Threshold Heuristic",
+          "66.08%",
+          "63.50%",
+          "54.58%",
+          "61.39%",
+          "0.00 pp (Ref)",
+          "0.332"
+        ],
+        [
+          "",
+          "",
+          "Random Valid",
+          "65.22%",
+          "62.83%",
+          "55.78%",
+          "61.28%",
+          "-0.11 pp",
+          "0.386"
+        ],
+        [
+          "",
+          "",
+          "Fixed Curriculum",
+          "64.22%",
+          "60.28%",
+          "51.47%",
+          "58.66%",
+          "-2.73 pp",
+          "0.323"
+        ],
+        [
+          "",
+          "",
+          "Myopic RL Bandit",
+          "59.02% ± 0.04%",
+          "56.08% ± 0.03%",
+          "49.74% ± 0.03%",
+          "54.95% ± 0.02%",
+          "-6.44 pp [-7.23, -5.62]",
+          "0.361 ± 0.000"
+        ],
+        [
+          "Retro (3 seeds, N=200)",
+          "Power-Law",
+          "Delayed PPO (Ours)",
+          "65.73% ± 0.38%",
+          "64.84% ± 0.61%",
+          "62.00% ± 1.16%",
+          "64.19% ± 0.66%",
+          "+2.68 pp [+2.10, +3.22]",
+          "0.463 ± 0.014"
+        ],
+        [
+          "",
+          "",
+          "Threshold Heuristic",
+          "65.42%",
+          "62.75%",
+          "56.36%",
+          "61.51%",
+          "0.00 pp (Ref)",
+          "0.332"
+        ],
+        [
+          "",
+          "",
+          "Random Valid",
+          "64.47%",
+          "62.22%",
+          "57.19%",
+          "61.30%",
+          "-0.21 pp",
+          "0.385"
+        ],
+        [
+          "",
+          "",
+          "Fixed Curriculum",
+          "63.31%",
+          "59.11%",
+          "52.83%",
+          "58.42%",
+          "-3.09 pp",
+          "0.323"
+        ],
+        [
+          "",
+          "",
+          "Myopic RL Bandit",
+          "58.45% ± 0.02%",
+          "56.12% ± 0.04%",
+          "51.19% ± 0.03%",
+          "55.25% ± 0.02%",
+          "-6.26 pp [-7.09, -5.42]",
+          "0.360 ± 0.000"
+        ],
+        [
+          "Retro (3 seeds, N=200)",
+          "Long-Gap",
+          "Delayed PPO (Ours)",
+          "63.36% ± 0.39%",
+          "62.80% ± 0.64%",
+          "60.00% ± 1.06%",
+          "62.05% ± 0.63%",
+          "+3.49 pp [+2.88, +4.08]",
+          "0.452 ± 0.011"
+        ],
+        [
+          "",
+          "",
+          "Threshold Heuristic",
+          "62.14%",
+          "60.03%",
+          "53.53%",
+          "58.56%",
+          "0.00 pp (Ref)",
+          "0.334"
+        ],
+        [
+          "",
+          "",
+          "Random Valid",
+          "61.39%",
+          "59.56%",
+          "54.50%",
+          "58.48%",
+          "-0.08 pp",
+          "0.377"
+        ],
+        [
+          "",
+          "",
+          "Fixed Curriculum",
+          "59.94%",
+          "56.31%",
+          "49.56%",
+          "55.27%",
+          "-3.30 pp",
+          "0.322"
+        ],
+        [
+          "",
+          "",
+          "Myopic RL Bandit",
+          "55.31% ± 0.06%",
+          "53.38% ± 0.06%",
+          "48.73% ± 0.11%",
+          "52.48% ± 0.07%",
+          "-6.09 pp [-6.96, -5.24]",
+          "0.359 ± 0.001"
+        ]
+      ]
+    },
+    {
+      "rows": 7,
+      "cols": 8,
+      "cells": [
+        [
+          "Policy",
+          "Range",
+          "Loops",
+          "Accum.",
+          "Cond.",
+          "Lists",
+          "Func. Ret.",
+          "Lowest Skill"
+        ],
+        [
+          "Delayed PPO (Ours)",
+          "81.55% ± 2.14%",
+          "73.99% ± 3.49%",
+          "56.73% ± 3.58%",
+          "56.55% ± 5.38%",
+          "52.42% ± 2.78%",
+          "36.72% ± 2.50%",
+          "36.72% ± 2.50%"
+        ],
+        [
+          "Threshold Heuristic",
+          "71.00%",
+          "62.33%",
+          "54.25%",
+          "51.67%",
+          "48.58%",
+          "36.00%",
+          "36.00%"
+        ],
+        [
+          "Myopic RL Bandit",
+          "90.73% ± 0.12%",
+          "47.47% ± 0.04%",
+          "36.08% ± 0.00%",
+          "40.67% ± 0.00%",
+          "49.08% ± 0.00%",
+          "31.67% ± 0.00%",
+          "31.67% ± 0.00%"
+        ],
+        [
+          "Fixed Curriculum",
+          "58.92%",
+          "49.17%",
+          "46.58%",
+          "51.00%",
+          "50.75%",
+          "41.42%",
+          "41.42%"
+        ],
+        [
+          "Random Valid",
+          "74.92%",
+          "61.25%",
+          "51.50%",
+          "53.42%",
+          "51.25%",
+          "36.00%",
+          "36.00%"
+        ],
+        [
+          "Ablated 23-Dim PPO",
+          "80.71% ± 3.25%",
+          "70.45% ± 9.12%",
+          "56.69% ± 7.98%",
+          "56.39% ± 7.17%",
+          "51.94% ± 4.30%",
+          "36.74% ± 3.11%",
+          "36.74% ± 3.11%"
+        ]
+      ]
+    },
+    {
+      "rows": 7,
+      "cols": 7,
+      "cells": [
+        [
+          "Cohort",
+          "Model",
+          "Delayed Mean",
+          "Day-30 Pass",
+          "Paired Loss from Ablation (95% CI)",
+          "Floor b_t",
+          "Self-Expl. %"
+        ],
+        [
+          "Main Test",
+          "Full PPO (36 dims)",
+          "62.77% ± 1.12%",
+          "59.66% ± 1.92%",
+          "—",
+          "0.427 ± 0.030",
+          "16.9%"
+        ],
+        [
+          "",
+          "Ablated PPO (23 dims)",
+          "61.76% ± 3.28%",
+          "58.82% ± 4.24%",
+          "Del: +1.02 pp [+0.87, +1.16]\nD30: +0.84 pp [+0.61, +1.05]",
+          "0.421 ± 0.040",
+          "20.7%"
+        ],
+        [
+          "Power-Law Test",
+          "Full PPO (36 dims)",
+          "62.71% ± 1.01%",
+          "60.29% ± 1.58%",
+          "—",
+          "0.425 ± 0.029",
+          "16.9%"
+        ],
+        [
+          "",
+          "Ablated PPO (23 dims)",
+          "61.73% ± 3.13%",
+          "59.44% ± 3.87%",
+          "Del: +0.98 pp [+0.84, +1.12]\nD30: +0.85 pp [+0.64, +1.05]",
+          "0.420 ± 0.039",
+          "20.7%"
+        ],
+        [
+          "Long-Gap Test",
+          "Full PPO (36 dims)",
+          "60.74% ± 1.13%",
+          "58.37% ± 1.74%",
+          "—",
+          "0.417 ± 0.026",
+          "16.9%"
+        ],
+        [
+          "",
+          "Ablated PPO (23 dims)",
+          "59.69% ± 3.33%",
+          "57.38% ± 4.04%",
+          "Del: +1.06 pp [+0.91, +1.20]\nD30: +0.99 pp [+0.77, +1.20]",
+          "0.412 ± 0.035",
+          "20.8%"
+        ]
+      ]
+    },
+    {
+      "rows": 13,
+      "cols": 6,
+      "cells": [
+        [
+          "Budget (B)",
+          "Policy",
+          "Delayed Mean",
+          "Day-30 Pass",
+          "Floor b_t",
+          "Diff vs. Heuristic (95% CI)"
+        ],
+        [
+          "16",
+          "Delayed PPO (Ours)",
+          "57.06% ± 0.67%",
+          "52.58% ± 1.14%",
+          "0.352 ± 0.017",
+          "+1.89 pp [+1.60, +2.16]"
+        ],
+        [
+          "",
+          "Threshold Heuristic",
+          "55.17%",
+          "48.14%",
+          "0.290",
+          "0.00 pp (Ref)"
+        ],
+        [
+          "",
+          "Myopic RL Bandit",
+          "53.72% ± 0.10%",
+          "48.10% ± 0.21%",
+          "0.323 ± 0.006",
+          "-1.46 pp [-1.84, -1.10]"
+        ],
+        [
+          "24",
+          "Delayed PPO (Ours)",
+          "60.17% ± 0.89%",
+          "56.53% ± 1.54%",
+          "0.392 ± 0.024",
+          "+2.16 pp [+1.82, +2.51]"
+        ],
+        [
+          "",
+          "Threshold Heuristic",
+          "58.00%",
+          "51.47%",
+          "0.307",
+          "0.00 pp (Ref)"
+        ],
+        [
+          "",
+          "Myopic RL Bandit",
+          "54.02% ± 0.02%",
+          "49.03% ± 0.05%",
+          "0.341 ± 0.003",
+          "-3.98 pp [-4.49, -3.52]"
+        ],
+        [
+          "32",
+          "Delayed PPO (Ours)",
+          "62.77% ± 1.12%",
+          "59.66% ± 1.92%",
+          "0.427 ± 0.030",
+          "+2.50 pp [+2.12, +2.86]"
+        ],
+        [
+          "",
+          "Threshold Heuristic",
+          "60.27%",
+          "53.97%",
+          "0.324",
+          "0.00 pp (Ref)"
+        ],
+        [
+          "",
+          "Myopic RL Bandit",
+          "53.98% ± 0.01%",
+          "49.28% ± 0.02%",
+          "0.352 ± 0.001",
+          "-6.30 pp [-6.92, -5.73]"
+        ],
+        [
+          "40",
+          "Delayed PPO (Ours)",
+          "65.13% ± 1.39%",
+          "62.57% ± 2.32%",
+          "0.458 ± 0.036",
+          "+2.61 pp [+2.21, +3.00]"
+        ],
+        [
+          "",
+          "Threshold Heuristic",
+          "62.52%",
+          "56.26%",
+          "0.341",
+          "0.00 pp (Ref)"
+        ],
+        [
+          "",
+          "Myopic RL Bandit",
+          "53.83% ± 0.02%",
+          "49.43% ± 0.02%",
+          "0.359 ± 0.000",
+          "-8.69 pp [-9.40, -8.03]"
+        ]
+      ]
+    },
+    {
+      "rows": 6,
+      "cols": 9,
+      "cells": [
+        [
+          "Policy",
+          "Easier",
+          "Same",
+          "Harder",
+          "Explain",
+          "Example",
+          "Self-Expl.",
+          "Prereq",
+          "Advance"
+        ],
+        [
+          "Delayed PPO (Ours)",
+          "3.8%",
+          "25.8%",
+          "15.1%",
+          "5.4%",
+          "16.4%",
+          "16.9%",
+          "8.1%",
+          "8.5%"
+        ],
+        [
+          "Threshold Heuristic",
+          "0.5%",
+          "60.4%",
+          "16.7%",
+          "12.7%",
+          "0.0%",
+          "0.0%",
+          "0.0%",
+          "9.7%"
+        ],
+        [
+          "Myopic RL Bandit",
+          "0.0%",
+          "71.9%",
+          "0.0%",
+          "0.0%",
+          "0.0%",
+          "28.1%",
+          "0.0%",
+          "0.0%"
+        ],
+        [
+          "Fixed Curriculum",
+          "0.0%",
+          "21.4%",
+          "38.1%",
+          "21.4%",
+          "0.0%",
+          "0.0%",
+          "0.0%",
+          "19.0%"
+        ],
+        [
+          "Random Valid",
+          "9.5%",
+          "22.7%",
+          "19.5%",
+          "12.4%",
+          "11.4%",
+          "8.1%",
+          "6.8%",
+          "9.6%"
+        ]
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "sha256": "36b505461d0d1df91c5bd3f8a04252110dc1679da3f159a318c04a9bb4463662",
+      "size_bytes": 243768,
+      "content_type": "image/png",
+      "caption": "Figure 6.1 — Tier 1 Log Loss (lower is better) and ROC-AUC (higher is better) on main_test (5 seeds)."
+    },
+    {
+      "sha256": "fc33b268706a3adc56a1ed85d8e41b4acf5da86d11532381d96c54c9153ebb32",
+      "size_bytes": 176618,
+      "content_type": "image/png",
+      "caption": "Figure 6.2 — Reliability diagram for monotonic_gru on main_test (Pre-Registered 5-seed average)."
+    },
+    {
+      "sha256": "6caa898572e3d1d4b537a027269a3b50cf17d5d4dcdab5c75fcb8f2d77193808",
+      "size_bytes": 164001,
+      "content_type": "image/png",
+      "caption": "Figure 6.3 — Pre-Registered (10 seeds, N=400) Mean Delayed Pass Rate and Day-30 Pass Rate across all 3 cohorts."
+    },
+    {
+      "sha256": "9edc615d2183c778da6e544d3aeadf005bc340dcde7dac64f32edca9541e7369",
+      "size_bytes": 151915,
+      "content_type": "image/png",
+      "caption": "Figure 6.4 — Ablation 3: Removing 30-day memory & floor b_t drops performance and makes training ~3x noisier (±1 SD bars)."
+    },
+    {
+      "sha256": "72f4620a86010924f17b70f2f6be3925b4c5b2a846af5410484214a76300b644",
+      "size_bytes": 160456,
+      "content_type": "image/png",
+      "caption": "Figure 6.5 — Day-30 pass rate as study budget grows from 16 to 40 across all 3 test cohorts."
+    }
+  ]
+}
